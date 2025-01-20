@@ -165,7 +165,7 @@ a.bg-primary:hover, a.bg-primary:focus {
 
 .list-group-item-primary {
   border-color: #14A0B4;
-  background-color: #e9e7fd;
+  background-color: #c4f8ff;
   border-color: #14A0B4;
   color: #14A0B4 !important;
 }
@@ -178,7 +178,7 @@ a.list-group-item-primary:hover, a.list-group-item-primary:focus,
 button.list-group-item-primary:hover,
 button.list-group-item-primary:focus {
   border-color: #14A0B4;
-  background-color: #e9e7fd;
+  background-color: #c4f8ff;
   color: #14A0B4;
 }
 a.list-group-item-primary.active,
@@ -200,8 +200,8 @@ button.list-group-item-primary.active {
 }
 
 .alert-primary {
-  background-color: #e9e7fd;
-  border-color: #e9e7fd;
+  background-color: #c4f8ff;
+  border-color: #c4f8ff;
   color: #14A0B4;
 }
 .alert-primary .btn-close {
@@ -333,7 +333,7 @@ button.list-group-item-primary.active {
 .btn-label-primary {
   color: #14A0B4;
   border-color: transparent;
-  background: #e9e7fd;
+  background: #c4f8ff;
 }
 .btn-label-primary.waves-effect .waves-ripple {
   background: radial-gradient(rgba(115, 103, 240, 0.2) 0, rgba(115, 103, 240, 0.3) 40%, rgba(115, 103, 240, 0.4) 50%, rgba(115, 103, 240, 0.5) 60%, rgba(255, 255, 255, 0) 70%);
@@ -395,7 +395,7 @@ button.list-group-item-primary.active {
 }
 .btn-check:checked + .btn-outline-primary, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
   color: #14A0B4 !important;
-  background-color: #e9e7fd !important;
+  background-color: #c4f8ff !important;
   border-color: #14A0B4 !important;
 }
 .btn-check:checked + .btn-outline-primary:focus, .btn-check:active + .btn-outline-primary:focus, .btn-outline-primary:active:focus, .btn-outline-primary.active:focus, .btn-outline-primary.dropdown-toggle.show:focus {
@@ -860,7 +860,7 @@ table.dataTable.dtr-column > tbody > tr > th.control:before {
 }
 .datepicker table tr td.range, .datepicker table tr td.range.highlighted, .datepicker table tr td.range.today {
   color: #14A0B4 !important;
-  background: #e9e7fd !important;
+  background: #c4f8ff !important;
 }
 .datepicker table tr td.range.focused, .datepicker table tr td.range.highlighted.focused, .datepicker table tr td.range.today.focused {
   background: #dddbfb !important;
@@ -878,8 +878,8 @@ table.dataTable.dtr-column > tbody > tr > th.control:before {
 }
 .flatpickr-day.inRange, .flatpickr-day.nextMonthDay.inRange, .flatpickr-day.prevMonthDay.inRange, .flatpickr-day.today.inRange, .flatpickr-day.prevMonthDay.today.inRange, .flatpickr-day.nextMonthDay.today.inRange {
   color: #14A0B4 !important;
-  background: #e9e7fd !important;
-  border-color: #e9e7fd !important;
+  background: #c4f8ff !important;
+  border-color: #c4f8ff !important;
 }
 .flatpickr-day.selected, .flatpickr-day.selected.inRange, .flatpickr-day.selected:focus, .flatpickr-day.selected:hover, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange, .flatpickr-day.startRange.inRange, .flatpickr-day.startRange:focus, .flatpickr-day.startRange:hover, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange, .flatpickr-day.endRange.inRange, .flatpickr-day.endRange:focus, .flatpickr-day.endRange:hover, .flatpickr-day.endRange.nextMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.week.selected {
   color: #fff !important;
@@ -909,7 +909,7 @@ table.dataTable.dtr-column > tbody > tr > th.control:before {
 
 .daterangepicker td.in-range:not(.start-date):not(.end-date):not(.off) {
   color: #14A0B4 !important;
-  background-color: #e9e7fd !important;
+  background-color: #c4f8ff !important;
 }
 
 .ranges li.active {

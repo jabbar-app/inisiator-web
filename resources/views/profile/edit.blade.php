@@ -98,3 +98,56 @@
     });
   </script>
 @endpush
+
+@push('scripts')
+  <script>
+    function copy() {
+      const referralCodeInput = document.getElementById('referral_code');
+      const referralCode = referralCodeInput.value;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        // Browser supports navigator.clipboard
+        navigator.clipboard.writeText(referralCode).then(function() {
+          Swal.fire({
+            icon: 'success',
+            title: 'Kode Referral Disalin',
+            text: 'Kode referral berhasil disalin ke clipboard.',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        }).catch(function() {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menyalin',
+            text: 'Terjadi kesalahan saat menyalin kode. Coba lagi.',
+          });
+        });
+      } else {
+        // Fallback for older browsers
+        referralCodeInput.select();
+        referralCodeInput.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+          const successful = document.execCommand('copy');
+          if (successful) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Kode Referral Disalin',
+              text: 'Kode referral berhasil disalin ke clipboard.',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          } else {
+            throw new Error('Copy failed');
+          }
+        } catch (err) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menyalin',
+            text: 'Browser Anda tidak mendukung salin otomatis.',
+          });
+        }
+      }
+    }
+  </script>
+@endpush

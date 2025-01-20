@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\InvitationRequest;
 use App\Models\Page;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -87,6 +88,40 @@ class PageController extends Controller
         // Kirim hasil pencarian ke view
         return view('pages.search', compact('results', 'query', 'highlightPosts'));
     }
+
+    public function requestInvitation()
+    {
+        return view('pages.request-invitation');
+    }
+
+    public function sendRequestInvitation(Request $request)
+    {
+        // Validasi input
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => [
+                'required',
+                'string',
+                'regex:/^62[1-9][0-9]{8,15}$/',
+                'unique:invitation_requests,phone',
+            ],
+            'email' => 'required|email|max:255|unique:invitation_requests,email',
+            'sample_article' => 'required|file|mimes:pdf,doc,docx,txt|max:2048',
+        ]);
+
+        // Handle file upload
+        if ($request->hasFile('sample_article')) {
+            $filePath = $request->file('sample_article')->store('sample_articles', 'public');
+            $validatedData['sample_article'] = $filePath;
+        }
+
+        // Simpan data ke database
+        InvitationRequest::create($validatedData);
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Permintaan undangan Anda telah berhasil dikirim. Kami akan segera menghubungi Anda!');
+    }
+
 
     /**
      * Display a listing of the resource.

@@ -17,12 +17,13 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::create([
+            'role' => 'admin',
             'name' => 'Jabbar A. Panggabean',
             'username' => 'jabbarp_',
             'phone' => '628990980799',
             'email' => 'jabbar@lomba.id',
             'password' => bcrypt('bism!LLAH99'),
-            'role' => 'admin',
+            'referral_code' => 'JABBAR01',
         ]);
 
         $categories = [

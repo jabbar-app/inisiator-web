@@ -17,6 +17,8 @@ Route::get('/', [PageController::class, 'home'])->name('pages.home');
 Route::get('/@{username}', [PageController::class, 'author'])->name('pages.author');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
 Route::get('/search', [PageController::class, 'search'])->name('pages.search');
+Route::get('/request-invitation', [PageController::class, 'requestInvitation'])->name('pages.request-invitation');
+Route::post('/send-request-invitation', [PageController::class, 'sendRequestInvitation'])->name('pages.send-request-invitation');
 
 Route::middleware('auth')->prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('dashboard');

@@ -25,9 +25,8 @@
           <div class="text-center">
             {{-- {{ dd($user->avatar) }} --}}
             <!-- Display Current or Default Avatar -->
-            <img id="preview-avatar"
-              src="{{ $user->avatar ? asset($user->avatar) : asset('assets/images/default-avatar.png') }}"
-              alt="User Avatar" class="rounded-circle mb-3" width="120" height="120" style="object-fit: cover;">
+            <img id="preview-avatar" src="{{ $user->avatar ? asset($user->avatar) : asset('assets/img/profpic.svg') }}"
+              alt="User Avatar" class="rounded-circle w-100 p-md-5 mb-3" style="object-fit: cover;">
 
             <!-- File Input -->
             <input type="file" name="avatar" class="form-control" id="avatar" accept="image/*">
@@ -79,6 +78,17 @@
           @endif
         </div>
 
+        <div class="mb-3">
+          <label for="bio" class="form-label">{{ __('Profil Bio') }}</label>
+          <textarea id="bio" name="bio" class="form-control @error('bio') is-invalid @enderror" rows="3" required
+            autocomplete="bio">{{ old('bio', $user->bio) }}</textarea>
+          @if ($errors->has('bio'))
+            <div class="text-danger mt-1">
+              {{ $errors->first('bio') }}
+            </div>
+          @endif
+        </div>
+
         <!-- Username Field -->
         <div class="mb-3">
           <label for="username" class="form-label">{{ __('Username') }}</label>
@@ -89,6 +99,14 @@
               {{ $errors->first('username') }}
             </div>
           @endif
+        </div>
+
+        <div class="mb-3">
+          <label for="referral_code" class="form-label">{{ __('Kode Referral') }}</label>
+          <div class="input-group">
+            <input id="referral_code" type="text" class="form-control" value="{{ $user->referral_code }}" readonly>
+            <a href="javascript:void(0);" onclick="copy()" class="btn btn-outline-primary">Copy</a>
+          </div>
         </div>
 
         <!-- Email Field -->

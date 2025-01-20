@@ -8,7 +8,7 @@
         <h1 class="entry-title mb-4 fw-normal">{{ $article->title }}</h1>
         <div class="entry-meta align-items-center">
           <a href="{{ route('pages.author', $article->user->username) }}" class="author-avatar">
-            <img src="{{ $article->user->avatar ?? asset('front/img/profpic.png') }}" alt="{{ $article->user->name }}">
+            <img src="{{ $article->user->avatar ?? asset('assets/img/profpic.svg') }}" alt="{{ $article->user->name }}">
           </a>
           <a href="{{ route('pages.author', $article->user->username) }}">{{ $article->user->name }}</a>
           in <a href="{{ route('categories.show', $article->category->slug) }}">{{ $article->category->title }}</a><br>
@@ -79,7 +79,7 @@
         <div class="box box-author mb-4">
           <div class="post-author d-flex">
             <div class="author-img">
-              <img src="{{ $article->user->avatar ?? asset('front/img/profpic.png') }}" alt="{{ $article->user->name }}"
+              <img src="{{ $article->user->avatar ?? asset('assets/img/profpic.svg') }}" alt="{{ $article->user->name }}"
                 class="avatar">
             </div>
             <div class="author-content">

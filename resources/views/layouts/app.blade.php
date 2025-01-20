@@ -60,7 +60,7 @@
         </h1>
         @auth
           <a class="author-avatar" href="{{ route('dashboard') }}"><img
-              src="{{ Auth::user()->avatar ?? asset('front/img/profpic.png') }}" alt="{{ Auth::user()->name }}"></a>
+              src="{{ Auth::user()->avatar ?? asset('assets/img/profpic.svg') }}" alt="{{ Auth::user()->name }}"></a>
         @endauth
 
         <a href="javascript:void(0)" class="menu-toggle-icon">
@@ -121,7 +121,7 @@
               </ul>
               @auth
                 <a class="author-avatar" href="{{ route('pages.author', Auth::user()->username) }}"><img
-                    src="{{ Auth::user()->avatar ?? asset('front/img/profpic.png') }}"
+                    src="{{ Auth::user()->avatar ?? asset('assets/img/profpic.svg') }}"
                     alt="{{ Auth::user()->name }}"></a>
               @endauth
             </div>

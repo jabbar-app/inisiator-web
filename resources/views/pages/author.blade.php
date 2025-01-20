@@ -12,7 +12,7 @@
               <div class="post-author row-flex">
                 <div class="author-img">
                   <img alt="author avatar"
-                    src="{{ $author->avatar ? asset($author->avatar) : asset('front/img/profpic.png') }}"
+                    src="{{ $author->avatar ? asset($author->avatar) : asset('assets/img/profpic.svg') }}"
                     class="avatar">
                 </div>
                 <div class="author-content">
@@ -22,7 +22,7 @@
                   </div>
                   <div class="profile-stats">
                     <p class="mb-2">
-                      {{ $author->followers()->count() }} followers &nbsp;&nbsp;&nbsp;
+                      {{ $author->followers()->count() }} followers &nbsp;&nbsp;&nbsp;&nbsp;
                       {{ $author->followings()->count() }} following
                     </p>
                     @if ($author->id != Auth::id())

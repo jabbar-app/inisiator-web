@@ -86,6 +86,16 @@
           <span>Login</span>
         </a>
       </p>
+
+      <div class="divider my-4">
+        <div class="divider-text">atau</div>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <a href="{{ route('pages.request-invitation') }}" class="btn btn-outline-primary">
+          Request Undangan
+        </a>
+      </div>
     </div>
   </div>
 
