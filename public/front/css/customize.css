@@ -1,0 +1,36 @@
+.f-mono {
+    font-family: 'B612 Mono', monospace;
+}
+
+.fw-normal {
+    font-weight: 400 !important;
+}
+
+.fw-bold {
+    font-weight: 600 !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #4DB8C7;
+    border-color: #4DB8C7;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #14A0B4;
+    border-color: #14A0B4;
+}
+
+.top-scroll-bar,
+.read-more:hover,
+.submit-btn:hover,
+.menu-toggle-icon.act:hover>span::after,
+.menu-toggle-icon.act:hover>span::before,
+button:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"],
+.blue {
+    background-color: #14A0B4 !important;
+}
