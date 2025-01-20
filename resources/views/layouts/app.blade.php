@@ -55,7 +55,10 @@
   <div class="sticky-header fixed d-lg-none d-md-block">
     <div class="text-right">
       <div class="container mobile-menu-fixed pr-5">
-        <h1 class="logo-small navbar-brand"><a href="{{ route('pages.home') }}" class="logo">Inisiator</a></h1>
+        <h1 class="logo-small navbar-brand">
+          <a href="{{ route('pages.home') }}" class="logo">Inisiator</a>
+          <small>A storytelling platform.</small>
+        </h1>
         @auth
           <a class="author-avatar" href="{{ route('dashboard') }}"><img
               src="{{ Auth::user()->avatar ?? asset('front/img/profpic.png') }}" alt="{{ Auth::user()->name }}"></a>
@@ -103,7 +106,8 @@
     <header id="header" class="d-lg-block d-none">
       <div class="container">
         <div class="align-items-center w-100">
-          <h1 class="logo float-left navbar-brand"><a href="{{ route('pages.home') }}" class="logo">Inisiator</a>
+          <h1 class="logo text-left float-left navbar-brand">
+            <a href="{{ route('pages.home') }}" class="logo">Inisiator</a>
           </h1>
           <div class="header-right float-right w-50">
             <div class="d-inline-flex float-right text-right align-items-center">
@@ -163,7 +167,7 @@
         <div class="divider"></div>
         <div class="row">
           <div class="col-md-6 copyright text-xs-center">
-            <p>2025 &copy; Nulis by <a href="https://lomba.id">LombaLomba</a></p>
+            <p>2025 &copy; Inisiator by <a href="https://lomba.id">LombaLomba</a></p>
           </div>
           <div class="col-md-6">
             <ul class="social-network inline text-md-right text-sm-center">
