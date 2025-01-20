@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
 
-  <title>Nulis</title>
+  <title>Inisiator</title>
 
   <!-- Bootstrap, Font Awesome, Aminate, Owl Carausel, Normalize CSS -->
   <link href="{{ asset('front/css/bootstrap.css') }}" rel="stylesheet">
@@ -57,17 +57,11 @@
       <div class="container mobile-menu-fixed pr-5">
         <h1 class="logo-small navbar-brand">
           <a href="{{ route('pages.home') }}" class="logo">Inisiator</a>
-          <small>A storytelling platform.</small>
         </h1>
         @auth
           <a class="author-avatar" href="{{ route('dashboard') }}"><img
               src="{{ Auth::user()->avatar ?? asset('front/img/profpic.png') }}" alt="{{ Auth::user()->name }}"></a>
         @endauth
-
-        <ul class="social-network heading navbar-nav d-lg-flex align-items-center">
-          <li><a href="#"><i class="icon-facebook"></i></a></li>
-          <li><a href="#"><i class="icon-instagram"></i></a></li>
-        </ul>
 
         <a href="javascript:void(0)" class="menu-toggle-icon">
           <span class="lines"></span>
@@ -79,12 +73,13 @@
       <div class="mobi-menu__logo">
         <h1 class="logo navbar-brand"><a href="{{ route('pages.home') }}" class="logo">Inisiator</a></h1>
       </div>
-      <form action="#" method="get" class="menu-search-form d-lg-flex">
-        <input type="text" class="search_field" placeholder="Search..." value="" name="s">
+      <form action="{{ route('pages.search') }}" method="get" class="menu-search-form d-lg-flex">
+        <input type="text" class="search_field" placeholder="Search..." value="{{ request('s') }}" name="s">
+        <button type="submit" class="btn btn-primary">Search</button>
       </form>
       <nav>
         <ul>
-          <li class="current-menu-item"><a href="{{ route('pages.home') }}">Home</a></li>
+          <li class="{{ Route::is('pages.home') ? 'current-menu-item' : '' }}"><a href="{{ route('pages.home') }}">Home</a></li>
           <li class="menu-item-has-children"><a href="categories.html">Categories</a>
             <ul class="sub-menu">
               <li><a href="categories.html">Politics</a></li>
@@ -125,16 +120,23 @@
                 </li>
               </ul>
               @auth
-                <a class="author-avatar" href="{{ route('dashboard') }}"><img
+                <a class="author-avatar" href="{{ route('pages.author', Auth::user()->username) }}"><img
                     src="{{ Auth::user()->avatar ?? asset('front/img/profpic.png') }}"
                     alt="{{ Auth::user()->name }}"></a>
               @endauth
             </div>
-            <form action="#" method="get" class="search-form d-lg-flex float-right">
+            {{-- <form action="#" method="get" class="search-form d-lg-flex float-right">
               <a href="javascript:void(0)" class="searh-toggle">
                 <i class="icon-search"></i>
               </a>
               <input type="text" class="search_field" placeholder="Search..." value="" name="s">
+            </form> --}}
+            <form action="{{ route('pages.search') }}" method="get" class="search-form d-lg-flex float-right">
+              <a href="javascript:void(0)" class="searh-toggle">
+                <i class="icon-search"></i>
+              </a>
+              <input type="text" class="search_field" placeholder="Search..." value="{{ request('s') }}"
+                name="s">
             </form>
           </div>
         </div>
@@ -144,7 +146,7 @@
         <div class="container">
           <div class="menu-primary">
             <ul class="d-flex justify-content-start" style="gap: 2rem;">
-              <li class="current-menu-item"><a href="{{ route('pages.home') }}">Home</a></li>
+              <li class="{{ Route::is('pages.home') ? 'current-menu-item' : '' }}"><a href="{{ route('pages.home') }}"><a href="{{ route('pages.home') }}">Home</a></li>
               <li class="menu-item-has-children"><a href="#">Kategori</a>
                 <ul class="sub-menu justify-content-start">
                   <li><a href="/kategori/teknologi">Teknologi</a></li>
@@ -157,10 +159,8 @@
       </nav>
     </header>
 
-    <div class="container py-5">
-      @include('layouts.session-message')
-      @yield('content')
-    </div>
+    @include('layouts.session-message')
+    @yield('content')
 
     <footer class="mt-5">
       <div class="container">

@@ -246,16 +246,16 @@ class ArticleController extends Controller
         // Misal periode bulanan: "2025-01"
         $currentPeriod = now()->format('Y-m');
 
-        // Dapatkan rank user (misal 'beginner', 'rookie', dsb.)
         $rank = $article->user->rank; // Pastikan kolom rank di table users
 
         // Definisikan rate per rank (bisa disimpan di config/ atau database)
         $rankRates = [
-            'beginner' => 1.0,
-            'rookie'   => 1.2,
-            'pro'      => 1.5,
-            'expert'   => 2.0,
-            'master'   => 2.5,
+            'Stargazer'     => 1.0, // Pemula
+            'Skywalker'     => 1.3, // Mulai berkembang
+            'Moonlighter'   => 1.7, // Menonjol
+            'Sunsurfer'     => 2.2, // Level tinggi
+            'Supernova'     => 2.8, // Sangat unggul
+            'Galaxian'      => 3.0, // Level tertinggi
         ];
 
         // Ambil rate rank. Jika rank tidak terdaftar, default 1.0

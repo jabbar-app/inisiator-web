@@ -51,4 +51,28 @@ class User extends Authenticatable
     {
         return $this->hasOne(WriterEarning::class);
     }
+
+    // Relasi untuk daftar yang diikuti oleh user
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'user_followers', 'follower_id', 'user_id');
+    }
+
+    // Relasi untuk daftar followers user
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'user_followers', 'user_id', 'follower_id');
+    }
+
+    // Check apakah user mengikuti user lain
+    public function isFollowing(User $user)
+    {
+        return $this->followings()->where('user_id', $user->id)->exists();
+    }
+
+    // Check apakah user diikuti oleh user lain
+    public function isFollowedBy(User $user)
+    {
+        return $this->followers()->where('follower_id', $user->id)->exists();
+    }
 }

@@ -12,8 +12,8 @@
         </a>
       </div>
       <!-- /Logo -->
-      <h4 class="mb-1 pt-2">Mulai menghasilkan 🚀</h4>
-      <p class="mb-4">Tulis artikel atau selesaikan misi, daftar sekarang!</p>
+      <h4 class="mb-1 pt-2">Login 🚀</h4>
+      <p class="mb-4">Masukkan email dan password untuk mengakses dashboard.</p>
 
       <form action="{{ route('login') }}" method="POST" id="formAuthentication" class="mb-3">
         @csrf
@@ -41,7 +41,7 @@
         </a>
       </p>
 
-      <div class="divider my-4">
+      {{-- <div class="divider my-4">
         <div class="divider-text">atau gunakan</div>
       </div>
 
@@ -49,7 +49,7 @@
         <a href="javascript:;" class="btn btn-label-google-plus">
           <i class="tf-icons fa-brands fa-google fs-5 me-2"></i> Google
         </a>
-      </div>
+      </div> --}}
     </div>
   </div>
   <!-- Login Card -->

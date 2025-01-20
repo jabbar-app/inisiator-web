@@ -1,22 +1,22 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DareQuestionController;
-use App\Http\Controllers\DareQuizController;
-use App\Http\Controllers\DareResponseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WhatsappController;
 use Illuminate\Support\Facades\Route;
 
 // Route public using Indonesian, other using English.
 
 Route::get('/', [PageController::class, 'home'])->name('pages.home');
-Route::get('/author/{username}', [PageController::class, 'author'])->name('pages.author');
+Route::get('/@{username}', [PageController::class, 'author'])->name('pages.author');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
+Route::get('/search', [PageController::class, 'search'])->name('pages.search');
 
 Route::middleware('auth')->prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('dashboard');
@@ -38,6 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/earnings/calculate', [EarningController::class, 'calculate'])->name('earnings.calculate');
     Route::post('/earnings/withdraw', [EarningController::class, 'withdraw'])->name('earnings.withdraw');
     Route::resource('earnings', EarningController::class);
+
+    Route::post('/users/{user}/follow', [UserController::class, 'follow'])->name('users.follow');
+    Route::delete('/users/{user}/unfollow', [UserController::class, 'unfollow'])->name('users.unfollow');
 });
 
 Route::post('/articles/check-typo', [ArticleController::class, 'checkTypo']);
@@ -50,5 +53,5 @@ Route::get('/kategori/{category:slug}', [CategoryController::class, 'show'])->na
 Route::get('/tags/{tag}', [PageController::class, 'tagShow'])->name('pages.tags');
 
 
-
+Route::post('/validate-referral', [RegisteredUserController::class, 'validateReferral'])->name('validate.referral');
 require __DIR__ . '/auth.php';

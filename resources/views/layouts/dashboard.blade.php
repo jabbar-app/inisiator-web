@@ -53,6 +53,9 @@
   <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
   <script src="{{ asset('assets/js/config.js') }}"></script>
   <link rel="stylesheet" href="{{ asset('front/css/customize.css') }}">
+
+  <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
   @stack('styles')
 </head>
 
@@ -515,7 +518,7 @@
               <div
                 class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
                 <div>
-                  © 2025 Nulis by
+                  © 2025 Inisiator by
                   <a href="https://inisiator.com" target="_blank"
                     class="footer-link text-primary fw-medium">Inisiator</a>
                 </div>

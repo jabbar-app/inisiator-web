@@ -1,7 +1,6 @@
 @extends('auth.layout')
 
 @section('content')
-  <!-- Register Card -->
   <div class="card">
     <div class="card-body">
       <!-- Logo -->
@@ -12,66 +11,74 @@
         </a>
       </div>
       <!-- /Logo -->
-      <h4 class="mb-1 pt-2">Mulai menghasilkan 🚀</h4>
-      <p class="mb-4">Tulis artikel atau selesaikan misi, daftar sekarang!</p>
 
-      <form id="formAuthentication" class="mb-3" action="{{ route('register') }}" method="POST"
-        onsubmit="return validatePhone()">
-        @csrf
-        <div class="mb-3">
-          <label for="name" class="form-label">Nama Lengkap</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name"
-            autofocus />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">No. WhatsApp</label>
-          <input type="tel" name="phone" value="{{ request()->query('phone') ?: old('phone') }}" placeholder="62XXX"
-            pattern="^62[1-9][0-9]*$" oninput="validatePhoneNumber(this)" class="form-control" required>
-          {{-- <small class="text-muted">Awalan input yang diperbolehkan adalah 62.</small> --}}
-        </div>
+      <h4 class="mb-1 pt-2">Buat Akun 🚀</h4>
+      <p class="mb-4">Untuk saat ini, pendaftaran hanya bisa dilakukan melalui Undangan, silakan masukkan kode referral
+        kamu:</p>
 
-        <script>
-          function validatePhoneNumber(input) {
-            // Remove all non-digit characters
-            let sanitizedInput = input.value.replace(/\D/g, '');
+      @include('layouts.session-message')
 
-            // Check if the first two digits are "62"
-            if (!sanitizedInput.startsWith('62')) {
-              sanitizedInput = '62';
-            }
-
-            // Remove leading zeroes after "62"
-            sanitizedInput = sanitizedInput.replace(/^62[0]*/, '62');
-
-            // Update the input value with the sanitized version
-            input.value = sanitizedInput;
-          }
-        </script>
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="text" class="form-control" id="email" name="email" placeholder="name@domain.com"
-            required />
-        </div>
-        <div class="mb-3 form-password-toggle">
-          <label class="form-label" for="password">Password</label>
-          <div class="input-group input-group-merge">
-            <input type="password" id="password" class="form-control" name="password"
-              placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-              aria-describedby="password" required />
-            <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+      @if (session('inviter'))
+        <!-- Jika Kode Referral Valid -->
+        <form id="formAuthentication" class="mb-3" action="{{ route('register') }}" method="POST"
+          onsubmit="return validatePhone()">
+          @csrf
+          <div class="mb-3">
+            <label for="invited_by" class="form-label">Diundang oleh</label>
+            <input type="text" class="form-control" id="invited_by" name="invited_by"
+              value="{{ session('inviter')->name }}" readonly>
           </div>
-        </div>
-        <div class="mb-3">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
-            <label class="form-check-label" for="terms-conditions">
-              Saya setuju dengan
-              <a href="javascript:void(0);">syarat & ketentuan</a>.
-            </label>
+          <div class="mb-3">
+            <label for="name" class="form-label">Nama Lengkap</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Input Nama Lengkap"
+              value="{{ old('name') }}" required autofocus />
           </div>
-        </div>
-        <button type="submit" class="btn btn-primary d-grid w-100">Register</button>
-      </form>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Buat username"
+              value="{{ old('username') }}" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">No. WhatsApp</label>
+            <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="62XXX" pattern="^62[1-9][0-9]*$"
+              oninput="validatePhoneNumber(this)" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="name@domain.com"
+              value="{{ old('email') }}" required />
+          </div>
+          <div class="mb-3 form-password-toggle">
+            <label class="form-label" for="password">Password</label>
+            <div class="input-group input-group-merge">
+              <input type="password" id="password" class="form-control" name="password"
+                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                aria-describedby="password" required />
+              <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
+              <label class="form-check-label" for="terms-conditions">
+                Saya setuju dengan <a href="javascript:void(0);">syarat & ketentuan</a>.
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary d-grid w-100">Register</button>
+        </form>
+      @else
+        <!-- Jika Kode Referral Belum Dimasukkan atau Tidak Valid -->
+        <form id="formReferral" class="mb-3" action="{{ route('validate.referral') }}" method="POST">
+          @csrf
+          <div class="mb-3">
+            <label for="referral_code" class="form-label">Kode Referral</label>
+            <input type="text" class="form-control" id="referral_code" name="referral_code"
+              placeholder="Masukkan kode referral kamu" required>
+          </div>
+          <button type="submit" class="btn btn-primary d-grid w-100">Verifikasi</button>
+        </form>
+      @endif
 
       <p class="text-center">
         <span>Sudah punya akun?</span>
@@ -79,17 +86,17 @@
           <span>Login</span>
         </a>
       </p>
-
-      <div class="divider my-4">
-        <div class="divider-text">atau gunakan</div>
-      </div>
-
-      <div class="d-flex justify-content-center">
-        <a href="javascript:void(0);" class="btn btn-label-google-plus">
-          <i class="tf-icons fa-brands fa-google fs-5 me-2"></i> Google
-        </a>
-      </div>
     </div>
   </div>
-  <!-- Register Card -->
+
+  <script>
+    function validatePhoneNumber(input) {
+      let sanitizedInput = input.value.replace(/\D/g, '');
+      if (!sanitizedInput.startsWith('62')) {
+        sanitizedInput = '62';
+      }
+      sanitizedInput = sanitizedInput.replace(/^62[0]*/, '62');
+      input.value = sanitizedInput;
+    }
+  </script>
 @endsection

@@ -25,8 +25,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        User::factory(10)->create();
-
         $categories = [
             [
                 'title' => 'Teknologi',

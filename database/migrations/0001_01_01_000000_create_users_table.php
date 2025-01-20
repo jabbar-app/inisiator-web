@@ -20,8 +20,13 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('password')->nullable();
             $table->string('avatar')->nullable();
-            $table->string('rank')->default('beginner');
+            $table->string('referral_code')->nullable()->unique(); // Kode referral unik untuk user
+            $table->unsignedBigInteger('invited_by')->nullable(); // ID user yang mengundang
+            $table->foreign('invited_by')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('referral_quota')->default(0);
+            $table->string('rank')->default('Stargazer');
             $table->integer('xp')->default(0);
+            $table->boolean('is_verified')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

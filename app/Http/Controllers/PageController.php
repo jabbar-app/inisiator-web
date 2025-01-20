@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Page;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -49,10 +50,44 @@ class PageController extends Controller
         return view('pages.home', compact('featureds', 'editorsPick', 'articlesSection', 'articles', 'popularArticles'));
     }
 
-    public function author()
+    public function author(string $username)
     {
-        return view('pages.author');
+        // Mengambil data penulis berdasarkan username
+        $author = User::with('articles')->where('username', $username)->firstOrFail();
+
+        // Mengambil 5 artikel terbaru untuk sidebar
+        $latestArticles = Article::latest()->take(5)->get();
+        $highlightPosts = Article::latest()->take(5)->get();
+
+        // Mengambil 4 artikel yang di-highlight
+        // $highlightPosts = Article::where('is_highlighted', true)->take(4)->get();
+
+        return view('pages.author', compact('author', 'latestArticles', 'highlightPosts'));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('s');
+
+        // Validasi input pencarian
+        if (!$query) {
+            return redirect()->route('pages.search')->with('error', 'Please enter a search term.');
+        }
+
+        // Lakukan pencarian di database
+        $results = Article::where('title', 'LIKE', "%{$query}%")
+            ->orWhere('content', 'LIKE', "%{$query}%")
+            ->orWhereHas('user', function ($q) use ($query) {
+                $q->where('name', 'LIKE', "%{$query}%");
+            })
+            ->latest()
+            ->paginate(10);
+
+        $highlightPosts = Article::latest()->take(5)->get();
+        // Kirim hasil pencarian ke view
+        return view('pages.search', compact('results', 'query', 'highlightPosts'));
+    }
+
     /**
      * Display a listing of the resource.
      */
