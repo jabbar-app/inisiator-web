@@ -21,10 +21,11 @@
                         rel="author">{{ $author->name }}</a></h4>
                   </div>
                   <div class="profile-stats">
-                    <p>
+                    <p class="mb-2">
                       {{ $author->followers()->count() }} followers &nbsp;&nbsp;&nbsp;
                       {{ $author->followings()->count() }} following
                     </p>
+                    @if ($author->id != Auth::id())
                     <div class="my-2">
                       @if (auth()->user()->isFollowing($author))
                         <form action="{{ route('users.unfollow', $author) }}" method="POST">
@@ -39,6 +40,7 @@
                         </form>
                       @endif
                     </div>
+                    @endif
                   </div>
 
                   <p class="d-none d-md-block">{{ $author->bio ?? 'Penulis belum menambahkan biografi.' }}</p>
