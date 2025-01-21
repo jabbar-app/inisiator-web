@@ -8,15 +8,14 @@
   <meta name="theme-color" content="#ffffff">
 
   <!-- Meta Title -->
-  <title>Inisiator - A storytelling platform.</title>
+  <title>Inisiator — A storytelling platform.</title>
 
   <!-- Meta Description -->
   <meta name="description"
     content="Inisiator adalah platform storytelling untuk berbagi cerita inspiratif, mendalam, dan bermakna. Temukan kisah-kisah menarik dari berbagai kategori, seperti hubungan, budaya, teknologi, dan eksplorasi." />
 
   <!-- Meta Keywords -->
-  <meta name="keywords"
-    content="storytelling, cerita inspiratif, platform cerita, hubungan, teknologi, budaya, eksplorasi, psikologi, edukasi" />
+  <meta name="keywords" content="storytelling, cerita inspiratif, platform cerita, hubungan, teknologi, budaya, eksplorasi, psikologi, edukasi" />
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://inisiator.com" />
@@ -26,8 +25,7 @@
 
   <!-- Open Graph / Facebook -->
   <meta property="og:title" content="Inisiator - A storytelling platform." />
-  <meta property="og:description"
-    content="Tempat untuk menemukan dan berbagi cerita yang mendalam dan bermakna. Jelajahi berbagai kisah inspiratif tentang hubungan, budaya, eksplorasi, dan banyak lagi." />
+  <meta property="og:description" content="Tempat untuk menemukan dan berbagi cerita yang mendalam dan bermakna. Jelajahi berbagai kisah inspiratif tentang hubungan, budaya, eksplorasi, dan banyak lagi." />
   <meta property="og:image" content="{{ asset('assets/img/profpic.svg') }}" />
   <meta property="og:url" content="https://inisiator.com" />
   <meta property="og:type" content="website" />
