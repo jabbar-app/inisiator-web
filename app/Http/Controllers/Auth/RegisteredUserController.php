@@ -64,7 +64,7 @@ class RegisteredUserController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'referral_code' => $this->generateReferralCode(), // Buat kode referral unik
+            'referral_code' => $this->generateReferralCode($request->username), // Buat kode referral unik
             'invited_by' => $inviter?->id, // Simpan ID user yang mengundang
         ]);
 
@@ -84,14 +84,17 @@ class RegisteredUserController extends Controller
     /**
      * Generate a unique referral code.
      */
-    private function generateReferralCode(): string
+    private function generateReferralCode($username): string
     {
         do {
-            $code = strtoupper(substr(md5(uniqid(rand(), true)), 0, 8)); // Contoh format referral
+            $prefix = strtoupper(substr($username, 0, 5));
+            $randomNumber = rand(100, 999);
+            $code = $prefix . $randomNumber;
         } while (User::where('referral_code', $code)->exists());
 
         return $code;
     }
+
 
     public function validateReferral(Request $request)
     {

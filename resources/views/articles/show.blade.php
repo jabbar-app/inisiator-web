@@ -22,7 +22,7 @@
       <!-- Featured Image -->
       @if ($article->img_featured)
         <figure class="image zoom mb-5">
-          <img src="{{ asset('storage/' . $article->img_featured) }}" alt="Featured Image" class="img-fluid">
+          <img src="{{ asset($article->img_featured) }}" alt="{{ $article->title }}" class="img-fluid">
         </figure>
       @endif
 
@@ -41,25 +41,58 @@
         <div class="entry-main-content">
           {!! $article->content !!}
 
-          <!-- Subscribe Section -->
-          <div class="border p-5 bg-lightblue mb-5">
-            <div class="row justify-content-between">
-              <div class="col-md-5 mb-2 mb-md-0">
-                <h5 class="font-weight-bold secondfont mb-3 mt-0">Become a member</h5>
-                <p class="small-text">Get the latest news right in your inbox. We never spam!</p>
-              </div>
-              <div class="col-md-7">
-                <div class="row">
-                  <div class="col-md-12">
-                    <input type="text" class="form-control" placeholder="Enter your e-mail address">
+          <section id="subscribe">
+            <div class="border p-5 bg-lightblue mb-5">
+              @if (session('success'))
+                <div class="alert alert-success">
+                  {{ session('success') }}
+                </div>
+              @endif
+              @if ($errors->any())
+                <div class="alert alert-danger">
+                  {{ $errors->first() }}
+                </div>
+              @endif
+
+              <form action="{{ route('subscribe') }}" method="POST" id="subscribe-form">
+                @csrf
+                <div class="row justify-content-between">
+                  <div class="col-md-5 mb-2 mb-md-0">
+                    <h5 class="font-weight-bold secondfont mb-3 mt-0">Become a member</h5>
+                    <p class="small-text">Get the latest news right in your inbox. We never spam!</p>
                   </div>
-                  <div class="col-md-12 mt-2">
-                    <button type="submit" class="btn btn-success btn-block">Subscribe</button>
+                  <div class="col-md-7">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <input type="email" name="email" id="email" class="form-control"
+                          placeholder="Enter your e-mail address" required>
+                      </div>
+                      <div class="col-md-12 mt-2">
+                        <button type="submit" class="btn btn-success btn-block">Subscribe</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
-          </div>
+
+            <script>
+              document.getElementById('subscribe-form').addEventListener('submit', function(e) {
+                const emailInput = document.getElementById('email');
+                const email = emailInput.value;
+
+                if (!validateEmail(email)) {
+                  e.preventDefault();
+                  alert('Please enter a valid email address.');
+                }
+              });
+
+              function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+              }
+            </script>
+          </section>
 
           @include('components.adsense-responsive')
         </div>
@@ -79,17 +112,55 @@
         <div class="box box-author mb-4">
           <div class="post-author d-flex">
             <div class="author-img">
-              <img src="{{ $article->user->avatar ?? asset('assets/img/profpic.svg') }}" alt="{{ $article->user->name }}"
-                class="avatar">
+              <img src="{{ $article->user->avatar ?? asset('assets/img/profpic.svg') }}"
+                alt="{{ $article->user->name }}" class="avatar">
             </div>
             <div class="author-content">
-              <h5><a href="{{ route('pages.author', $article->user->username) }}"
-                  class="text-decoration-none">{{ $article->user->name }}</a></h5>
-              <p class="d-none d-md-block">{{ $article->user->bio }}</p>
+              <h5>
+                <a href="{{ route('pages.author', $article->user->username) }}" class="text-decoration-none">
+                  {{ $article->user->name }}
+                  @if ($article->user->is_verified)
+                    <img src="{{ asset('assets/img/badge.svg') }}" alt="" height="24" class="mb-1">
+                  @endif
+                </a>
+              </h5>
+              {{-- <p class="d-none d-md-block">{{ $article->user->bio }}</p> --}}
+              <div class="profile-stats">
+                <div class="d-flex mb-2" style="gap: 1rem;">
+                  <div>
+                    <p style="margin-bottom: -4px;">{{ $article->user->followers()->count() }}</p>
+                    <small>followers</small>
+                  </div>
+                  <div>
+                    <p style="margin-bottom: -4px;">{{ $article->user->followings()->count() }}</p>
+                    <small>following</small>
+                  </div>
+                </div>
+                @if (auth()->check() && $article->user->id != auth()->id())
+                  <div class="my-2">
+                    @if (auth()->user()->isFollowing($article->user))
+                      <form action="{{ route('users.unfollow', $article->user) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Unfollow</button>
+                      </form>
+                    @else
+                      <form action="{{ route('users.follow', $article->user) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Follow</button>
+                      </form>
+                    @endif
+                  </div>
+                @endif
+              </div>
+
+              <p class="d-none d-md-block">{{ $article->user->bio ?? 'Penulis belum menambahkan biografi.' }}</p>
               <div class="content-social-author">
-                <a href="#" target="_blank" class="author-social">X/Twitter</a>
-                <a href="#" target="_blank" class="author-social">LinkedIn</a>
-                <a href="#" target="_blank" class="author-social">Instagram</a>
+                @if ($article->user->social_links)
+                  @foreach (json_decode($article->user->social_links, true) as $platform => $link)
+                    <a target="_blank" class="author-social" href="{{ $link }}">{{ ucfirst($platform) }}</a>
+                  @endforeach
+                @endif
               </div>
             </div>
           </div>
@@ -105,7 +176,7 @@
               <div class="d-flex mb-3">
                 <figure class="col-md-5">
                   <a href="{{ route('articles.show', $related->slug) }}">
-                    <img src="{{ asset('storage/' . $related->img_featured) }}" alt="{{ $related->title }}">
+                    <img src="{{ asset($related->img_featured) }}" alt="{{ $related->title }}">
                   </a>
                 </figure>
                 <div class="entry-content col-md-7 pl-md-0">
@@ -131,7 +202,9 @@
           <div class="comments-inner">
             <div id="respond" class="comment-respond">
               <h3 class="comment-reply-title">Leave a Reply</h3>
-              <form action="#" method="post" id="commentform" class="comment-form">
+              <form action="{{ route('comments.store', $article->id) }}" method="POST" id="commentform"
+                class="comment-form">
+                @csrf
                 <p class="comment-notes">
                   <span id="email-notes">Your email address will not be published.</span>
                   Required fields are marked <span class="required">*</span>
@@ -155,13 +228,26 @@
                   </div>
                 </div>
                 <p class="form-submit">
-                  <button type="submit" class="btn btn-success">Post Comment</button>
+                  <button type="submit" class="btn btn-inisiator py-2 px-4 rounded-pill">Post Comment</button>
                 </p>
               </form>
+            </div>
+
+            <!-- Display Comments -->
+            <div class="comments-list mt-5">
+              <h4 class="mb-4">Comments ({{ $article->comments->count() }})</h4>
+              @foreach ($article->comments as $comment)
+                <div class="comment-item mb-3">
+                  <h5>{{ $comment->author }}</h5>
+                  <p class="text-muted">{{ $comment->created_at->format('d M Y') }}</p>
+                  <p>{{ $comment->comment }}</p>
+                </div>
+              @endforeach
             </div>
           </div>
         </section>
       </div>
+
     </div>
   </main>
 @endsection

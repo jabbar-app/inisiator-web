@@ -165,7 +165,7 @@
         <div class="container">
           <div class="menu-primary">
             <ul class="d-flex justify-content-start" style="gap: 2rem;">
-              <li><a href="#"><i class="ti ti-plus mb-1"></i></a></li>
+              <li><a href="{{ route('articles.create') }}"><i class="ti ti-plus mb-1"></i></a></li>
               <li><a href="{{ route('pages.home') }}" class="{{ Route::is('pages.home') ? 'menu-active' : '' }}"><a href="{{ route('pages.home') }}">Home</a></li>
               <li><a href="#">Following</a></li>
             </ul>

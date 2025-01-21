@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\InvitationRequest;
 use App\Models\Page;
+use App\Models\Subscriber;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -122,6 +123,18 @@ class PageController extends Controller
         return redirect()->back()->with('success', 'Permintaan undangan Anda telah berhasil dikirim. Kami akan segera menghubungi Anda!');
     }
 
+    public function subscribe(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:subscribers,email',
+        ]);
+
+        Subscriber::create([
+            'email' => $request->email,
+        ]);
+
+        return redirect()->back()->with('success', 'Thank you for subscribing!');
+    }
 
     /**
      * Display a listing of the resource.

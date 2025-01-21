@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\MissionController;
@@ -22,6 +23,7 @@ Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact'
 Route::get('/search', [PageController::class, 'search'])->name('pages.search');
 Route::get('/request-invitation', [PageController::class, 'requestInvitation'])->name('pages.request-invitation');
 Route::post('/send-request-invitation', [PageController::class, 'sendRequestInvitation'])->name('pages.send-request-invitation');
+Route::post('/subscribe', [PageController::class, 'subscribe'])->name('pages.subscribe');
 
 // Route::middleware('auth')->prefix('dashboard')->controller(DashboardController::class)->group(function () {
 //     Route::get('/', 'index')->name('dashboard');
@@ -66,6 +68,8 @@ Route::get('/whatsapp/send-notification/{articleId}', [WhatsappController::class
 
 Route::get('/kategori/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
 Route::get('/tags/{tag}', [PageController::class, 'tagShow'])->name('pages.tags');
+
+Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
 
 Route::post('/validate-referral', [RegisteredUserController::class, 'validateReferral'])->name('validate.referral');
 require __DIR__ . '/auth.php';

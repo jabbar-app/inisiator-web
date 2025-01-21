@@ -11,6 +11,7 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 use OpenAI;
@@ -70,7 +71,7 @@ class ArticleController extends Controller
         if ($request->hasFile('file')) {
             $path = $request->file('file')->store('articles/images', 'public');
             return response()->json([
-                'url' => asset('storage/' . $path),
+                'url' => asset($path),
             ]);
         }
 
@@ -103,25 +104,31 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'       => 'required|string|max:255',
-            'content'     => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'img_featured' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'title'            => 'required|string|max:255',
+            'content'          => 'required',
+            'category_id'      => 'nullable|exists:categories,id',
+            'img_featured'     => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'compressed_image' => 'nullable|string|regex:/^data:image\/\w+;base64,/',
         ]);
 
         $imgPath = null;
 
-        if ($request->hasFile('img_featured')) {
-            $image = $request->file('img_featured');
-            $imageName = time() . '-' . uniqid() . '.webp'; // Generate unique file name
-            $imagePath = public_path('images/' . $imageName); // Path to save the image
+        if ($request->filled('compressed_image')) {
+            $croppedData = $request->input('compressed_image');
+            $imageName = time() . '-' . uniqid() . '.webp';
+            $imagesFolder = public_path('featured-images');
+            $avatarPath = $imagesFolder . '/' . $imageName;
 
-            // Compress and convert to WebP
-            $image = Image::make($image)
-                ->encode('webp', 75) // Convert to WebP with 75% quality
-                ->save($imagePath);
+            if (!is_dir($imagesFolder)) {
+                mkdir($imagesFolder, 0755, true);
+            }
 
-            $imgPath = 'images/' . $imageName;
+            $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $croppedData));
+            if (!file_put_contents($avatarPath, $imageData)) {
+                return redirect()->back()->withErrors(['img_featured' => 'Gagal menyimpan gambar.']);
+            }
+
+            $imgPath = 'featured-images/' . $imageName;
         }
 
         $content = $request->content;
@@ -130,7 +137,7 @@ class ArticleController extends Controller
 
         $article = Article::create([
             'user_id'      => Auth::id(),
-            'category_id'  => $request->category_id,
+            'category_id'  => $request->category_id ?? null,
             'img_featured' => $imgPath,
             'title'        => $request->title,
             'slug'         => SlugService::createSlug(Article::class, 'slug', $request->title),
@@ -141,16 +148,23 @@ class ArticleController extends Controller
         ]);
 
         if ($request->filled('tags')) {
-            $tagIds = collect(json_decode($request->input('tags'), true))
+            $tags = collect(json_decode($request->input('tags'), true))
                 ->pluck('value')
-                ->map(fn($tag) => Tag::firstOrCreate(['name' => ucwords(strtolower(trim($tag)))]))
-                ->pluck('id')
-                ->toArray();
+                ->map(fn($tag) => ucwords(strtolower(trim($tag))));
 
-            $article->tags()->sync($tagIds);
+            $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
+
+            $newTags = $tags->diff(Tag::whereIn('name', $tags)->pluck('name'));
+            $createdTags = $newTags->map(fn($tag) => Tag::create(['name' => $tag])->id);
+
+            $article->tags()->sync(array_merge($tagIds, $createdTags->toArray()));
         }
 
-        app(WhatsappController::class)->sendNotification($article->id, '08990980799');
+        try {
+            app(WhatsappController::class)->sendNotification($article->id, '08990980799');
+        } catch (\Exception $e) {
+            Log::error('WhatsApp notification failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('articles.index')->with('success', 'Artikel berhasil diajukan!');
     }
@@ -161,6 +175,8 @@ class ArticleController extends Controller
             // ->where('status', 'approved') // Opsional, jika hanya ingin menampilkan artikel yang disetujui
             ->with('tags') // Eager load untuk menghindari query tambahan
             ->firstOrFail();
+
+            // dd($article);
 
         $relatedPosts = Article::where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)

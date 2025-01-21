@@ -95,7 +95,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 bgcover"
-                  style="background-image:url({{ $article->img_featured ? asset('storage/' . $article->img_featured) : asset('assets/images/default-thumbnail.jpg') }});">
+                  style="background-image:url({{ $article->img_featured ? asset($article->img_featured) : asset('assets/images/default-thumbnail.jpg') }});">
                 </div>
               </article>
             @empty

@@ -18,7 +18,7 @@
                     <figure>
                       <a href="{{ route('articles.show', $firstFeature->slug) }}">
                         <img
-                          src="{{ $firstFeature->img_featured ? asset('storage/' . $firstFeature->img_featured) : asset('assets/images/thumb/thumb-1240x700.jpg') }}"
+                          src="{{ $firstFeature->img_featured ? asset($firstFeature->img_featured) : asset('assets/images/thumb/thumb-1240x700.jpg') }}"
                           alt="{{ $firstFeature->title }}">
                       </a>
                     </figure>
@@ -53,7 +53,7 @@
                         <figure class="col-4">
                           <a href="{{ route('articles.show', $feature->slug) }}">
                             <img
-                              src="{{ $feature->img_featured ? asset('storage/' . $feature->img_featured) : asset('assets/images/thumb/thumb-700x512.jpg') }}"
+                              src="{{ $feature->img_featured ? asset($feature->img_featured) : asset('assets/images/thumb/thumb-700x512.jpg') }}"
                               alt="{{ $feature->title }}">
                           </a>
                         </figure>
@@ -135,7 +135,7 @@
             </div>
           </div>
           <div class="col-lg-6 bgcover d-none d-md-block"
-            style="background-image:url({{ $editorsPick->img_featured ? asset('storage/' . $editorsPick->img_featured) : asset('assets/images/thumb/thumb-800x495.jpg') }});">
+            style="background-image:url({{ $editorsPick->img_featured ? asset($editorsPick->img_featured) : asset('assets/images/thumb/thumb-800x495.jpg') }});">
           </div>
         @endif
       </div>
@@ -179,7 +179,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 bgcover"
-                  style="background-image:url({{ $article->img_featured ? asset('storage/' . $article->img_featured) : asset('assets/images/thumb/thumb-512x512.jpg') }});">
+                  style="background-image:url({{ $article->img_featured ? asset($article->img_featured) : asset('assets/images/thumb/thumb-512x512.jpg') }});">
                 </div>
               </article>
             @endif

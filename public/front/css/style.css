@@ -269,9 +269,9 @@ hr.section-divider::before {
 }
 
 .bg-lightblue {
-    fill: #e8f3ec !important;
-    background: #e8f3ec !important;
-    border-radius: 3px;
+    background: #bdf6ff !important;
+    border: none;
+    border-radius: 4px;
 }
 
 .btn-success {

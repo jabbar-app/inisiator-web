@@ -36,7 +36,7 @@
                     </div>
                   </div>
                   <div class="col-md-3 bgcover"
-                    style="background-image:url({{ $result->featured_image ? asset('storage/' . $result->featured_image) : asset('assets/images/default-image.jpg') }});">
+                    style="background-image:url({{ $result->featured_image ? asset($result->featured_image) : asset('assets/images/default-image.jpg') }});">
                   </div>
                 </article>
               @endforeach

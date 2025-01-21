@@ -48,6 +48,8 @@
                     <p class="m-0 text-muted">Tarik & Lepas gambar di sini atau klik untuk memilih</p>
                   </div>
                   <input type="file" name="img_featured" id="img_featured" class="d-none" accept="image/*">
+                  <input type="hidden" name="compressed_image" id="compressed_image">
+                  <small class="text-muted d-block mt-2">Gambar akan otomatis dikompresi sebelum diunggah.</small>
                 </div>
 
                 <!-- Select Kategori -->
@@ -111,125 +113,84 @@
 
 @push('scripts')
   <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/compressorjs/dist/compressor.min.js"></script>
   <script src="https://unpkg.com/@yaireo/tagify"></script>
   <script>
-    // Initialize Quill Editor
-    var quill = new Quill('#editor-container', {
-      theme: 'snow',
-      modules: {
-        toolbar: [
-          [{
-            header: [1, 2, 3, false]
-          }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{
-            list: 'ordered'
-          }, {
-            list: 'bullet'
-          }],
-          ['link'],
-          ['clean']
-        ]
-      }
-    });
-
-    // Set existing content (if any)
-    var existingContent = {!! json_encode(old('content', '')) !!};
-    quill.root.innerHTML = existingContent;
-
-    function updateWordCount(element, wordCountElementId, maxWords, isContent = true, yellowThreshold = 10) {
-      const wordCountElement = document.getElementById(wordCountElementId);
-      const words = element.value.trim().split(/\s+/).filter(word => word.length > 0).length;
-
-      // Update only the word count number
-      wordCountElement.textContent = words;
-
-      // Apply color based on word count logic
-      if (isContent) {
-        // Content logic: red/yellow below 300, green above 300
-        if (words < maxWords - yellowThreshold) {
-          wordCountElement.style.color = 'red';
-        } else if (words < maxWords) {
-          wordCountElement.style.color = 'orange';
-        } else {
-          wordCountElement.style.color = 'green';
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Quill Editor
+      const quill = new Quill('#editor-container', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            [{
+              header: [1, 2, 3, false]
+            }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{
+              list: 'ordered'
+            }, {
+              list: 'bullet'
+            }],
+            ['link'],
+            ['clean']
+          ]
         }
-      } else {
-        // Excerpt logic: green below 30, red above 30
-        if (words <= maxWords) {
-          wordCountElement.style.color = 'green';
-        } else {
-          wordCountElement.style.color = 'red';
+      });
+
+      quill.on('text-change', function() {
+        document.getElementById('content').value = quill.root.innerHTML;
+      });
+
+      const dropZone = document.getElementById('drop-zone');
+      const fileInput = document.getElementById('img_featured');
+      const compressedInput = document.getElementById('compressed_image');
+
+      dropZone.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          compressAndPreviewImage(files[0]);
         }
-      }
-    }
+      });
 
-    // Update Content Word Count
-    quill.on('text-change', function() {
-      const content = quill.root.innerText.trim();
-      document.getElementById('content').value = quill.root.innerHTML;
-      updateWordCount({
-        value: content
-      }, 'content-word-count', 300, true, 30);
-    });
+      fileInput.addEventListener('change', (e) => {
+        if (fileInput.files.length > 0) {
+          compressAndPreviewImage(fileInput.files[0]);
+        }
+      });
 
-    // Update Excerpt Word Count
-    document.getElementById('excerpt').addEventListener('input', function() {
-      updateWordCount(this, 'excerpt-word-count', 30, false);
-    });
-
-    // Drop Zone Logic
-    let dropZone = document.getElementById('drop-zone');
-    let fileInput = document.getElementById('img_featured');
-
-    dropZone.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      dropZone.classList.add('dragover');
-    });
-
-    dropZone.addEventListener('dragleave', function(e) {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-    });
-
-    dropZone.addEventListener('drop', function(e) {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-      let files = e.dataTransfer.files;
-      if (files.length > 0) {
-        fileInput.files = files;
-        dropZone.innerHTML = `<p class="m-0">${files[0].name}</p>`;
+      function compressAndPreviewImage(file) {
+        new Compressor(file, {
+          quality: 1,
+          mimeType: 'image/webp',
+          maxWidth: 1024,
+          success(result) {
+            const reader = new FileReader();
+            reader.readAsDataURL(result);
+            reader.onload = () => {
+              compressedInput.value = reader.result; // Set Base64 data
+              dropZone.innerHTML = `<p class="m-0 text-success">${file.name} (terkompresi)</p>`;
+            };
+          },
+          error(err) {
+            console.error(err.message);
+          },
+        });
       }
     });
-
-    dropZone.addEventListener('click', function() {
-      fileInput.click();
-    });
-
-    fileInput.addEventListener('change', function() {
-      if (fileInput.files.length > 0) {
-        dropZone.innerHTML = `<p class="m-0">${fileInput.files[0].name}</p>`;
-      }
-    });
-
-    // Tagify Initialization
-    const tagify = document.querySelector("#tags");
-    if (tagify) {
-      fetch("/articles/tags")
-        .then(response => response.json())
-        .then(whitelist => {
-          new Tagify(tagify, {
-            whitelist: whitelist,
-            maxTags: 10,
-            dropdown: {
-              maxItems: 20,
-              classname: "tags-inline",
-              enabled: 0,
-              closeOnSelect: false,
-            },
-          });
-        })
-        .catch(error => console.error("Error fetching tags:", error));
-    }
   </script>
 @endpush
