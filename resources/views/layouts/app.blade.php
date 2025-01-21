@@ -7,7 +7,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
 
-  <title>Inisiator</title>
+  <!-- Meta Title -->
+  <title>Inisiator - A storytelling platform.</title>
+
+  <!-- Meta Description -->
+  <meta name="description"
+    content="Inisiator adalah platform storytelling untuk berbagi cerita inspiratif, mendalam, dan bermakna. Temukan kisah-kisah menarik dari berbagai kategori, seperti hubungan, budaya, teknologi, dan eksplorasi." />
+
+  <!-- Meta Keywords -->
+  <meta name="keywords"
+    content="storytelling, cerita inspiratif, platform cerita, hubungan, teknologi, budaya, eksplorasi, psikologi, edukasi" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://inisiator.com" />
+
+  <!-- Author -->
+  <meta name="author" content="Inisiator Team" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Inisiator - A storytelling platform." />
+  <meta property="og:description"
+    content="Tempat untuk menemukan dan berbagi cerita yang mendalam dan bermakna. Jelajahi berbagai kisah inspiratif tentang hubungan, budaya, eksplorasi, dan banyak lagi." />
+  <meta property="og:image" content="{{ asset('assets/img/profpic.svg') }}" />
+  <meta property="og:url" content="https://inisiator.com" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Inisiator - A storytelling platform." />
+  <meta name="twitter:description"
+    content="Temukan cerita inspiratif dan bermakna dari berbagai kategori, mulai dari hubungan hingga eksplorasi." />
+  <meta name="twitter:image" content="{{ asset('assets/img/profpic.svg') }}" />
+
+  <!-- Mobile Optimization -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/company/inisiator-icon.svg') }}" />
 
   <!-- Bootstrap, Font Awesome, Aminate, Owl Carausel, Normalize CSS -->
   <link href="{{ asset('front/css/bootstrap.css') }}" rel="stylesheet">
@@ -166,7 +202,8 @@
           <div class="menu-primary">
             <ul class="d-flex justify-content-start" style="gap: 2rem;">
               <li><a href="{{ route('articles.create') }}"><i class="ti ti-plus mb-1"></i></a></li>
-              <li><a href="{{ route('pages.home') }}" class="{{ Route::is('pages.home') ? 'menu-active' : '' }}"><a href="{{ route('pages.home') }}">Home</a></li>
+              <li><a href="{{ route('pages.home') }}" class="{{ Route::is('pages.home') ? 'menu-active' : '' }}"><a
+                    href="{{ route('pages.home') }}">Home</a></li>
               <li><a href="#">Following</a></li>
             </ul>
           </div>
