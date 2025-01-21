@@ -35,6 +35,7 @@
   {{-- Dashboard CSS --}}
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+  <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/tabler-icons.css') }}" />
 
   @stack('styles')
 
@@ -79,7 +80,8 @@
       </form>
       <nav>
         <ul>
-          <li class="{{ Route::is('pages.home') ? 'current-menu-item' : '' }}"><a href="{{ route('pages.home') }}">Home</a></li>
+          <li class="{{ Route::is('pages.home') ? 'current-menu-item' : '' }}"><a
+              href="{{ route('pages.home') }}">Home</a></li>
           <li class="menu-item-has-children"><a href="categories.html">Categories</a>
             <ul class="sub-menu">
               <li><a href="categories.html">Politics</a></li>
@@ -99,61 +101,74 @@
 
   <div id="wrapper">
     <header id="header" class="d-lg-block d-none">
-      <div class="container">
+      <div class="mx-4">
         <div class="align-items-center w-100">
-          <h1 class="logo text-left float-left navbar-brand">
-            <a href="{{ route('pages.home') }}" class="logo">Inisiator</a>
-          </h1>
-          <div class="header-right float-right w-50">
-            <div class="d-inline-flex float-right text-right align-items-center">
-              <ul class="social-network heading navbar-nav d-lg-flex align-items-center">
-                <li><a href="#"><i class="icon-facebook"></i></a></li>
-                <li><a href="#"><i class="icon-instagram"></i></a></li>
-              </ul>
-              <ul class="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
-                <li>
-                  @guest
-                    <a href="{{ route('login') }}" class="btn">Login/Register</a>
-                  @else
-                    <a href="{{ route('dashboard') }}" class="btn">Dashboard</a>
-                  @endguest
-                </li>
-              </ul>
-              @auth
-                <a class="author-avatar" href="{{ route('pages.author', Auth::user()->username) }}"><img
-                    src="{{ Auth::user()->avatar ?? asset('assets/img/profpic.svg') }}"
-                    alt="{{ Auth::user()->name }}"></a>
-              @endauth
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <h1 class="logo text-left float-left navbar-brand">
+                <a href="{{ route('pages.home') }}" class="logo">Inisiator</a>
+              </h1>
+              <form action="{{ route('pages.search') }}" method="get" class="search-container">
+                <i class="ti ti-search search-icon"></i>
+                <input type="text" class="form-control search-input" placeholder="Search..."
+                  value="{{ request('s') }}" name="s">
+              </form>
             </div>
-            {{-- <form action="#" method="get" class="search-form d-lg-flex float-right">
-              <a href="javascript:void(0)" class="searh-toggle">
-                <i class="icon-search"></i>
-              </a>
-              <input type="text" class="search_field" placeholder="Search..." value="" name="s">
-            </form> --}}
-            <form action="{{ route('pages.search') }}" method="get" class="search-form d-lg-flex float-right">
-              <a href="javascript:void(0)" class="searh-toggle">
-                <i class="icon-search"></i>
-              </a>
-              <input type="text" class="search_field" placeholder="Search..." value="{{ request('s') }}"
-                name="s">
-            </form>
+            <div class="header-right float-right w-50">
+              <div class="d-inline-flex float-right text-right align-items-center">
+                <ul class="social-network heading navbar-nav d-lg-flex align-items-center">
+                  <li><a href="#" target="_blank"><i class="icon-linkedin"></i></a></li>
+                  <li><a href="https://twitter.com/inisiatorcom" target="_blank"><i class="icon-twitter"></i></a>
+                  </li>
+                  <li><a href="https://instagram.com/inisiatorcom" target="_blank"><i class="icon-instagram"></i></a>
+                  </li>
+                </ul>
+                <ul class="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
+                  <li>
+                    @guest
+                      <a href="{{ route('login') }}" class="btn rounded-pill">Login/Register</a>
+                    @else
+                      <a href="{{ route('dashboard') }}" class="btn">Dashboard</a>
+                    @endguest
+                  </li>
+                </ul>
+                @auth
+                  <a class="author-avatar" href="{{ route('pages.author', Auth::user()->username) }}"><img
+                      src="{{ Auth::user()->avatar ?? asset('assets/img/profpic.svg') }}"
+                      alt="{{ Auth::user()->name }}"></a>
+                @endauth
+              </div>
+            </div>
           </div>
         </div>
         <div class="clearfix"></div>
       </div>
+      <p class="text-center mt-2 mb-0 bg-light position-relative dismissible-alert"
+        style="padding: 14px 40px 14px 0; color: #212121; font-size: 14px;">
+
+        <img src="{{ asset('assets/img/rocket.svg') }}" alt="Inisiator" height="16" style="margin-top: -4px;">
+        Tingkatkan views hingga 10x lipat. Dapatkan
+        <a href="#" style="text-decoration: underline; font-weight: 600;">badge verifikasi</a> sekarang!
+
+        <!-- Close button -->
+        <a href="javascript:void(0);" onclick="closeBanner()" class="position-absolute btn-banner-close">
+          ×
+        </a>
+        <script>
+          function closeBanner() {
+            console.log('halo');
+          }
+        </script>
+      </p>
+
       <nav id="main-menu" class="stick d-lg-block d-none">
         <div class="container">
           <div class="menu-primary">
             <ul class="d-flex justify-content-start" style="gap: 2rem;">
-              <li class="{{ Route::is('pages.home') ? 'current-menu-item' : '' }}"><a href="{{ route('pages.home') }}"><a href="{{ route('pages.home') }}">Home</a></li>
-              <li class="menu-item-has-children"><a href="#">Kategori</a>
-                <ul class="sub-menu justify-content-start">
-                  <li><a href="/kategori/teknologi">Teknologi</a></li>
-                </ul>
-              </li>
+              <li><a href="#"><i class="ti ti-plus mb-1"></i></a></li>
+              <li><a href="{{ route('pages.home') }}" class="{{ Route::is('pages.home') ? 'menu-active' : '' }}"><a href="{{ route('pages.home') }}">Home</a></li>
+              <li><a href="#">Following</a></li>
             </ul>
-            <span></span>
           </div>
         </div>
       </nav>
@@ -202,3 +217,20 @@
 </body>
 
 </html>
+
+@push('scripts')
+  <script>
+    function close() {
+      console.log('halo');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const closeBtn = document.querySelector('.alert-close-btn');
+      const alertBox = document.querySelector('.dismissible-alert');
+
+      closeBtn.addEventListener('click', () => {
+        alertBox.style.display = 'none'; // Hide the <p> element
+      });
+    });
+  </script>
+@endpush

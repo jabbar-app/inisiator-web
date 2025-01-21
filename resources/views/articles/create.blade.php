@@ -1,78 +1,80 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="row justify-content-center">
-    <div class="col-12">
-      <div class="card shadow-sm p-4 border-0">
-        <h2 class="mb-4 text-center">Buat Artikel Baru</h2>
+  <div class="container py-5">
+    <div class="row justify-content-center f-default">
+      <div class="col-12">
+        <div class="card shadow-sm p-4 border-0">
+          <h2 class="mb-4 text-center f-mono">Buat Artikel Baru</h2>
 
-        <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data" class="needs-validation">
-          @csrf
+          <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data" class="needs-validation">
+            @csrf
 
-          <div class="row">
-            <div class="col-xl-8 col-sm-12">
-              <!-- Input Judul -->
-              <div class="mb-3">
-                <label for="title" class="form-label fw-semibold">Judul</label>
-                <input type="text" name="title" id="title" class="form-control" placeholder="Tulis Judul Artikel"
-                  value="{{ old('title') }}" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="content" class="form-label fw-semibold">Konten</label>
-                <div id="editor-container" class="border rounded p-2 bg-white" style="height: 400px;"></div>
-                <input type="hidden" name="content" id="content" value="{{ old('content') }}">
-                <small class="text-muted">Kamu sudah menulis
-                  <span id="content-word-count" style="color: inherit;">0</span>
-                  dari minimal 300 kata yang direkomendasikan.
-                </small>
-              </div>
-
-              <div class="mb-3">
-                <label for="excerpt" class="form-label fw-semibold">Ringkasan</label>
-                <textarea name="excerpt" id="excerpt" class="form-control" rows="3" placeholder="Tulis ringkasan di sini."
-                  required>{{ old('excerpt') }}</textarea>
-                <small class="text-muted">
-                  Kamu sudah menulis <span id="excerpt-word-count" style="color: inherit;">0</span>
-                  dari 30 kata maksimal untuk ringkasan.
-                </small>
-              </div>
-            </div>
-
-            <div class="col-xl-4 col-sm-12">
-              <!-- Input Featured Image -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Featured Image (Opsional)</label>
-                <div id="drop-zone" class="drop-zone text-center p-4 border rounded position-relative">
-                  <p class="m-0 text-muted">Tarik & Lepas gambar di sini atau klik untuk memilih</p>
+            <div class="row">
+              <div class="col-xl-8 col-sm-12">
+                <!-- Input Judul -->
+                <div class="mb-3">
+                  <label for="title" class="form-label fw-semibold">Judul</label>
+                  <input type="text" name="title" id="title" class="form-control"
+                    placeholder="Tulis Judul Artikel" value="{{ old('title') }}" required>
                 </div>
-                <input type="file" name="img_featured" id="img_featured" class="d-none" accept="image/*">
+
+                <div class="mb-3">
+                  <label for="content" class="form-label fw-semibold">Konten</label>
+                  <div id="editor-container" class="border rounded p-2 bg-white" style="height: 400px;"></div>
+                  <input type="hidden" name="content" id="content" value="{{ old('content') }}">
+                  <small class="text-muted">Kamu sudah menulis
+                    <span id="content-word-count" style="color: inherit;">0</span>
+                    dari minimal 300 kata yang direkomendasikan.
+                  </small>
+                </div>
+
+                <div class="mb-3">
+                  <label for="excerpt" class="form-label fw-semibold">Ringkasan</label>
+                  <textarea name="excerpt" id="excerpt" class="form-control" rows="3" placeholder="Tulis ringkasan di sini."
+                    required>{{ old('excerpt') }}</textarea>
+                  <small class="text-muted">
+                    Kamu sudah menulis <span id="excerpt-word-count" style="color: inherit;">0</span>
+                    dari 30 kata maksimal untuk ringkasan.
+                  </small>
+                </div>
               </div>
 
-              <!-- Select Kategori -->
-              <div class="mb-3">
-                <label for="category_id" class="form-label fw-semibold">Kategori</label>
-                <select name="category_id" id="category_id" class="form-select" required>
-                  <option value="" selected disabled>- Pilih Kategori -</option>
-                  @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                      {{ $category->title }}
-                    </option>
-                  @endforeach
-                </select>
-              </div>
+              <div class="col-xl-4 col-sm-12">
+                <!-- Input Featured Image -->
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Featured Image (Opsional)</label>
+                  <div id="drop-zone" class="drop-zone text-center p-4 border rounded position-relative">
+                    <p class="m-0 text-muted">Tarik & Lepas gambar di sini atau klik untuk memilih</p>
+                  </div>
+                  <input type="file" name="img_featured" id="img_featured" class="d-none" accept="image/*">
+                </div>
 
-              <!-- Input Tags -->
-              <div class="mb-3">
-                <label for="tags" class="form-label fw-semibold">Tags</label>
-                <input type="text" class="w-100" id="tags" name="tags" placeholder="Pilih Tag"
-                  value="{{ old('tags') }}">
-              </div>
+                <!-- Select Kategori -->
+                <div class="mb-3">
+                  <label for="category_id" class="form-label fw-semibold">Kategori</label>
+                  <select name="category_id" id="category_id" class="form-select" required>
+                    <option value="" selected disabled>- Pilih Kategori -</option>
+                    @foreach ($categories as $category)
+                      <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                        {{ $category->title }}
+                      </option>
+                    @endforeach
+                  </select>
+                </div>
 
-              <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">Submit</button>
+                <!-- Input Tags -->
+                <div class="mb-3">
+                  <label for="tags" class="form-label fw-semibold">Tags</label>
+                  <input type="text" class="w-100" id="tags" name="tags" placeholder="Pilih Tag"
+                    value="{{ old('tags') }}">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Submit</button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>

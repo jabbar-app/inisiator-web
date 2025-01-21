@@ -37,15 +37,48 @@
         <div data-i18n="Artikel">Artikel</div>
       </a>
     </li>
+    <li class="menu-item {{ Route::is('missions.*') ? 'active' : '' }}">
+      <a href="{{ route('missions.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons ti ti-spiral"></i>
+        <div data-i18n="Portal Misi">Portal Misi</div>
+      </a>
+    </li>
 
     <li class="menu-header small text-uppercase">
-      <span class="menu-header-text" data-i18n="Profil">Profil</span>
+      <span class="menu-header-text" data-i18n="Manajemen Akun">Manajemen Akun</span>
     </li>
-    <li class="menu-item {{ Route::is('profile.edit') ? 'active' : '' }}">
-      <a href="{{ route('profile.edit') }}" class="menu-link">
+    <li class="menu-item {{ Route::is('profile.*') ? 'active open' : '' }}">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons ti ti-smart-home"></i>
-        <div data-i18n="Edit Profil">Edit Profil</div>
+        <div data-i18n="Profil">Profil</div>
       </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{{ route('pages.author', Auth::user()->username) }}" class="menu-link" target="_blank">
+            <div data-i18n="{{ Auth::user()->name }}">{{ Auth::user()->name }}</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('profile.edit') ? 'active' : '' }}">
+          <a href="{{ route('profile.edit') }}" class="menu-link">
+            <div data-i18n="Edit Profil">Edit Profil</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('profile.verification') ? 'active' : '' }}">
+          <a href="{{ route('profile.verification') }}" class="menu-link">
+            <div data-i18n="Verifikasi">Verifikasi</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('profile.rank') ? 'active' : '' }}">
+          <a href="{{ route('profile.rank') }}" class="menu-link">
+            <div data-i18n="Rank & XP">Rank & XP</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('profile.bank-account') ? 'active' : '' }}">
+          <a href="{{ route('profile.bank-account') }}" class="menu-link">
+            <div data-i18n="Rekening Bank">Rekening Bank</div>
+          </a>
+        </li>
+      </ul>
     </li>
     <li class="menu-item">
       <form method="POST" action="{{ route('logout') }}">

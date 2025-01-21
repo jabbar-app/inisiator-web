@@ -2,6 +2,10 @@
     font-family: 'B612 Mono', monospace;
 }
 
+.f-default {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+}
+
 .fw-normal {
     font-weight: 400 !important;
 }
@@ -33,4 +37,79 @@ input[type="reset"]:hover,
 input[type="submit"],
 .blue {
     background-color: #14A0B4 !important;
+}
+
+/* Styling untuk container form */
+.search-container {
+    position: relative;
+    width: 200px;
+    /* Sesuaikan lebar sesuai kebutuhan */
+    margin-left: 12px;
+    /* Margin untuk posisi */
+    display: flex;
+    align-items: center;
+}
+
+/* Styling untuk ikon pencarian */
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: #6c757d;
+    font-size: 16px;
+    /* Ukuran ikon */
+    cursor: pointer;
+    /* Memberikan indikasi klik */
+}
+
+/* Styling untuk input */
+.search-input {
+    width: 100%;
+    padding-left: 35px;
+    height: 28px;
+    border-radius: 50px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* Styling untuk input saat fokus */
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn-banner-close {
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    font-weight: 300;
+    font-size: 28px;
+    margin-top: -4px;
+}
+
+.menu-active {
+    color: #14A0B4 !important;
+}
+
+
+/* Inherit from Main CSS */
+.nav-tabs .nav-link.active {
+    color: #14A0B4;
+}
+
+.nav-tabs .nav-link.active:hover,
+.nav-tabs .nav-link.active:focus {
+    /* color: #FFFFFF; */
+}
+
+.nav-tabs .nav-link:not(.active):hover,
+.nav-tabs .nav-link:not(.active):focus,
+.nav-pills .nav-link:not(.active):hover,
+.nav-pills .nav-link:not(.active):focus {
+    color: #FFFFFF;
 }

@@ -193,46 +193,70 @@
                 </div>
               </li>
               <!-- Quick links -->
+            --}}
 
               <!-- Notification -->
               <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
-                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
-                  data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
+                  data-bs-auto-close="outside" aria-expanded="false">
                   <i class="ti ti-bell ti-md"></i>
-                  <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+                  @if ($notifications->where('is_read', false)->count() > 0)
+                    <span class="badge bg-danger rounded-pill badge-notifications">
+                      {{ $notifications->where('is_read', false)->count() }}
+                    </span>
+                  @endif
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end py-0">
                   <li class="dropdown-menu-header border-bottom">
                     <div class="dropdown-header d-flex align-items-center py-3">
                       <h5 class="text-body mb-0 me-auto">Notification</h5>
-                      <a href="javascript:void(0)" class="dropdown-notifications-all text-body"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Mark all as read"><i
-                          class="ti ti-mail-opened fs-4"></i></a>
+                      <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Mark all as read"><i class="ti ti-mail-opened fs-4"></i></a>
                     </div>
                   </li>
                   <li class="dropdown-notifications-list scrollable-container">
                     <ul class="list-group list-group-flush">
-                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                        <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar">
-                              <img src="../../assets/img/avatars/1.png" alt class="h-auto rounded-circle" />
+                      @forelse ($notifications as $notification)
+                        <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                          <div class="d-flex">
+                            <!-- Gambar notifikasi -->
+                            <div class="flex-shrink-0 me-3">
+                              <div class="avatar">
+                                <img src="{{ asset($notification->image) }}" alt class="h-auto rounded-circle" />
+                              </div>
+                            </div>
+                            <a href="{{ route('notifications.read', $notification->id) }}" class="flex-grow-1">
+                              <!-- Judul notifikasi -->
+                              <h6 class="mb-1">{{ $notification->title }}</h6>
+                              <!-- Pesan notifikasi -->
+                              <p class="mb-0 text-black">{{ $notification->message }}</p>
+                              <!-- Waktu notifikasi -->
+                              <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                            </a>
+                            <!-- Aksi tambahan -->
+                            <div class="flex-shrink-0 dropdown-notifications-actions">
+                              <div
+                                class="dropdown-notifications-read">
+                                <span class="badge badge-dot @if($notification->is_read) bg-light @else bg-primary @endif"></span>
+                              </div>
+                              <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <a href="{{ route('notifications.destroy', $notification->id) }}" class="text-light"
+                                  onclick="event.preventDefault(); this.closest('form').submit();">
+                                  <span class="ti ti-x"></span>
+                                </a>
+                              </form>
                             </div>
                           </div>
-                          <div class="flex-grow-1">
-                            <h6 class="mb-1">Congratulation Lettie 🎉</h6>
-                            <p class="mb-0">Won the monthly best seller gold badge</p>
-                            <small class="text-muted">1h ago</small>
-                          </div>
-                          <div class="flex-shrink-0 dropdown-notifications-actions">
-                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
-                                class="badge badge-dot"></span></a>
-                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
-                                class="ti ti-x"></span></a>
-                          </div>
-                        </div>
-                      </li>
-                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        </li>
+                      @empty
+                        <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                          <p class="mb-0">Belum ada notifikasi baru.</p>
+                        </li>
+                      @endforelse
+                      {{-- <li class="list-group-item list-group-item-action dropdown-notifications-item">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar">
@@ -394,19 +418,18 @@
                                 class="ti ti-x"></span></a>
                           </div>
                         </div>
-                      </li>
+                      </li> --}}
                     </ul>
                   </li>
                   <li class="dropdown-menu-footer border-top">
                     <a href="javascript:void(0);"
                       class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center">
-                      View all notifications
+                      Lihat semua
                     </a>
                   </li>
                 </ul>
               </li>
               <!--/ Notification -->
-            --}}
 
               <!-- User -->
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -574,6 +597,7 @@
 
   <!-- Page JS -->
   <script src="{{ asset('assets/js/app-ecommerce-dashboard.js') }}"></script>
+  <script src="{{ asset('assets/js/ui-popover.js') }}"></script>
   @stack('scripts')
 </body>
 

@@ -25,7 +25,7 @@ class EarningController extends Controller
         $totalArticles = Article::where('user_id', Auth::id())->where('status', 'approved')->count();
 
         // Threshold minimal
-        $threshold = 200000;
+        $threshold = 500000;
 
         return view('earnings.index', compact('earnings', 'totalViews', 'totalArticles', 'threshold'));
     }

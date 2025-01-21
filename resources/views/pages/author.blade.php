@@ -12,34 +12,45 @@
               <div class="post-author row-flex">
                 <div class="author-img">
                   <img alt="author avatar"
-                    src="{{ $author->avatar ? asset($author->avatar) : asset('assets/img/profpic.svg') }}"
-                    class="avatar">
+                    src="{{ $author->avatar ? asset($author->avatar) : asset('assets/img/profpic.svg') }}" class="avatar">
                 </div>
                 <div class="author-content">
                   <div class="top-author">
-                    <h4 class="heading-font mb-1"><a href="#" title="{{ $author->name }}"
-                        rel="author">{{ $author->name }}</a></h4>
+                    <h4 class="heading-font mb-1">
+                      <a href="#" title="{{ $author->name }}" rel="author">
+                        {{ $author->name }}
+                        @if ($author->is_verified)
+                          <img src="{{ asset('assets/img/badge.svg') }}" alt="" height="24" class="mb-1">
+                        @endif
+                      </a>
+                    </h4>
                   </div>
                   <div class="profile-stats">
-                    <p class="mb-2">
-                      {{ $author->followers()->count() }} followers &nbsp;&nbsp;&nbsp;&nbsp;
-                      {{ $author->followings()->count() }} following
-                    </p>
-                    @if ($author->id != Auth::id())
-                    <div class="my-2">
-                      @if (auth()->user()->isFollowing($author))
-                        <form action="{{ route('users.unfollow', $author) }}" method="POST">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="btn btn-danger">Unfollow</button>
-                        </form>
-                      @else
-                        <form action="{{ route('users.follow', $author) }}" method="POST">
-                          @csrf
-                          <button type="submit" class="btn btn-primary">Follow</button>
-                        </form>
-                      @endif
+                    <div class="d-flex mb-2" style="gap: 1rem;">
+                      <div>
+                        <p style="margin-bottom: -4px;">{{ $author->followers()->count() }}</p>
+                        <small>followers</small>
+                      </div>
+                      <div>
+                        <p style="margin-bottom: -4px;">{{ $author->followings()->count() }}</p>
+                        <small>following</small>
+                      </div>
                     </div>
+                    @if (auth()->check() && $author->id != auth()->id())
+                      <div class="my-2">
+                        @if (auth()->user()->isFollowing($author))
+                          <form action="{{ route('users.unfollow', $author) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Unfollow</button>
+                          </form>
+                        @else
+                          <form action="{{ route('users.follow', $author) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Follow</button>
+                          </form>
+                        @endif
+                      </div>
                     @endif
                   </div>
 
@@ -127,14 +138,5 @@
         </div>
       </div>
     </div>
-
-    <div class="content-widget">
-      <div class="container">
-        <div class="sidebar-widget ads">
-          @include('components.adsense-responsive')
-        </div>
-        <div class="hr"></div>
-      </div>
-    </div> <!--content-widget-->
   </main>
 @endsection

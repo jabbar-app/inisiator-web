@@ -7,7 +7,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-9">
-          <h2 class="spanborder h4"><span>Pilihan Editor</span></h2>
+          <h2 class="spanborder h4"><span>Editor's Pick</span></h2>
           <div class="row">
             @if ($featureds && $featureds->count() > 0)
               <!-- Artikel Pertama -->

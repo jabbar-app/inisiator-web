@@ -87,4 +87,19 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function bankAccount()
+    {
+        return view('profile.bank-account');
+    }
+
+    public function rank()
+    {
+        return view('profile.rank');
+    }
+
+    public function verification()
+    {
+        return view('profile.verification');
+    }
 }

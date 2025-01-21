@@ -373,7 +373,7 @@ body {
 body,
 .entry-meta,
 .heading-font {
-    font-family: 'Cabin', sans-serif;
+    /* font-family: 'Cabin', sans-serif; */
 }
 
 .menu-primary,
