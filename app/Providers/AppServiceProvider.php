@@ -20,11 +20,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Redirect ke login jika session expired
-        view()->composer('*', function ($view) {
-            if (!Auth::check() && request()->route() && !request()->routeIs('login')) {
-                redirect()->route('login')->send();
-            }
-        });
+        // Redirect ke login jika session expired, kecuali untuk route tertentu
+        // view()->composer('*', function ($view) {
+        //     $excludedRoutes = ['login', 'register', 'password.request', 'password.reset'];
+
+        //     if (!Auth::check() && request()->route() && !in_array(request()->route()->getName(), $excludedRoutes)) {
+        //         redirect()->route('login')->send();
+        //     }
+        // });
     }
 }

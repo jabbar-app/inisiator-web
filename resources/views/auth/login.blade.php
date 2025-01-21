@@ -13,7 +13,13 @@
       </div>
       <!-- /Logo -->
       <h4 class="mb-1 pt-2">Login 🚀</h4>
-      <p class="mb-4">Masukkan email dan password untuk mengakses dashboard.</p>
+      @if (request('message'))
+        <div class="alert alert-warning my-3">
+          {{ request('message') }}
+        </div>
+      @else
+        <p class="mb-4">Masukkan email dan password untuk mengakses dashboard.</p>
+      @endif
 
       <form action="{{ route('login') }}" method="POST" id="formAuthentication" class="mb-3">
         @csrf
