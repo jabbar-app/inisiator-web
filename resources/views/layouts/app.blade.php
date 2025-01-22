@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr"
+  data-theme="theme-default" data-assets-path="{{ asset('assets/') }}"
+  data-template="vertical-menu-template-no-customizer">
 
 <head>
   <!-- Meta tags -->
@@ -15,7 +17,8 @@
     content="Inisiator adalah platform storytelling untuk berbagi cerita inspiratif, mendalam, dan bermakna. Temukan kisah-kisah menarik dari berbagai kategori, seperti hubungan, budaya, teknologi, dan eksplorasi." />
 
   <!-- Meta Keywords -->
-  <meta name="keywords" content="storytelling, cerita inspiratif, platform cerita, hubungan, teknologi, budaya, eksplorasi, psikologi, edukasi" />
+  <meta name="keywords"
+    content="storytelling, cerita inspiratif, platform cerita, hubungan, teknologi, budaya, eksplorasi, psikologi, edukasi" />
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://inisiator.com" />
@@ -25,7 +28,8 @@
 
   <!-- Open Graph / Facebook -->
   <meta property="og:title" content="Inisiator - A storytelling platform." />
-  <meta property="og:description" content="Tempat untuk menemukan dan berbagi cerita yang mendalam dan bermakna. Jelajahi berbagai kisah inspiratif tentang hubungan, budaya, eksplorasi, dan banyak lagi." />
+  <meta property="og:description"
+    content="Tempat untuk menemukan dan berbagi cerita yang mendalam dan bermakna. Jelajahi berbagai kisah inspiratif tentang hubungan, budaya, eksplorasi, dan banyak lagi." />
   <meta property="og:image" content="{{ asset('assets/img/profpic.svg') }}" />
   <meta property="og:url" content="https://inisiator.com" />
   <meta property="og:type" content="website" />
@@ -66,21 +70,11 @@
   <link rel="stylesheet" href="{{ asset('front/css/popup.css') }}">
   <link rel="stylesheet" href="{{ asset('front/css/customize.css') }}">
 
-  {{-- Dashboard CSS --}}
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/tabler-icons.css') }}" />
-
-  @stack('styles')
-
-
   <script src="{{ asset('front/js/jquery.min.js') }}"></script>
   <script src="{{ asset('front/js/jquery.bpopup.min.js') }}"></script>
-  <script>
-    $(document).ready(function() {
-      $('#popup_this').bPopup();
-    });
-  </script>
+
+  {{-- <link rel="stylesheet" href="{{ asset('assets/vendor/css/core.css') }}"> --}}
+  @include('layouts.css')
 </head>
 
 <body class="home">
@@ -160,9 +154,9 @@
                 <ul class="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
                   <li>
                     @guest
-                      <a href="{{ route('login') }}" class="btn rounded-pill">Login/Register</a>
+                      <a href="{{ route('login') }}" class="btn  btn-outline-primary rounded-pill px-4">Login/Register</a>
                     @else
-                      <a href="{{ route('dashboard') }}" class="btn">Dashboard</a>
+                      <a href="{{ route('dashboard') }}" class="btn btn-outline-primary rounded-pill px-4">Dashboard</a>
                     @endguest
                   </li>
                 </ul>
@@ -233,21 +227,72 @@
   <a href="#" class="back-to-top heading"><i class="icon-left-open-big"></i><span
       class="d-lg-inline d-md-none">Top</span></a>
 
-  <!-- ads popup -->
-  {{-- <div id="popup_this">
-    <span class="button b-close">
-      <span>X</span>
-    </span>
-    <a href="#" target="_blank"><img src="{{ asset('front/img/wp-version.png') }}" alt="ads"></a>
-  </div> --}}
+  <div id="modalAdblock" style="display: none;">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="fw-normal mb-2" style="font-size: 18px;">
+              <img src="{{ asset('assets/img/company/inisiator-icon.svg') }}" alt="Inisiator" height="24">
+              Inisiator Prime
+            </h6>
+            <h1 class="fw-bold mb-3">It looks like you’re using an ad-blocker!</h1>
+            <p class="text-muted">
+              This website is an advertising-supported platform, and we noticed you have ad-blocking enabled.
+              Here are two ways you can keep enjoying our content:
+            </p>
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="p-4 text-center">
+                <small class="text-muted">TURN OFF YOUR AD-BLOCKER</small>
+                <a href="" class="btn btn-outline-primary rounded-pill btn-block mt-2">RELOAD</a>
+              </div>
+              <div class="p-4 text-center">
+                <small class="text-muted">JOIN OUR MEMBERSHIP</small>
+                <a href="" class="btn btn-primary rounded-pill btn-block px-4 mt-2">GET ACCESS NOW</a>
+              </div>
+            </div>
+
+            <small class="row justify-content-between mx-1 mt-4">
+              <a href="#">Learn more about Inisiator Prime</a>
+              @guest
+                <span>
+                  Already a member? <a href="{{ route('login') }}" class="text-primary">Login</a>
+                </span>
+              @endguest
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // Create a dummy ad element
+      const adBlockTester = document.createElement('div');
+      adBlockTester.className = 'ad-banner'; // Class name commonly blocked by adblockers
+      adBlockTester.style.display = 'none'; // Hide it visually
+      document.body.appendChild(adBlockTester);
+
+      // Check if adblock is active
+      const isAdblockActive = window.getComputedStyle(adBlockTester).getPropertyValue('display') === 'none';
+
+      if (isAdblockActive) {
+        $('#modalAdblock').bPopup(); // Show the popup
+      }
+
+      // Clean up: remove the test element
+      document.body.removeChild(adBlockTester);
+    });
+  </script>
 
   <!--Scripts-->
   <script src="{{ asset('front/js/bootstrap.js') }}"></script>
   <script src="{{ asset('front/js/jquery-scrolltofixed-min.js') }}"></script>
   <script src="{{ asset('front/js/theia-sticky-sidebar.js') }}"></script>
   <script src="{{ asset('front/js/scripts.js') }}"></script>
-  <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-  <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
+
+  @include('layouts.js')
   @stack('scripts')
 </body>
 

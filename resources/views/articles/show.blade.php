@@ -54,7 +54,7 @@
                 </div>
               @endif
 
-              <form action="{{ route('subscribe') }}" method="POST" id="subscribe-form">
+              <form action="{{ route('pages.subscribe') }}" method="POST" id="subscribe-form">
                 @csrf
                 <div class="row justify-content-between">
                   <div class="col-md-5 mb-2 mb-md-0">

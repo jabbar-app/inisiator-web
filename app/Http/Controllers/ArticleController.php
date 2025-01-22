@@ -103,11 +103,12 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'title'            => 'required|string|max:255',
             'content'          => 'required',
             'category_id'      => 'nullable|exists:categories,id',
-            'img_featured'     => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'img_featured'     => 'nullable|image|mimes:jpeg,png,jpg',
             'compressed_image' => 'nullable|string|regex:/^data:image\/\w+;base64,/',
         ]);
 

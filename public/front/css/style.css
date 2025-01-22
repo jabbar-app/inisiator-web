@@ -1,39 +1,3 @@
-/***
- Theme Name:  merinda
- Theme URI:   http://demos.alithemes.com/merinda
- Description: WordPress Theme like Medium Blog Platform
- Author:    alithemes.com
- Author URI:  http://alithemes.com
- Version:   2.1
- License:   GNU General Public License v2 or later
- License URI: http://www.gnu.org/licenses/gpl-2.0.html
-==============================
-TABLE CONTENT
-  1. GENERAL
-  2. FONTS & TYPOGRAPHY
-  3. BEGIN STYLE
-      Top Search
-      Progress bar
-      Meta
-      Back to top
-      Image zoom
-      Transition
-      Pagination
-  4. HEADER
-      Main menu
-      Mobile menu
-  5. FOOTER
-  6. ELEMENTS
-      Pagination
-      Form
-  7. ARCHIVE
-  8. SINGLE POST
-  9. PAGEs
-  10. OTHER
-***/
-
-/* GENERAL */
-
 *,
 *::before,
 *::after {
@@ -63,7 +27,6 @@ a:hover {
 
 .entry-title {
     overflow: hidden !important;
-
     text-overflow: ellipsis !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
@@ -583,7 +546,7 @@ input.search_field {
     right: 20px;
     display: none;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 2;
     transform: rotate(90deg);
     font-weight: 700;
     text-transform: uppercase;
@@ -1144,48 +1107,6 @@ ul.page-numbers li span.current {
 }
 
 /*Form*/
-
-.form-control {
-    height: 50px;
-    padding: 15px;
-    background: none;
-    border-top: 0;
-    border-left: 0;
-    border-radius: 0;
-    border-right: 0;
-    font-size: .875rem;
-    background: #fff;
-    border-radius: 3px;
-    border: 1px solid #dee2e6 !important;
-}
-
-textarea.form-control {
-    /* min-height: 160px; */
-    resize: none;
-    padding: 10px 20px;
-}
-
-.submit-btn {
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border: 0;
-    border-radius: 50px;
-    font-size: 0.875rem;
-    padding: .8em 1.8em .7em;
-    font-size: .785em;
-}
-
-.submit-btn:hover {
-    color: #fff;
-}
-
-.form-control:focus {
-    color: #5f656b;
-    background: none;
-    outline: 0;
-    box-shadow: none;
-}
 
 #comments input.submit {
     max-width: 250px;
