@@ -52,11 +52,15 @@
   <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
   <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
   <script src="{{ asset('assets/js/config.js') }}"></script>
-  <link rel="stylesheet" href="{{ asset('front/css/customize.css') }}">
 
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
   @stack('styles')
+  <style>
+    .f-mono {
+      font-family: 'B612 Mono', monospace;
+    }
+  </style>
 </head>
 
 <body class="f-mono">
@@ -235,9 +239,9 @@
                             </a>
                             <!-- Aksi tambahan -->
                             <div class="flex-shrink-0 dropdown-notifications-actions">
-                              <div
-                                class="dropdown-notifications-read">
-                                <span class="badge badge-dot @if($notification->is_read) bg-light @else bg-primary @endif"></span>
+                              <div class="dropdown-notifications-read">
+                                <span
+                                  class="badge badge-dot @if ($notification->is_read) bg-light @else bg-primary @endif"></span>
                               </div>
                               <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST"
                                 style="display: inline;">

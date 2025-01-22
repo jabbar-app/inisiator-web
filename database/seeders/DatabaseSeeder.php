@@ -30,73 +30,73 @@ class DatabaseSeeder extends Seeder
 
         $categories = [
             [
-                'title' => 'Kisah Inspiratif',
-                'slug' => Str::slug('Kisah Inspiratif'),
-                'content' => '<h2>Kisah Inspiratif</h2><p>Kategori ini menghadirkan cerita perjalanan hidup, kisah sukses, dan pelajaran berharga dari berbagai pengalaman nyata yang menginspirasi.</p>',
-                'meta_description' => 'Kisah inspiratif yang memotivasi dan memberikan pelajaran hidup.',
+                'title' => 'Luminary', // Inspirasi dan motivasi
+                'slug' => Str::slug('Luminary'),
+                'content' => '<h2>Luminary</h2><p>Discover inspiring life stories, success journeys, and valuable lessons that motivate and enlighten. <br>Temukan kisah inspiratif, perjalanan menuju sukses, dan pelajaran berharga yang memotivasi dan mencerahkan.</p>',
+                'meta_description' => 'Inspirational stories and life lessons to brighten your day. Kisah motivasi yang menginspirasi.',
                 'color' => 'success',
             ],
             [
-                'title' => 'Hubungan dan Kehidupan',
-                'slug' => Str::slug('Hubungan dan Kehidupan'),
-                'content' => '<h2>Hubungan dan Kehidupan</h2><p>Kategori ini membahas cinta, keluarga, persahabatan, dan berbagai cerita emosional yang relatable dengan kehidupan sehari-hari.</p>',
-                'meta_description' => 'Cerita tentang cinta, keluarga, dan hubungan emosional dalam kehidupan.',
+                'title' => 'Elysian', // Keindahan hubungan
+                'slug' => Str::slug('Elysian'),
+                'content' => '<h2>Elysian</h2><p>Explore the beauty of relationships, love, and emotional connections that shape our lives. <br>Eksplorasi keindahan hubungan, cinta, dan koneksi emosional yang membentuk hidup kita.</p>',
+                'meta_description' => 'Heartwarming stories about love, family, and relationships. Cerita tentang cinta dan keluarga.',
                 'color' => 'primary',
             ],
             [
-                'title' => 'Misteri dan Konspirasi',
-                'slug' => Str::slug('Misteri dan Konspirasi'),
-                'content' => '<h2>Misteri dan Konspirasi</h2><p>Kategori ini menyajikan cerita penuh teka-teki, teori konspirasi, dan kisah yang memicu rasa ingin tahu Anda.</p>',
-                'meta_description' => 'Temukan cerita misteri dan teori konspirasi yang memikat.',
+                'title' => 'Obscura', // Misteri dan teka-teki
+                'slug' => Str::slug('Obscura'),
+                'content' => '<h2>Obscura</h2><p>Dive into mysteries, conspiracies, and untold stories that spark curiosity. <br>Telusuri misteri, konspirasi, dan cerita tersembunyi yang memancing rasa ingin tahu Anda.</p>',
+                'meta_description' => 'Mysterious stories and intriguing conspiracies. Kisah misteri yang menggugah rasa penasaran.',
                 'color' => 'info',
             ],
             [
-                'title' => 'Psikologi dan Emosi',
-                'slug' => Str::slug('Psikologi dan Emosi'),
-                'content' => '<h2>Psikologi dan Emosi</h2><p>Kategori ini membahas kesehatan mental, pengembangan diri, dan cara memahami emosi untuk kehidupan yang lebih baik.</p>',
-                'meta_description' => 'Artikel tentang psikologi, kesehatan mental, dan pengembangan diri.',
+                'title' => 'Sanctum', // Refleksi batin
+                'slug' => Str::slug('Sanctum'),
+                'content' => '<h2>Sanctum</h2><p>Delve into mental health, self-improvement, and understanding emotions for a better life. <br>Mendalami kesehatan mental, pengembangan diri, dan cara memahami emosi untuk hidup yang lebih baik.</p>',
+                'meta_description' => 'Insights on mental health and personal growth. Panduan kesehatan mental dan pengembangan diri.',
                 'color' => 'warning',
             ],
             [
-                'title' => 'Cerita Sejarah dan Budaya',
-                'slug' => Str::slug('Cerita Sejarah dan Budaya'),
-                'content' => '<h2>Cerita Sejarah dan Budaya</h2><p>Kategori ini mengeksplorasi cerita-cerita bersejarah, asal-usul budaya, dan tradisi yang menarik.</p>',
-                'meta_description' => 'Eksplorasi cerita sejarah dan budaya dari berbagai penjuru dunia.',
+                'title' => 'Anecdota', // Sejarah dan budaya
+                'slug' => Str::slug('Anecdota'),
+                'content' => '<h2>Anecdota</h2><p>Uncover historical tales, cultural origins, and timeless traditions from around the world. <br>Temukan kisah sejarah, asal-usul budaya, dan tradisi yang tak lekang oleh waktu dari berbagai penjuru dunia.</p>',
+                'meta_description' => 'Stories of history and culture. Cerita sejarah dan budaya yang menarik.',
                 'color' => 'danger',
             ],
             [
-                'title' => 'Kisah Horor dan Supranatural',
-                'slug' => Str::slug('Kisah Horor dan Supranatural'),
-                'content' => '<h2>Kisah Horor dan Supranatural</h2><p>Kategori ini menghadirkan pengalaman mistis, cerita seram, dan legenda urban yang memacu adrenalin.</p>',
-                'meta_description' => 'Nikmati kisah horor dan pengalaman supranatural yang menegangkan.',
+                'title' => 'Phantom', // Horor dan supranatural
+                'slug' => Str::slug('Phantom'),
+                'content' => '<h2>Phantom</h2><p>Experience ghost stories, urban legends, and supernatural encounters. <br>Rasakan kisah hantu, legenda urban, dan pengalaman supranatural yang menegangkan.</p>',
+                'meta_description' => 'Ghost stories and supernatural encounters. Kisah hantu dan pengalaman mistis.',
                 'color' => 'dark',
             ],
             [
-                'title' => 'Teknologi dan Masa Depan',
-                'slug' => Str::slug('Teknologi dan Masa Depan'),
-                'content' => '<h2>Teknologi dan Masa Depan</h2><p>Kategori ini membahas perkembangan teknologi, inovasi digital, dan prediksi masa depan.</p>',
-                'meta_description' => 'Informasi terbaru tentang teknologi dan inovasi masa depan.',
+                'title' => 'Nexus', // Teknologi dan inovasi
+                'slug' => Str::slug('Nexus'),
+                'content' => '<h2>Nexus</h2><p>Explore the latest tech trends, digital innovation, and future possibilities. <br>Eksplorasi tren teknologi terbaru, inovasi digital, dan kemungkinan masa depan.</p>',
+                'meta_description' => 'Latest tech and innovations. Tren teknologi dan inovasi masa depan.',
                 'color' => 'info',
             ],
             [
-                'title' => 'Perjalanan dan Eksplorasi',
-                'slug' => Str::slug('Perjalanan dan Eksplorasi'),
-                'content' => '<h2>Perjalanan dan Eksplorasi</h2><p>Kategori ini membawa Anda ke tempat-tempat tersembunyi, pengalaman budaya, dan petualangan seru dari berbagai belahan dunia.</p>',
-                'meta_description' => 'Cerita perjalanan dan eksplorasi ke tempat-tempat menarik di dunia.',
+                'title' => 'Odyssey', // Petualangan dan eksplorasi
+                'slug' => Str::slug('Odyssey'),
+                'content' => '<h2>Odyssey</h2><p>Embark on adventures, explore hidden gems, and experience thrilling journeys worldwide. <br>Mulai petualangan, jelajahi tempat tersembunyi, dan nikmati perjalanan seru di seluruh dunia.</p>',
+                'meta_description' => 'Travel stories and explorations. Cerita petualangan dan eksplorasi seru.',
                 'color' => 'success',
             ],
             [
-                'title' => 'Cerita Fiksi yang Membekas',
-                'slug' => Str::slug('Cerita Fiksi yang Membekas'),
-                'content' => '<h2>Cerita Fiksi yang Membekas</h2><p>Kategori ini menyajikan cerita pendek, fiksi bersambung, dan kisah-kisah imajinatif yang menggugah emosi.</p>',
-                'meta_description' => 'Nikmati cerita fiksi yang menarik dan penuh imajinasi.',
+                'title' => 'Fable', // Cerita fiksi
+                'slug' => Str::slug('Fable'),
+                'content' => '<h2>Fable</h2><p>Immerse yourself in imaginative tales, gripping narratives, and creative fiction. <br>Masuki dunia kisah imajinatif, narasi yang mendalam, dan cerita fiksi yang menarik.</p>',
+                'meta_description' => 'Imaginative tales and gripping fiction. Cerita fiksi yang memikat.',
                 'color' => 'primary',
             ],
             [
-                'title' => 'Konten Edukatif dan Informatif',
-                'slug' => Str::slug('Konten Edukatif dan Informatif'),
-                'content' => '<h2>Konten Edukatif dan Informatif</h2><p>Kategori ini menyediakan panduan belajar, tips sukses, dan insight mendalam untuk meningkatkan pengetahuan Anda.</p>',
-                'meta_description' => 'Artikel edukatif yang informatif untuk meningkatkan wawasan Anda.',
+                'title' => 'Mentor', // Edukasi dan wawasan
+                'slug' => Str::slug('Mentor'),
+                'content' => '<h2>Mentor</h2><p>Gain educational insights, practical tips, and informative guides for personal growth. <br>Dapatkan wawasan edukatif, tips praktis, dan panduan informatif untuk pengembangan diri.</p>',
+                'meta_description' => 'Educational articles and guides. Artikel edukatif untuk pengembangan wawasan.',
                 'color' => 'warning',
             ],
         ];
