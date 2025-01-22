@@ -58,7 +58,7 @@
   @stack('styles')
   <style>
     .f-mono {
-      font-family: 'B612 Mono', monospace;
+      font-family: 'B612 Mono', monospace !important;
     }
   </style>
 </head>
