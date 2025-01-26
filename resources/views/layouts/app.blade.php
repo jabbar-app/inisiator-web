@@ -8,9 +8,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Meta Title -->
-  <title>Inisiator — A storytelling platform.</title>
+  <title>
+    @if (Route::is('pages.author'))
+      {{ $author->name }} | Inisiator
+    @elseif (Route::is('articles.show'))
+      {{ $article->title }} | Inisiator
+    @else
+      Inisiator | A storytelling platform.
+    @endif
+  </title>
+
+  @if (app()->environment('prod'))
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3DYVKYS8Z8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-3DYVKYS8Z8');
+    </script>
+  @endif
 
   <!-- Meta Description -->
   <meta name="description"
@@ -68,7 +92,7 @@
 
   <!--Poprup-->
   <link rel="stylesheet" href="{{ asset('front/css/popup.css') }}">
-  <link rel="stylesheet" href="{{ asset('front/css/customize.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
   <script src="{{ asset('front/js/jquery.min.js') }}"></script>
   <script src="{{ asset('front/js/jquery.bpopup.min.js') }}"></script>
@@ -89,7 +113,8 @@
         </h1>
         @auth
           <a class="author-avatar" href="{{ route('dashboard') }}"><img
-              src="{{ Auth::user()->avatar ?? asset('assets/img/profpic.svg') }}" alt="{{ Auth::user()->name }}"></a>
+              src="{{ !empty(Auth::user()->avatar) ? asset(Auth::user()->avatar) : asset('assets/img/profpic.svg') }}"
+              alt="{{ Auth::user()->name }}"></a>
         @endauth
 
         <a href="javascript:void(0)" class="menu-toggle-icon">
@@ -154,15 +179,17 @@
                 <ul class="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
                   <li>
                     @guest
-                      <a href="{{ route('login') }}" class="btn  btn-outline-primary rounded-pill px-4">Login/Register</a>
+                      <a href="{{ route('login') }}"
+                        class="btn  btn-outline-primary rounded-pill px-4">Login/Register</a>
                     @else
-                      <a href="{{ route('dashboard') }}" class="btn btn-outline-primary rounded-pill px-4">Dashboard</a>
+                      <a href="{{ route('dashboard') }}"
+                        class="btn btn-outline-primary rounded-pill px-4">Dashboard</a>
                     @endguest
                   </li>
                 </ul>
                 @auth
                   <a class="author-avatar" href="{{ route('pages.author', Auth::user()->username) }}"><img
-                      src="{{ Auth::user()->avatar ?? asset('assets/img/profpic.svg') }}"
+                      src="{{ !empty(Auth::user()->avatar) ? asset(Auth::user()->avatar) : asset('assets/img/profpic.svg') }}"
                       alt="{{ Auth::user()->name }}"></a>
                 @endauth
               </div>
@@ -171,8 +198,10 @@
         </div>
         <div class="clearfix"></div>
       </div>
-      <p class="text-center mt-2 mb-0 bg-light position-relative dismissible-alert"
-        style="padding: 14px 40px 14px 0; color: #212121; font-size: 14px;">
+
+      {{-- Banner --}}
+      <p class="text-center mt-2 mb-0 bg-light position-relative" id="bannerId"
+        style="padding: 14px 40px 14px 0; color: #212121; font-size: 14px; display: none;">
 
         <img src="{{ asset('assets/img/rocket.svg') }}" alt="Inisiator" height="16" style="margin-top: -4px;">
         Tingkatkan views hingga 10x lipat. Dapatkan
@@ -182,9 +211,26 @@
         <a href="javascript:void(0);" onclick="closeBanner()" class="position-absolute btn-banner-close">
           ×
         </a>
+
         <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const banner = document.getElementById('bannerId');
+            const today = new Date().toISOString().split('T')[0];
+
+            // Tampilkan banner jika tidak ada cache untuk menyembunyikan
+            if (localStorage.getItem('bannerClosedDate') !== today) {
+              banner.style.display = 'block'; // Tampilkan banner
+            }
+          });
+
           function closeBanner() {
-            console.log('halo');
+            const banner = document.getElementById('bannerId');
+            const today = new Date().toISOString().split('T')[0];
+
+            // Sembunyikan banner
+            banner.style.display = 'none';
+            // Simpan status penutupan di localStorage
+            localStorage.setItem('bannerClosedDate', today);
           }
         </script>
       </p>
@@ -194,8 +240,13 @@
           <div class="menu-primary">
             <ul class="d-flex justify-content-start" style="gap: 2rem;">
               <li><a href="{{ route('articles.create') }}"><i class="ti ti-plus mb-1"></i></a></li>
-              <li><a href="{{ route('pages.home') }}" class="{{ Route::is('pages.home') ? 'menu-active' : '' }}"><a
-                    href="{{ route('pages.home') }}">Home</a></li>
+              <li>
+                <a href="{{ route('pages.home') }}"
+                  class="{{ Route::is('pages.home') ? 'menu-active' : '' }}">Story</a>
+              </li>
+              <li><a href="{{ route('pages.game') }}"
+                  class="{{ Route::is('pages.game') ? 'menu-active' : '' }}">Play</a></li>
+              <li><a href="#">Job Opportunities</a></li>
               <li><a href="#">Following</a></li>
             </ul>
           </div>
@@ -206,20 +257,18 @@
     @include('layouts.session-message')
     @yield('content')
 
-    <footer class="mt-5">
-      <div class="container">
-        <div class="divider"></div>
-        <div class="row">
-          <div class="col-md-6 copyright text-xs-center">
-            <p>2025 &copy; Inisiator by <a href="https://lomba.id">LombaLomba</a></p>
-          </div>
-          <div class="col-md-6">
-            <ul class="social-network inline text-md-right text-sm-center">
-              <li class="list-inline-item"><a href="#"><i class="icon-facebook"></i></a></li>
-              <li class="list-inline-item"><a href="#"><i class="icon-twitter"></i></a></li>
-              <li class="list-inline-item"><a href="#"><i class="icon-behance"></i></a></li>
-            </ul>
-          </div>
+    <footer class="mt-5 mx-4">
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col-md-6 copyright text-xs-center">
+          <p>2025 &copy; Inisiator by <a href="https://lomba.id">LombaLomba</a></p>
+        </div>
+        <div class="col-md-6">
+          <ul class="social-network inline text-md-right text-sm-center">
+            <li class="list-inline-item"><a href="#"><i class="icon-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="#"><i class="icon-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="#"><i class="icon-behance"></i></a></li>
+          </ul>
         </div>
       </div>
     </footer>
@@ -227,64 +276,7 @@
   <a href="#" class="back-to-top heading"><i class="icon-left-open-big"></i><span
       class="d-lg-inline d-md-none">Top</span></a>
 
-  <div id="modalAdblock" style="display: none;">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="fw-normal mb-2" style="font-size: 18px;">
-              <img src="{{ asset('assets/img/company/inisiator-icon.svg') }}" alt="Inisiator" height="24">
-              Inisiator Prime
-            </h6>
-            <h1 class="fw-bold mb-3">It looks like you’re using an ad-blocker!</h1>
-            <p class="text-muted">
-              This website is an advertising-supported platform, and we noticed you have ad-blocking enabled.
-              Here are two ways you can keep enjoying our content:
-            </p>
-            <div class="d-flex justify-content-center align-items-center">
-              <div class="p-4 text-center">
-                <small class="text-muted">TURN OFF YOUR AD-BLOCKER</small>
-                <a href="" class="btn btn-outline-primary rounded-pill btn-block mt-2">RELOAD</a>
-              </div>
-              <div class="p-4 text-center">
-                <small class="text-muted">JOIN OUR MEMBERSHIP</small>
-                <a href="" class="btn btn-primary rounded-pill btn-block px-4 mt-2">GET ACCESS NOW</a>
-              </div>
-            </div>
-
-            <small class="row justify-content-between mx-1 mt-4">
-              <a href="#">Learn more about Inisiator Prime</a>
-              @guest
-                <span>
-                  Already a member? <a href="{{ route('login') }}" class="text-primary">Login</a>
-                </span>
-              @endguest
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    $(document).ready(function() {
-      // Create a dummy ad element
-      const adBlockTester = document.createElement('div');
-      adBlockTester.className = 'ad-banner'; // Class name commonly blocked by adblockers
-      adBlockTester.style.display = 'none'; // Hide it visually
-      document.body.appendChild(adBlockTester);
-
-      // Check if adblock is active
-      const isAdblockActive = window.getComputedStyle(adBlockTester).getPropertyValue('display') === 'none';
-
-      if (isAdblockActive) {
-        $('#modalAdblock').bPopup(); // Show the popup
-      }
-
-      // Clean up: remove the test element
-      document.body.removeChild(adBlockTester);
-    });
-  </script>
+  {{-- @include('components.adblocker') --}}
 
   <!--Scripts-->
   <script src="{{ asset('front/js/bootstrap.js') }}"></script>

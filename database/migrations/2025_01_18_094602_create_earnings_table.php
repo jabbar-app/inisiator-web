@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('earnings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('type')->default('views');
             $table->decimal('total_amount', 18, 2)->default(0); // Total earnings
-            $table->json('details')->nullable();               // Store detailed sources (JSON)
+            $table->json('details')->nullable(); // Store detailed sources (JSON)
             $table->timestamps();
         });
     }

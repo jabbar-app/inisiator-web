@@ -80,4 +80,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function clappedArticles()
+    {
+        return $this->belongsToMany(Article::class, 'article_claps')
+            ->withPivot('claps_count')
+            ->withTimestamps();
+    }
 }

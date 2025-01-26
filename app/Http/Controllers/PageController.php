@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
+    public function landing()
+    {
+        return view('pages.landing');
+    }
+
     public function home()
     {
         // Ambil artikel unggulan
@@ -134,6 +139,11 @@ class PageController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Thank you for subscribing!');
+    }
+
+    public function game()
+    {
+        return view('pages.game');
     }
 
     /**

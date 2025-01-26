@@ -21,9 +21,9 @@ return new class extends Migration
             $table->text('content');
             $table->text('excerpt')->nullable();
             $table->integer('reading_time')->default(0);
-            $table->integer('views')->default(0);
             $table->decimal('earnings', 18, 2)->default(0);
             $table->boolean('is_featured')->default(false);
+            $table->boolean('is_highlighted')->default(false);
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });

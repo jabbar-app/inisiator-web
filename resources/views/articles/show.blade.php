@@ -5,41 +5,107 @@
     <div class="container">
       <!-- Entry Header -->
       <div class="entry-header mb-5">
-        <h1 class="entry-title mb-4 fw-normal">{{ $article->title }}</h1>
+        <h1 class="entry-title mb-1 fw-normal">{{ $article->title }}</h1>
+        <p class="text-muted mb-4">{{ $article->excerpt }}</p>
         <div class="entry-meta align-items-center">
           <a href="{{ route('pages.author', $article->user->username) }}" class="author-avatar">
-            <img src="{{ $article->user->avatar ?? asset('assets/img/profpic.svg') }}" alt="{{ $article->user->name }}">
+            <img
+              src="{{ !empty($article->user->avatar) ? asset($article->user->avatar) : asset('assets/img/profpic.svg') }}">
           </a>
-          <a href="{{ route('pages.author', $article->user->username) }}">{{ $article->user->name }}</a>
-          in <a href="{{ route('categories.show', $article->category->slug) }}">{{ $article->category->title }}</a><br>
-          <span>{{ $article->created_at->format('d M Y') }}</span>
+          <div class="d-flex mb-1">
+            <a href="{{ route('pages.author', $article->user->username) }}" style="font-size: 14px;">
+              {{ $article->user->name }}
+            </a>
+            <span class="middotDivider"></span>
+            @auth
+              @if (auth()->user()->isFollowing($article->user))
+                <form action="{{ route('users.unfollow', $article->user) }}" method="POST">
+                  @csrf
+                  @method('DELETE')
+                  <a href="" class="text-danger">Unfollow</a>
+                </form>
+              @else
+                <form action="{{ route('users.follow', $article->user) }}" method="POST">
+                  @csrf
+                  <a href="" class="text-primary">Follow</a>
+                </form>
+              @endif
+            @else
+              <form action="{{ route('users.follow', $article->user) }}" method="POST">
+                @csrf
+                <a href="" class="text-primary">Follow</a>
+              </form>
+            @endauth
+          </div>
+          Published in <a
+            href="{{ route('categories.show', $article->category->slug) }}">{{ $article->category->title }}</a>
           <span class="middotDivider"></span>
           <span class="readingTime" title="{{ $article->reading_time }} min read">{{ $article->reading_time }} min
             read</span>
+          <span class="middotDivider"></span>
+          <span>{{ $article->created_at->diffForHumans() }}</span>
+        </div>
+        <div class="mt-4 text-muted">
+          <hr class="m-0">
+          <small>
+            <div class="row my-3">
+              <div class="col-12">
+                <div class="d-flex justify-content-between">
+                  <div id="counter" class="d-flex" style="gap: 1rem;">
+                    <div id="claps" class="d-flex" style="gap: 4px;">
+                      @auth
+                        <form action="{{ route('articles.clap', $article) }}" method="POST">
+                          @csrf
+                          <a href="{{ route('articles.clap', $article) }}"
+                            onclick="event.preventDefault(); this.closest('form').submit();">
+                            @if ($article->claps()->where('user_id', auth()->id())->exists())
+                              <img src="{{ asset('assets/img/icons/clapped.svg') }}" alt="Clapped" height="14">
+                            @else
+                              <img src="{{ asset('assets/img/icons/clap.svg') }}" alt="Clap" height="14">
+                            @endif
+                          </a>
+                        </form>
+                      @else
+                        <img src="{{ asset('assets/img/icons/clap.svg') }}" alt="Clap" height="14" style="margin-top: 3px;">
+                      @endauth
+
+                      {{ formatNumber($article->claps()->sum('claps_count')) }}
+                    </div>
+                    <div id="comments" class="d-flex" style="gap: 4px;">
+                      <img src="{{ asset('assets/img/icons/comments.svg') }}" alt="Clap" height="15"
+                        style="margin-top: 2px;"> 0
+                    </div>
+                  </div>
+
+                  <div id="actions" class="d-flex" style="gap: 1rem;">
+                    <div id="claps">
+                      <i class="ti ti-thumb-up"></i> 10k
+                    </div>
+                    <div id="comments">
+                      <i class="ti ti-thumb-up"></i> 10k
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </small>
+          <hr class="m-0">
         </div>
       </div>
-
-      <!-- Featured Image -->
-      @if ($article->img_featured)
-        <figure class="image zoom mb-5">
-          <img src="{{ asset($article->img_featured) }}" alt="{{ $article->title }}" class="img-fluid">
-        </figure>
-      @endif
-
       <!-- Main Content -->
       <article class="entry-wraper mb-5">
-        <div class="entry-left-col">
-          <div class="social-sticky">
-            <a href="#"><i class="icon-facebook"></i></a>
-            <a href="#"><i class="icon-twitter"></i></a>
-            <a href="#"><i class="icon-heart"></i></a>
-            <a href="#"><i class="icon-paper-plane"></i></a>
-          </div>
-        </div>
-        @include('components.adsense-responsive')
+
+        <!-- Featured Image -->
+        @if ($article->img_featured)
+          <figure class="image zoom mb-5">
+            <img src="{{ asset($article->img_featured) }}" alt="{{ $article->title }}" class="img-fluid">
+          </figure>
+        @endif
 
         <div class="entry-main-content">
-          {!! $article->content !!}
+          <div id="article" data-id="{{ $article->id }}">
+            {!! $article->content !!}
+          </div>
 
           <section id="subscribe">
             <div class="border p-5 bg-lightblue mb-5">
@@ -112,7 +178,8 @@
         <div class="box box-author mb-4">
           <div class="post-author d-flex">
             <div class="author-img">
-              <img src="{{ $article->user->avatar ?? asset('assets/img/profpic.svg') }}"
+              <img
+                src="{{ !empty($article->user->avatar) ? asset($article->user->avatar) : asset('assets/img/profpic.svg') }}"
                 alt="{{ $article->user->name }}" class="avatar">
             </div>
             <div class="author-content">
@@ -251,3 +318,54 @@
     </div>
   </main>
 @endsection
+
+@auth
+  @push('scripts')
+    <script>
+      let readingTime = 0; // Waktu membaca (dalam detik)
+      const readThreshold = 3; // 3 menit
+      const articleId = document.getElementById("article").dataset.id;
+
+      const timer = setInterval(() => {
+        readingTime += 1;
+
+        if (readingTime >= readThreshold) {
+          markArticleAsRead(articleId);
+          clearInterval(timer); // Hentikan timer setelah tercapai
+        }
+      }, 1000);
+
+      function markArticleAsRead(articleId) {
+        const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+        if (!csrfTokenMeta) {
+          console.error("CSRF token meta tag is missing. Cannot send request.");
+          return; // Exit the function if CSRF token is missing
+        }
+
+        const csrfToken = csrfTokenMeta.content;
+        console.log("CSRF token found:", csrfToken); // Log the token for debugging
+
+        fetch(`/articles/${articleId}/mark-read`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": csrfToken,
+            },
+            body: JSON.stringify({}),
+          })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Read recorded successfully:", data); // Log successful response
+          })
+          .catch((error) => {
+            console.error("Error recording read:", error); // Log any errors
+          });
+      }
+    </script>
+  @endpush
+@endauth

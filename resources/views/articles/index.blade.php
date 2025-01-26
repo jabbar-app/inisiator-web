@@ -25,12 +25,14 @@
     <div class="col-xl-3 col-md-6 mb-3">
       <div class="card">
         <div class="card-body">
-          <h3 class="mb-2">{{ Str::ucfirst(Auth::user()->rank) }}</h3>
-          <span class="text-muted">XP: {{ Auth::user()->xp }}</span>
+          <h3 class="mb-2">{{ Str::ucfirst(Auth::user()->rank ?? 'Beginner') }}</h3>
+          <span class="text-muted">XP: {{ Auth::user()->xp ?? 0 }}</span>
         </div>
       </div>
     </div>
   </div>
+
+  @include('dashboard.stats')
 
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h3 class="m-0">Daftar Artikel</h3>
@@ -55,7 +57,7 @@
               <td>{{ $article->title }}</td>
               <td>{{ $article->category->title ?? '-' }}</td>
               <td>{{ ucfirst($article->status) }}</td>
-              <td>{{ number_format($article->views, 0, ',', '.') }}</td>
+              <td>{{ number_format($article->stats->sum('views'), 0, ',', '.') }}</td>
               <td class="d-flex gap-2">
                 <a href="{{ route('articles.show', $article->slug) }}" target="_blank" class="btn btn-info btn-sm">
                   Lihat
@@ -70,6 +72,10 @@
       </table>
     </div>
   </div>
+
+  {{-- <div class="mt-4">
+    {{ $articles->links() }}
+  </div> --}}
 @endsection
 
 @push('scripts')
@@ -80,7 +86,7 @@
         lengthChange: true,
         order: [
           [3, 'asc']
-        ] // Contoh: urutkan berdasarkan kolom status (index kolom dimulai dari 0)
+        ] // Contoh: urutkan berdasarkan kolom views (index kolom dimulai dari 0)
       });
     });
   </script>

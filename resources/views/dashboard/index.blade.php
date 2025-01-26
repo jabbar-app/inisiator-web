@@ -1,9 +1,59 @@
 @extends('layouts.dashboard')
 
 @section('content')
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <!-- Progress Bar -->
+        <div class="col-lg-8 col-md-7 col-12">
+          <div class="d-flex justify-content-between align-items-center">
+            @php
+              $rewards = [25, 50, 25, 50, 10, 15, 2500]; // Reward per hari
+              $streak = Auth::user()->check_in_streak ?? 0; // Streak user saat ini
+            @endphp
+
+            @foreach ($rewards as $index => $reward)
+              <div class="text-center" style="flex: 1;">
+                <!-- Icon Check or Uncheck -->
+                <div class="icon mb-2">
+                  @if ($streak > $index)
+                    <i class="ti ti-check text-success" style="font-size: 24px;"></i>
+                  @else
+                    <i class="ti ti-circle text-muted" style="font-size: 24px;"></i>
+                  @endif
+                </div>
+
+                <!-- Day and Amount -->
+                <p class="mb-0" style="font-size: 14px;">Hari {{ $index + 1 }}</p>
+                <small>Rp{{ number_format($reward, 0, ',', '.') }}</small>
+              </div>
+
+              <!-- Separator Line -->
+              @if ($index < count($rewards) - 1)
+                <div class="progress-line"
+                  style="width: 20px; height: 2px; background-color: {{ $streak > $index ? '#28a745' : '#dcdcdc' }};">
+                </div>
+              @endif
+            @endforeach
+          </div>
+        </div>
+
+        <!-- Check-In Button -->
+        <div class="col-lg-4 col-md-5 col-12 text-end">
+          <form action="{{ route('check-in') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-primary">
+              Check-In Harian
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <!-- View sales -->
-    <div class="col-xl-4 mb-4 col-md-6">
+    <div class="col-md-4 mb-4">
       <div class="card">
         <div class="card-body">
           <div class="d-flex justify-content-between">
@@ -13,7 +63,7 @@
                 <small>Estimasi Penghasilan:</small>
               </div>
               <div class="chart-statistics mt-2">
-                <h3 class="card-title mb-1">Rp{{ number_format($userEarning, 0, ',', '.') }},-</h3>
+                <h3 class="card-title mb-1">Rp{{ number_format($totalEarnings, 0, ',', '.') }},-</h3>
                 @if ($percentageChange > 0)
                   <small class="text-success text-nowrap fw-medium">
                     <i class="ti ti-chevron-up me-1"></i>
@@ -42,7 +92,7 @@
     <!-- View sales -->
 
     <!-- Statistics -->
-    <div class="col-xl-8 mb-4 col-lg-7 col-12">
+    <div class="col-md-8 mb-4">
       <div class="card h-100">
         <div class="card-header">
           <div class="d-flex justify-content-between mb-3">
@@ -110,39 +160,29 @@
           <table id="earningsTable" class="table table-striped">
             <thead>
               <tr>
-                <th>Deskripsi</th>
-                <th>Tanggal</th>
-                <th>Jumlah</th>
+                <th>Type</th>
+                <th>Period</th>
+                <th>Amount</th>
+                <th>Details</th>
               </tr>
             </thead>
             <tbody>
               @foreach ($earnings as $earning)
                 @php
-                  // Pastikan 'details' adalah string sebelum menggunakan json_decode
                   $details = is_string($earning->details) ? json_decode($earning->details, true) : $earning->details;
                 @endphp
                 <tr>
+                  <td>{{ ucfirst($earning->type) }}</td>
+                  <td>{{ $details['period'] ?? '-' }}</td>
+                  <td>Rp{{ number_format($earning->total_amount, 0, ',', '.') }}</td>
                   <td>
-                    @if ($details)
-                      <ul class="list-unstyled mb-0">
-                        @foreach ($details as $detail)
-                          <li>
-                            <strong>Periode:</strong> {{ $detail['period'] ?? '-' }} <br>
-                            <strong>Views:</strong> {{ $detail['views'] ?? 0 }} <br>
-                            <strong>Jumlah:</strong> Rp{{ number_format($detail['amount'] ?? 0, 2, ',', '.') }} <br>
-                            <strong>Rank Rate:</strong> {{ $detail['rank_rate'] ?? '-' }}
-                          </li>
-                          @if (!$loop->last)
-                            <hr>
-                          @endif
-                        @endforeach
-                      </ul>
+                    @if ($earning->type === 'check_in')
+                      Streak: {{ $details['streak'] ?? '-' }}, Reward:
+                      Rp{{ number_format($details['reward'] ?? 0, 0, ',', '.') }}
                     @else
-                      Tidak ada detail
+                      Views: {{ $details['views'] ?? '-' }}, Rank Rate: {{ $details['rank_rate'] ?? '-' }}
                     @endif
                   </td>
-                  <td>{{ $earning->created_at->format('d M Y, H:i') }}</td>
-                  <td>Rp{{ number_format($earning->total_amount, 2, ',', '.') }}</td>
                 </tr>
               @endforeach
             </tbody>

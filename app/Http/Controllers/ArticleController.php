@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\ArticleRead;
+use App\Models\ArticleStat;
 use App\Models\Category;
-use App\Models\ArticleViewStat;
+use App\Models\Earning;
 use App\Models\Tag;
+use App\Models\User;
 use App\Models\WriterEarning;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
@@ -21,21 +24,46 @@ class ArticleController extends Controller
     public function index()
     {
         $categories = Category::all();
-        // Query semua artikel milik user login
-        // Jika data sangat besar, pertimbangkan server-side pagination
         $articles = Article::where('user_id', Auth::id())
-            ->with('category')
+            ->with(['category', 'stats'])
             ->orderByDesc('created_at')
             ->get();
+            // ->paginate(10);
 
-        // Total views dari semua artikel user
-        $totalViews = Article::where('user_id', Auth::id())->sum('views');
+        $totalViews = ArticleStat::whereIn('article_id', $articles->pluck('id'))->sum('views');
 
-        // Ambil total earnings user (contoh, satu record di writer_earnings)
         $userEarning = Auth::user()->earning->amount ?? 0;
 
-        // Render ke blade
-        return view('articles.index', compact('categories', 'articles', 'totalViews', 'userEarning'));
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now();
+        $stats = ArticleStat::whereIn('article_id', $articles->pluck('id'))
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->get()
+            ->groupBy('date');
+
+        // Siapkan data untuk grafik
+        $dates = [];
+        $viewsData = [];
+        $readsData = [];
+
+        foreach (range(1, now()->daysInMonth) as $day) {
+            $date = now()->startOfMonth()->addDays($day - 1)->format('Y-m-d');
+            $dates[] = now()->startOfMonth()->addDays($day - 1)->format('M j');
+
+            // Jika tidak ada data pada tanggal tersebut, default ke 0
+            $viewsData[] = isset($stats[$date]) ? $stats[$date]->sum('views') : 0;
+            $readsData[] = isset($stats[$date]) ? $stats[$date]->sum('reads') : 0;
+        }
+
+        return view('articles.index', compact(
+            'categories',
+            'articles',
+            'totalViews',
+            'userEarning',
+            'dates',
+            'viewsData',
+            'readsData'
+        ));
     }
 
 
@@ -172,46 +200,71 @@ class ArticleController extends Controller
 
     public function show(string $slug)
     {
-        $article = Article::where('slug', $slug)
-            // ->where('status', 'approved') // Opsional, jika hanya ingin menampilkan artikel yang disetujui
-            ->with('tags') // Eager load untuk menghindari query tambahan
+        // 1. Fetch the article and related models using eager loading
+        $article = Article::with([
+            'tags',              // Load tags
+            'category',          // Load category
+            'user.followers',    // Load user followers for stats
+            'comments'           // Load comments
+        ])->where('slug', $slug)
             ->firstOrFail();
 
-            // dd($article);
-
-        $relatedPosts = Article::where('category_id', $article->category_id)
+        // 2. Fetch related articles (reuse category from eager-loaded `category`)
+        $relatedPosts = Article::where('category_id', $article->category->id)
             ->where('id', '!=', $article->id)
             ->latest()
-            ->take(3) // Batasi jumlah artikel terkait
+            ->take(3)
             ->get();
 
-        $ipAddress = request()->ip() ?? 'anonymous';
-        $cacheKey  = 'article_views_' . md5($slug . $ipAddress);
+        // 3. Handle views and earnings with caching
+        $ipAddress = request()->ip();
+        $cacheKey = 'article_views_' . md5($slug . $ipAddress);
 
-        // Jika cacheKey belum ada, berarti IP ini belum mengunjungi (dlm periode cache)
         if (!Cache::has($cacheKey)) {
-            // 1. Increment statistik harian di article_view_stats
-            $today = now()->toDateString();
-            $todayStat = ArticleViewStat::firstOrCreate([
+            // Increment today's stats
+            $stats = ArticleStat::firstOrCreate([
                 'article_id' => $article->id,
-                'date'       => $today,
+                'date' => now()->toDateString(),
             ]);
-            $todayStat->increment('views_count');
+            $stats->increment('views');
 
-            // 2. Increment kolom 'views' di artikel (lifetime views)
-            $article->increment('views');
-
-            // 3. Tambahkan earnings untuk penulis
+            // Add earnings for the writer
             $this->addWriterEarnings($article);
 
-            // 4. Simpan ke cache agar tidak bisa di-spam
+            // Cache to prevent abuse
             Cache::put($cacheKey, true, now()->addMinutes(15));
         }
 
-        // Format tag untuk digunakan di tampilan
-        $tags = $article->tags->map(fn($tag) => $tag->name)->toArray();
+        // 4. Inject Ads after the third paragraph
+        $adsHtml = view('components.adsense-responsive')->render();
+        $content = $this->injectAdsIntoContent($article->content, $adsHtml);
 
-        return view('articles.show', compact('article', 'relatedPosts', 'tags'));
+        // 5. Prepare tags for the view
+        $tags = $article->tags->pluck('name')->toArray();
+
+        // 6. Pass all data to the view
+        return view('articles.show', compact('article', 'relatedPosts', 'tags', 'content'));
+    }
+
+    /**
+     * Injects an ad into the article content after the third paragraph.
+     */
+    private function injectAdsIntoContent(string $content, string $adsHtml): string
+    {
+        $paragraphs = explode('</p>', $content);
+        $contentWithAd = '';
+
+        foreach ($paragraphs as $index => $paragraph) {
+            $trimmed = trim($paragraph);
+            if ($trimmed) {
+                $contentWithAd .= $paragraph . '</p>';
+            }
+            if ($index === 2) {
+                $contentWithAd .= $adsHtml;
+            }
+        }
+
+        return $contentWithAd;
     }
 
 
@@ -329,5 +382,70 @@ class ArticleController extends Controller
             ->get();
 
         return view('search.results', compact('results', 'query'));
+    }
+
+    public function clap(Article $article)
+    {
+        $user = Auth::user();
+
+        // Cek apakah user sudah pernah clap artikel ini
+        $existingClap = $article->claps()->where('user_id', $user->id)->first();
+
+        if ($existingClap) {
+            // Jika sudah clap, hapus record (unclap)
+            $article->claps()->detach($user->id);
+        } else {
+            // Jika belum clap, tambahkan record baru di pivot
+            $article->claps()->attach($user->id, ['claps_count' => 1]);
+        }
+
+        return back();
+    }
+
+    public function markRead(Article $article)
+    {
+        $user = User::findOrFail(Auth::id()); // Pastikan user login
+
+        // Cek apakah user sudah membaca artikel ini sebelumnya
+        $alreadyRead = ArticleRead::where('article_id', $article->id)
+            ->where('user_id', $user->id)
+            ->exists();
+
+        if ($alreadyRead) {
+            return response()->json(['message' => 'Reward already granted for this article'], 200);
+        }
+
+        // Tambahkan entri baru ke tabel article_reads
+        ArticleRead::create([
+            'article_id' => $article->id,
+            'user_id' => $user->id,
+        ]);
+
+        // Tambahkan 1 rupiah ke earnings user
+        $reward = 1;
+        Earning::create([
+            'user_id' => $user->id,
+            'type' => 'reads',
+            'total_amount' => $reward,
+            'details' => json_encode([
+                'description' => 'Hadiah dari membaca: ' . $article->title,
+                'reward' => $reward,
+                'date' => now()->format('Y-m-d'),
+            ]),
+        ]);
+
+        // Tambahkan 1 ke kolom reads di tabel articles
+        $stats = ArticleStat::firstOrCreate([
+            'article_id' => $article->id,
+            'date' => now()->toDateString(),
+        ]);
+        $stats->increment('reads');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Read successfully recorded and reward granted',
+            'reward' => $reward,
+            'total_earnings' => $user->earning->amount,
+        ]);
     }
 }

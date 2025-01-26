@@ -32,7 +32,7 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique('users', 'phone')->ignore($this->user()->id),
             ],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'avatar' => ['nullable', 'string', 'max:255'], // Avatar biasanya berupa URL
+            // 'avatar' => ['nullable', 'string', 'max:255'], // Avatar biasanya berupa URL
             'bio' => ['nullable', 'string', 'max:1000'], // Bio memiliki batas panjang yang wajar
             'referral_code' => [
                 'nullable',
@@ -75,8 +75,8 @@ class ProfileUpdateRequest extends FormRequest
             'password.min' => 'Password minimal harus terdiri dari 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak sesuai.',
 
-            'avatar.string' => 'Avatar harus berupa URL.',
-            'avatar.max' => 'Avatar tidak boleh lebih dari 255 karakter.',
+            // 'avatar.string' => 'Avatar harus berupa URL.',
+            // 'avatar.max' => 'Avatar tidak boleh lebih dari 255 karakter.',
 
             'bio.string' => 'Bio harus berupa teks.',
             'bio.max' => 'Bio tidak boleh lebih dari 1000 karakter.',

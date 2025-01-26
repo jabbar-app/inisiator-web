@@ -3,44 +3,73 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\ArticleStat;
 use App\Models\Earning;
 use App\Models\WriterEarning;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index(EarningController $earningController)
+    public function index()
     {
-        $userEarning = Auth::user()->earning->amount ?? 0;
-
-        // Ambil pendapatan bulan ini
+        // Current month's earnings
         $currentMonth = now()->month;
-        $currentMonthEarning = WriterEarning::where('user_id', Auth::id())
+        $currentMonthEarning = Earning::where('user_id', Auth::id())
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', now()->year)
-            ->sum('amount');
+            ->sum('total_amount');
 
-        // Ambil pendapatan bulan lalu
+        // Last month's earnings
         $lastMonth = now()->subMonth();
-        $lastMonthEarning = WriterEarning::where('user_id', Auth::id())
+        $lastMonthEarning = Earning::where('user_id', Auth::id())
             ->whereMonth('created_at', $lastMonth->month)
             ->whereYear('created_at', $lastMonth->year)
-            ->sum('amount');
+            ->sum('total_amount');
 
-        // Hitung persentase perubahan
+        // Percentage change in earnings
         $percentageChange = 0;
         if ($lastMonthEarning > 0) {
             $percentageChange = (($currentMonthEarning - $lastMonthEarning) / $lastMonthEarning) * 100;
         }
 
-        // Total views (optional jika diperlukan)
-        $totalViews = Article::where('user_id', Auth::id())->sum('views');
+        $articles = Article::where('user_id', Auth::id())
+            ->with(['category', 'stats'])
+            ->orderByDesc('created_at')
+            ->get();
 
-        $earnings = Earning::all();
+        $totalViews = ArticleStat::whereIn('article_id', $articles->pluck('id'))->sum('views');
+
+        $earnings = Earning::where('user_id', Auth::id())->get();
+        $totalEarnings = $earnings->sum('total_amount');
+
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now();
+        $stats = ArticleStat::whereIn('article_id', $articles->pluck('id'))
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->get()
+            ->groupBy('date');
+
+        // Siapkan data untuk grafik
+        $dates = [];
+        $viewsData = [];
+        $readsData = [];
+
+        foreach (range(1, now()->daysInMonth) as $day) {
+            $date = now()->startOfMonth()->addDays($day - 1)->format('Y-m-d');
+            $dates[] = now()->startOfMonth()->addDays($day - 1)->format('M j');
+
+            // Jika tidak ada data pada tanggal tersebut, default ke 0
+            $viewsData[] = isset($stats[$date]) ? $stats[$date]->sum('views') : 0;
+            $readsData[] = isset($stats[$date]) ? $stats[$date]->sum('reads') : 0;
+        }
 
         return view('dashboard.index', compact(
-            'userEarning',
+            'dates',
+            'viewsData',
+            'readsData',
+            'totalEarnings',
             'totalViews',
             'currentMonthEarning',
             'lastMonthEarning',

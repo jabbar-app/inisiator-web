@@ -32,11 +32,6 @@ class Article extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function viewStats()
-    {
-        return $this->hasMany(ArticleViewStat::class);
-    }
-
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'article_tag');
@@ -45,5 +40,17 @@ class Article extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function claps()
+    {
+        return $this->belongsToMany(User::class, 'article_claps')
+            ->withPivot('claps_count')
+            ->withTimestamps();
+    }
+
+    public function stats()
+    {
+        return $this->hasMany(ArticleStat::class);
     }
 }

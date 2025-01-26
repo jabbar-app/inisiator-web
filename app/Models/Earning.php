@@ -14,11 +14,7 @@ class Earning extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'user_id',
-        'total_amount',
-        'details',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be cast.

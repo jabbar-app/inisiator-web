@@ -586,25 +586,29 @@ pre code {
 
 @media (min-width: 576px) {
     .container {
-        max-width: 540px;
+        max-width: 460px;
+        /* Lebar lebih kecil */
     }
 }
 
 @media (min-width: 768px) {
     .container {
-        max-width: 720px;
+        max-width: 640px;
+        /* Lebar lebih kecil */
     }
 }
 
 @media (min-width: 992px) {
     .container {
-        max-width: 960px;
+        max-width: 860px;
+        /* Lebar lebih kecil */
     }
 }
 
 @media (min-width: 1200px) {
     .container {
-        max-width: 1140px;
+        max-width: 960px;
+        /* Lebar lebih kecil */
     }
 }
 
@@ -615,6 +619,7 @@ pre code {
     margin-right: auto;
     margin-left: auto;
 }
+
 
 .row {
     display: -ms-flexbox;

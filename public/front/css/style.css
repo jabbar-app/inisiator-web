@@ -1197,10 +1197,10 @@ blockquote ol:last-child {
 /*Social share icons*/
 .entry-left-col {
     position: absolute;
-    left: -20%;
+    left: -5%;
     height: 200vh;
     z-index: 2;
-    top: 3rem;
+    top: 0rem;
     bottom: 0;
 }
 

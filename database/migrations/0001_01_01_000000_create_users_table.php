@@ -27,6 +27,8 @@ return new class extends Migration
             $table->integer('referral_quota')->default(0);
             $table->string('rank')->default('Stargazer');
             $table->integer('xp')->default(0);
+            $table->date('check_in_date')->nullable();
+            $table->integer('check_in_streak')->default(0);
             $table->boolean('is_verified')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

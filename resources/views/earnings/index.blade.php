@@ -7,7 +7,7 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <h2 class="card-title">Rp{{ number_format($earnings->total_amount ?? 0, 0, ',', '.') }},-</h2>
+          <h2 class="card-title">Rp{{ number_format($totalEarnings, 0, ',', '.') }},-</h2>
           <p class="mb-0">Total Artikel: <strong>{{ number_format($totalArticles) }}</strong></p>
         </div>
         <div class="d-flex gap-2">
@@ -16,7 +16,7 @@
             <button type="submit" class="btn btn-primary"><i class="ti ti-reload"></i></button>
           </form>
           <button onclick="withdraw()" id="withdrawButton" class="btn btn-outline-primary my-auto"
-            data-amount="{{ $earnings->total_amount ?? 0 }}" data-threshold="{{ $threshold }}">
+            data-amount="{{ $totalEarnings }}" data-threshold="{{ $threshold }}">
             <i class="ti ti-transition-bottom me-2"></i> Withdraw
           </button>
         </div>
@@ -24,10 +24,9 @@
 
       <!-- Progress Bar -->
       <div class="progress mt-3" style="height: 20px;">
-        <div class="progress-bar" role="progressbar"
-          style="width: {{ min(($earnings->total_amount / $threshold) * 100, 100) }}%;"
-          aria-valuenow="{{ $earnings->total_amount }}" aria-valuemin="0" aria-valuemax="{{ $threshold }}">
-          {{ min(($earnings->total_amount / $threshold) * 100, 100) }}%
+        <div class="progress-bar" role="progressbar" style="width: {{ min(($totalEarnings / $threshold) * 100, 100) }}%;"
+          aria-valuenow="{{ $totalEarnings }}" aria-valuemin="0" aria-valuemax="{{ $threshold }}">
+          {{ min(($totalEarnings / $threshold) * 100, 100) }}%
         </div>
       </div>
       <small class="text-muted">Minimal saldo untuk penarikan: Rp{{ number_format($threshold, 0, ',', '.') }},-</small>
@@ -39,17 +38,29 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th>Type</th>
           <th>Period</th>
           <th>Amount</th>
-          <th>Rank Rate</th>
+          <th>Details</th>
         </tr>
       </thead>
       <tbody>
-        @foreach ($earnings->details as $detail)
+        @foreach ($earnings as $earning)
+          @php
+            $details = is_string($earning->details) ? json_decode($earning->details, true) : $earning->details;
+          @endphp
           <tr>
-            <td>{{ $detail['period'] }}</td>
-            <td>Rp{{ number_format($detail['amount'], 0, ',', '.') }}</td>
-            <td>{{ $detail['rank_rate'] }}</td>
+            <td>{{ ucfirst($earning->type) }}</td>
+            <td>{{ $details['period'] ?? '-' }}</td>
+            <td>Rp{{ number_format($earning->total_amount, 0, ',', '.') }}</td>
+            <td>
+              @if ($earning->type === 'check_in')
+                Streak: {{ $details['streak'] ?? '-' }}, Reward:
+                Rp{{ number_format($details['reward'] ?? 0, 0, ',', '.') }}
+              @else
+                Views: {{ $details['views'] ?? '-' }}, Rank Rate: {{ $details['rank_rate'] ?? '-' }}
+              @endif
+            </td>
           </tr>
         @endforeach
       </tbody>
