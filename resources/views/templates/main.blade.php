@@ -7,7 +7,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>
-    @yield('title', 'Home') | Inisiator
+    @yield('title', 'Home')&nbsp;|&nbsp;Inisiator
   </title>
 
   <meta name="description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">

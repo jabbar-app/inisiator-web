@@ -1,8 +1,7 @@
 @extends('templates.main')
 
 @section('title', $quiz->user->name . '\'s Quiz')
-@section('meta_description', 'Ikuti Friendship Dare Quiz seru dari ' . $quiz->user->name . '! Jawab tantangan, uji
-  persahabatanmu, dan temukan kejutan menarik tentang sahabatmu. Siap untuk tertawa dan terkejut?')
+@section('meta_description', 'Ikuti Friendship Dare Quiz seru dari ' . $quiz->user->name . '! Jawab tantangan, uji persahabatanmu, dan temukan kejutan menarik tentang sahabatmu. Siap untuk tertawa dan terkejut?')
 @section('meta_keywords', $quiz->user->name . ', inisiator, darequiz, friendship dare quiz')
 @section('meta_image', !empty($article->user->avatar) ? asset($article->user->avatar) : asset('assets/img/profpic.svg'))
 
