@@ -177,8 +177,10 @@ class DareQuizController extends Controller
 
     public function show(string $slug, Request $request)
     {
-        $response = DareResponse::where('identifier', app(DareResponseController::class)->getUserIdentifier($request))->first();
+        $identifier = app(DareResponseController::class)->getUserIdentifier($request);
+        $response = DareResponse::where('identifier', $identifier)->first();
         $quiz = DareQuiz::where('slug', $slug)->first();
+        $title = $quiz->user->name."'s Quiz";
 
         $leaderboard = DareResponse::where('dare_quiz_id', $quiz->id)
             ->orderByDesc('score')
@@ -194,7 +196,7 @@ class DareQuizController extends Controller
                 ->toArray();
         }
 
-        return view('game.dare.quizzes.show', compact('quiz', 'leaderboard', 'response', 'reactions'));
+        return view('game.dare.quizzes.show', compact('quiz', 'leaderboard', 'identifier', 'response', 'reactions', 'title'));
     }
 
     public function updateSong(Request $request, $id)

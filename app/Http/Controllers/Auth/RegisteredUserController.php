@@ -142,11 +142,11 @@ class RegisteredUserController extends Controller
     {
         $user = User::findOrFail($request->user_id);
         $user->update([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'referral_code' => $this->generateReferralCode($request->username),
+            'name' => $request->form_name,
+            'username' => $request->form_username,
+            'email' => $request->form_email,
+            'password' => Hash::make($request->form_password),
+            'referral_code' => $this->generateReferralCode($request->form_username),
         ]);
 
         return redirect()->route('play.dare.store');

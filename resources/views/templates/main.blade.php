@@ -5,16 +5,34 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  {{-- <link rel="stylesheet" href="{{ asset('theme/css/bootstrap.min.css') }}"> --}}
+
+  <title>
+    @yield('title', 'Home') | Inisiator
+  </title>
+
+  <meta name="description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">
+  <meta name="keywords" content="@yield('meta_keywords', 'kata kunci, inisiator, website')">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request()->url() }}">
+  <meta property="og:title" content="@if (!empty($title)) {{ $title . ' | ' }} @endif Inisiator">
+  <meta property="og:description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">
+  <meta property="og:image" content="@yield('meta_image', asset('assets/img/company/inisiator-icon.svg'))">
+
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ request()->url() }}">
+  <meta property="twitter:title" content="@if (!empty($title)) {{ $title . ' | ' }} @endif Inisiator">
+  <meta property="twitter:description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">
+  <meta property="twitter:image" content="@yield('meta_image', asset('assets/img/company/inisiator-icon.svg'))">
+
+  <link rel="canonical" href="{{ request()->url() }}">
+
   <link rel="stylesheet" href="{{ asset('front/css/bootstrap.css') }}">
   <link rel="stylesheet" href="{{ asset('theme/css/styles.min.css') }}">
   <link rel="stylesheet" href="{{ asset('theme/css/vendor/simplebar.css') }}">
   <link rel="stylesheet" href="{{ asset('theme/css/vendor/tiny-slider.css') }}">
   <link rel="stylesheet" href="{{ asset('theme/css/custom.css') }}">
   <link rel="icon" href="{{ asset('assets/img/company/inisiator-icon.svg') }}">
-  <title>
-    @yield('title' . ' | ', 'Home | ') Inisiator
-  </title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,7 +72,6 @@
   @endif
 
   <main id="content">
-
     {{-- <hr class="mt-0">
     <div class="container">
       <div class="d-flex" style="gap: 24px;">
@@ -67,35 +84,25 @@
     </div>
     <hr> --}}
     @yield('content')
-
   </main>
 
   <script src="{{ asset('theme/js/app.bundle.min.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Tangkap semua link dengan href="#"
       const links = document.querySelectorAll('a[href="#"]');
-
-      // Tambahkan event listener untuk setiap link
       links.forEach(link => {
         link.addEventListener('click', function(event) {
-          event.preventDefault(); // Mencegah perilaku default link
-
-          // Hitung tanggal besok
+          event.preventDefault();
           const today = new Date();
           const tomorrow = new Date(today);
           tomorrow.setDate(today.getDate() + 4);
-
-          // Format tanggal ke "28 Feb 2025"
           const options = {
             day: 'numeric',
             month: 'short',
             year: 'numeric'
           };
           const formattedDate = tomorrow.toLocaleDateString('en-US', options);
-
-          // Tampilkan SweetAlert2
           Swal.fire({
             title: 'Fitur Segera Hadir!',
             text: `Fitur akan segera tersedia pada tanggal ${formattedDate}.`,

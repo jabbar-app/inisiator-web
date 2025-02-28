@@ -4,6 +4,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css">
 @endpush
 
+@php
+  $title = $quiz->user->name . "'s Quiz";
+@endphp
+
 @section('content')
   <div class="content-grid">
     <div class="row">

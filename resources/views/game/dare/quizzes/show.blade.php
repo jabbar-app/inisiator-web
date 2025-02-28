@@ -1,5 +1,11 @@
 @extends('templates.main')
 
+@section('title', $quiz->user->name . '\'s Quiz')
+@section('meta_description', 'Ikuti Friendship Dare Quiz seru dari ' . $quiz->user->name . '! Jawab tantangan, uji
+  persahabatanmu, dan temukan kejutan menarik tentang sahabatmu. Siap untuk tertawa dan terkejut?')
+@section('meta_keywords', $quiz->user->name . ', inisiator, darequiz, friendship dare quiz')
+@section('meta_image', !empty($article->user->avatar) ? asset($article->user->avatar) : asset('assets/img/profpic.svg'))
+
 @section('content')
   <div class="content-grid">
 
@@ -413,8 +419,9 @@
                   <form action="{{ route('dare-reactions.store') }}" method="POST" class="reaction-form">
                     @csrf
                     <input type="hidden" name="dare_quiz_id" value="{{ $quiz->id }}">
-                    <input type="hidden" name="name" value="{{ $response->name ?? 'Anonymous' }}">
+                    <input type="hidden" name="name" value="{{ $response->responder_name ?? 'Anonymous' }}">
                     <input type="hidden" name="content" value="{{ $reaction }}">
+                    <input type="hidden" name="identifier" value="{{ $identifier }}">
                     <button type="submit" class="reaction-option text-tooltip-tft" data-title="{{ $reaction }}">
                       <img class="reaction-option-image"
                         src="{{ asset('assets/img/reactions/' . strtolower($reaction) . '.webp') }}"
@@ -462,7 +469,7 @@
           </div>
           <div id="comments" class="post-comment-list">
             @foreach ($quiz->messages as $message)
-              @if ($message->is_visible || Auth::check() && Auth::user()->id == $message->quiz->user->id)
+              @if ($message->is_visible || (Auth::check() && Auth::user()->id == $message->quiz->user->id))
                 <div class="post-comment px-0 py-2 bg-transparent">
 
                   <p class="post-comment-text">
@@ -515,88 +522,29 @@
 
                         <div class="reaction-options small reaction-options-small-dropdown"
                           style="position: absolute; z-index: 9999; bottom: 30px; left: -80px; opacity: 0; visibility: hidden; transform: translate(0px, 16px); transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;">
-                          <div class="reaction-option text-tooltip-tft" data-title="Like" style="position: relative;">
-                            <img class="reaction-option-image" src="{{ asset('assets/img/reactions/like.webp') }}"
-                              alt="reaction-like">
-                            <div class="xm-tooltip"
-                              style="white-space: nowrap; position: absolute; z-index: 99999; top: -28px; left: 50%; margin-left: -24px; opacity: 0; visibility: hidden; transform: translate(0px, 10px); transition: 0.3s ease-in-out;">
-                              <p class="xm-tooltip-text">Like</p>
-                            </div>
-                          </div>
-
-                          <div class="reaction-option text-tooltip-tft" data-title="Love" style="position: relative;">
-                            <img class="reaction-option-image" src="{{ asset('assets/img/reactions/love.webp') }}"
-                              alt="reaction-love">
-                            <div class="xm-tooltip"
-                              style="white-space: nowrap; position: absolute; z-index: 99999; top: -28px; left: 50%; margin-left: -26px; opacity: 0; visibility: hidden; transform: translate(0px, 10px); transition: 0.3s ease-in-out;">
-                              <p class="xm-tooltip-text">Love</p>
-                            </div>
-                          </div>
-
-                          <div class="reaction-option text-tooltip-tft" data-title="Dislike"
-                            style="position: relative;">
-                            <img class="reaction-option-image" src="{{ asset('assets/img/reactions/dislike.webp') }}"
-                              alt="reaction-dislike">
-                            <div class="xm-tooltip"
-                              style="white-space: nowrap; position: absolute; z-index: 99999; top: -28px; left: 50%; margin-left: -31.5px; opacity: 0; visibility: hidden; transform: translate(0px, 10px); transition: 0.3s ease-in-out;">
-                              <p class="xm-tooltip-text">Dislike</p>
-                            </div>
-                          </div>
-
-                          <div class="reaction-option text-tooltip-tft" data-title="Happy" style="position: relative;">
-                            <img class="reaction-option-image" src="{{ asset('assets/img/reactions/happy.webp') }}"
-                              alt="reaction-happy">
-                            <div class="xm-tooltip"
-                              style="white-space: nowrap; position: absolute; z-index: 99999; top: -28px; left: 50%; margin-left: -30.5px; opacity: 0; visibility: hidden; transform: translate(0px, 10px); transition: 0.3s ease-in-out;">
-                              <p class="xm-tooltip-text">Happy</p>
-                            </div>
-                          </div>
-
-                          <div class="reaction-option text-tooltip-tft" data-title="Funny" style="position: relative;">
-                            <img class="reaction-option-image" src="{{ asset('assets/img/reactions/funny.webp') }}"
-                              alt="reaction-funny">
-                            <div class="xm-tooltip"
-                              style="white-space: nowrap; position: absolute; z-index: 99999; top: -28px; left: 50%; margin-left: -30px; opacity: 0; visibility: hidden; transform: translate(0px, 10px); transition: 0.3s ease-in-out;">
-                              <p class="xm-tooltip-text">Funny</p>
-                            </div>
-                          </div>
-
-                          <div class="reaction-option text-tooltip-tft" data-title="Wow" style="position: relative;">
-                            <img class="reaction-option-image" src="{{ asset('assets/img/reactions/wow.webp') }}"
-                              alt="reaction-wow">
-                            <div class="xm-tooltip"
-                              style="white-space: nowrap; position: absolute; z-index: 99999; top: -28px; left: 50%; margin-left: -26px; opacity: 0; visibility: hidden; transform: translate(0px, 10px); transition: 0.3s ease-in-out;">
-                              <p class="xm-tooltip-text">Wow</p>
-                            </div>
-                          </div>
-
-                          <div class="reaction-option text-tooltip-tft" data-title="Angry" style="position: relative;">
-                            <img class="reaction-option-image" src="{{ asset('assets/img/reactions/angry.webp') }}"
-                              alt="reaction-angry">
-                            <div class="xm-tooltip"
-                              style="white-space: nowrap; position: absolute; z-index: 99999; top: -28px; left: 50%; margin-left: -29.5px; opacity: 0; visibility: hidden; transform: translate(0px, 10px); transition: 0.3s ease-in-out;">
-                              <p class="xm-tooltip-text">Angry</p>
-                            </div>
-                          </div>
-
-                          <div class="reaction-option text-tooltip-tft" data-title="Sad" style="position: relative;">
-                            <img class="reaction-option-image" src="{{ asset('assets/img/reactions/sad.webp') }}"
-                              alt="reaction-sad">
-                            <div class="xm-tooltip"
-                              style="white-space: nowrap; position: absolute; z-index: 99999; top: -28px; left: 50%; margin-left: -23px; opacity: 0; visibility: hidden; transform: translate(0px, 10px); transition: 0.3s ease-in-out;">
-                              <p class="xm-tooltip-text">Sad</p>
-                            </div>
-                          </div>
+                          @foreach (['Like', 'Love', 'Dislike', 'Happy', 'Funny', 'Wow', 'Angry', 'Sad'] as $reaction)
+                            <form action="{{ route('dare-reactions.store') }}" method="POST" class="reaction-form">
+                              @csrf
+                              <input type="hidden" name="dare_quiz_id" value="{{ $quiz->id }}">
+                              <input type="hidden" name="name" value="{{ $response->name ?? 'Anonymous' }}">
+                              <input type="hidden" name="content" value="{{ $reaction }}">
+                              <input type="hidden" name="identifier" value="{{ $identifier }}">
+                              <button type="submit" class="reaction-option text-tooltip-tft"
+                                data-title="{{ $reaction }}">
+                                <img class="reaction-option-image"
+                                  src="{{ asset('assets/img/reactions/' . strtolower($reaction) . '.webp') }}"
+                                  alt="reaction-{{ strtolower($reaction) }}">
+                              </button>
+                            </form>
+                          @endforeach
                         </div>
                       </div>
 
-                      @auth
-                        @if (Auth::user()->id == $quiz->user->id)
-                          <div class="meta-line">
-                            <p class="meta-line-link light">Reply</p>
-                          </div>
-                        @endif
-                      @endauth
+                      @if (Auth::check() && Auth::user()->id == $quiz->user->id)
+                        <div class="meta-line">
+                          <div class="meta-line-link light">Reply</div>
+                        </div>
+                      @endif
 
                       <div class="meta-line">
                         <p class="meta-line-timestamp">{{ $message->created_at->diffForHumans() }}</p>
@@ -771,7 +719,45 @@
 
             {{-- <p class="post-comment-heading">Load More Comments <span class="highlighted">1+</span></p> --}}
           </div>
+
+          @guest
+            <div class="button primary w-100 mt-4" data-bs-toggle="modal" data-bs-target="#loginModal">
+              Login to open messages
+            </div>
+          @endguest
         </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Login -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Form Login -->
+          <form action="{{ route('login') }}" method="POST">
+            @csrf
+            <input type="hidden" name="url" value="{{ url()->current() }}">
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="button secondary w-100">Login</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <p class="text-center w-100">Don't have an account? <a href="{{ route('register') }}">Register here</a></p>
+        </div>
       </div>
     </div>
   </div>
@@ -786,8 +772,8 @@
             <h4 class="m-3">Send message to {{ $quiz->user->name }}</h4>
           </div>
 
-          <div class="quick-post-body p-3">
-            <form action="{{ route('dare-messages.store') }}" method="POST" class="form">
+          <form action="{{ route('dare-messages.store') }}" method="POST">
+            <div class="quick-post-body p-3">
               @csrf
               <input type="hidden" name="dare_quiz_id" value="{{ $quiz->id }}">
               <div class="mb-3">
@@ -799,12 +785,10 @@
                 <textarea name="content" id="content" rows="4" class="form-control"
                   placeholder="Write your message or question here..."></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Send</button>
-            </form>
-          </div>
+            </div>
 
-          <div class="quick-post-footer">
-            <div class="quick-post-footer-actions">
+            <div class="quick-post-footer">
+              {{-- <div class="quick-post-footer-actions">
               <div class="quick-post-footer-action text-tooltip-tft-medium" data-title="Insert Photo"
                 style="position: relative;">
                 <svg class="quick-post-footer-action-icon icon-camera">
@@ -837,14 +821,16 @@
                   <p class="xm-tooltip-text">Insert Tag</p>
                 </div>
               </div>
-            </div>
+            </div> --}}
+              <div></div>
 
-            <div class="quick-post-footer-actions">
-              <p class="button small void">Discard</p>
+              <div class="quick-post-footer-actions">
+                <p class="button small void">Discard</p>
 
-              <p class="button small secondary">Post</p>
+                <button type="submit" class="button small secondary">Send</button>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

@@ -24,10 +24,22 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // dd($request->all());
         $request->authenticate();
 
         $request->session()->regenerate();
 
+        // Cek apakah ada input URL
+        if ($request->has('url')) {
+            $redirectUrl = $request->input('url');
+
+            // Validasi URL untuk menghindari redirect ke domain yang tidak diinginkan
+            if (filter_var($redirectUrl, FILTER_VALIDATE_URL)) {
+                return redirect()->to($redirectUrl);
+            }
+        }
+
+        // Jika tidak ada URL, redirect ke dashboard
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

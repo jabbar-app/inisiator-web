@@ -54,9 +54,9 @@
                   <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                   <div class="form-item mb-4">
                     <div class="form-input small">
-                      <label for="name">Full Name</label>
-                      <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus>
-                      @error('name')
+                      <label for="form_name">Full Name</label>
+                      <input type="text" id="form_name" name="form_name" value="{{ old('form_name') }}" required autofocus>
+                      @error('form_name')
                         <span class="text-danger">{{ $message }}</span>
                       @enderror
                     </div>
@@ -64,9 +64,9 @@
 
                   <div class="form-item mb-4">
                     <div class="form-input small">
-                      <label for="username">Username</label>
-                      <input type="text" id="username" name="username" value="{{ old('username') }}" autocomplete="off">
-                      @error('username')
+                      <label for="form_username">Username</label>
+                      <input type="text" id="form_username" name="form_username" value="{{ old('form_username') }}" autocomplete="off">
+                      @error('form_username')
                         <span class="text-danger">{{ $message }}</span>
                       @enderror
                     </div>
@@ -74,10 +74,10 @@
 
                   <div class="form-item mb-4">
                     <div class="form-input small">
-                      <label for="email">Email Address</label>
-                      <input type="text" id="email" name="email" value="{{ old('email') }}" autocomplete="off"
+                      <label for="form_email">form_Email Address</label>
+                      <input type="text" id="form_email" name="form_email" value="{{ old('form_email') }}" autocomplete="off"
                         required>
-                      @error('email')
+                      @error('form_email')
                         <span class="text-danger">{{ $message }}</span>
                       @enderror
                     </div>
@@ -85,9 +85,9 @@
 
                   <div class="form-item mb-4">
                     <div class="form-input small">
-                      <label for="password">Password</label>
-                      <input type="password" id="password" name="password" autocomplete="off" required>
-                      @error('password')
+                      <label for="form_password">form_Password</label>
+                      <input type="form_password" id="form_password" name="form_password" autocomplete="off" required>
+                      @error('form_password')
                         <span class="text-danger">{{ $message }}</span>
                       @enderror
                     </div>

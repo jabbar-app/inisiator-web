@@ -12,7 +12,7 @@ class DareMessage extends Model
 
     public function quiz()
     {
-        return $this->belongsTo(DareQuiz::class);
+        return $this->belongsTo(DareQuiz::class, 'dare_quiz_id');
     }
 
     public function replies()

@@ -29,7 +29,10 @@ class DareReactionController extends Controller
             ]
         );
 
-        dd($reaction);
+        $reaction->update([
+            'name' => $request->name,
+            'content' => $request->content
+        ]);
 
         return redirect()->back()->with('success', 'Reaction added successfully!');
     }
