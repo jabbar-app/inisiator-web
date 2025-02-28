@@ -15,13 +15,13 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ request()->url() }}">
-  <meta property="og:title" content="@if (!empty($title)) {{ $title . ' | ' }} @endif Inisiator">
+  <meta property="og:title" content="@yield('title', 'Home')&nbsp;|&nbsp;Inisiator">
   <meta property="og:description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">
   <meta property="og:image" content="@yield('meta_image', asset('assets/img/company/inisiator-icon.svg'))">
 
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="{{ request()->url() }}">
-  <meta property="twitter:title" content="@if (!empty($title)) {{ $title . ' | ' }} @endif Inisiator">
+  <meta property="twitter:title" content="@yield('title', 'Home')&nbsp;|&nbsp;Inisiator">
   <meta property="twitter:description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">
   <meta property="twitter:image" content="@yield('meta_image', asset('assets/img/company/inisiator-icon.svg'))">
 
