@@ -14,7 +14,7 @@ class PageController extends Controller
 {
     public function landing()
     {
-        return view('pages.landing');
+        return view('landing');
     }
 
     public function home()
@@ -48,8 +48,11 @@ class PageController extends Controller
 
         // Ambil artikel populer untuk sidebar
         $popularArticles = Article::with(['user:id,username,name', 'category:id,slug,title'])
-            ->select('id', 'title', 'slug', 'img_featured', 'content', 'created_at', 'user_id', 'category_id')
-            ->orderBy('views', 'desc') // Urutkan berdasarkan jumlah views
+            ->select('articles.id', 'articles.title', 'articles.slug', 'articles.img_featured', 'articles.content', 'articles.created_at', 'articles.user_id', 'articles.category_id')
+            ->join('article_stats', 'articles.id', '=', 'article_stats.article_id')
+            ->selectRaw('SUM(article_stats.views) as total_views') // Hitung total views
+            ->groupBy('articles.id', 'articles.title', 'articles.slug', 'articles.img_featured', 'articles.content', 'articles.created_at', 'articles.user_id', 'articles.category_id')
+            ->orderByDesc('total_views') // Urutkan berdasarkan total views
             ->take(5) // Ambil 5 artikel paling populer
             ->get();
 
@@ -57,10 +60,12 @@ class PageController extends Controller
         return view('pages.home', compact('featureds', 'editorsPick', 'articlesSection', 'articles', 'popularArticles'));
     }
 
+
     public function author(string $username)
     {
         // Mengambil data penulis berdasarkan username
         $author = User::with('articles')->where('username', $username)->firstOrFail();
+        // dd($author->followers->count());
 
         // Mengambil 5 artikel terbaru untuk sidebar
         $latestArticles = Article::latest()->take(5)->get();

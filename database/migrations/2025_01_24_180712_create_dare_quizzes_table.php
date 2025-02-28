@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('slug')->nullable();
+            $table->string('song')->nullable();
             $table->string('location')->nullable();
             $table->json('device')->nullable();
+            $table->integer('share')->default(0);
             $table->timestamps();
         });
     }

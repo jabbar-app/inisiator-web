@@ -22,6 +22,34 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $avatarPath;
+        }
+
+        if ($request->hasFile('cover')) {
+            $coverPath = $request->file('cover')->store('covers', 'public');
+            $user->cover = $coverPath;
+        }
+
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
     /**
      * Update the user's profile information.
      */

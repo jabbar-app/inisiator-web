@@ -1,6 +1,6 @@
 <div class="mb-3">
   @if (session('success'))
-    <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Berhasil!
+    <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Success!
       </strong> {{ session('success') }}
       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -11,8 +11,7 @@
     </div>
   @elseif (session('danger') || session('error'))
     <div class="alert alert-danger dark alert-dismissible fade show" role="alert">
-      <strong>Gagal!</strong> {{ session('danger') ?? session('error') }}
-      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+      <strong>Error!</strong> {{ session('danger') ?? session('error') }}
     </div>
   @endif
   @if ($errors->any())

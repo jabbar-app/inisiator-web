@@ -7,25 +7,22 @@ use Illuminate\Http\Request;
 
 class WhatsappController extends Controller
 {
-    public function sendNotification($articleId, $adminNumber = '08990980799')
+    public $token;
+
+    public function __construct()
     {
-        // Misal ambil data artikel
-        $article = Article::findOrFail($articleId);
+        $this->token = 'p56gF9W4WQZLgs9qq1sY';
+    }
 
-        // Token Fonnte
-        $token = 'p56gF9W4WQZLgs9qq1sY';
-
-        // Buat link approval (sesuaikan route)
-        // Contoh route: articles.approve -> /articles/{id}/approve
-        $approveUrl = route('articles.approve', $article->id);
-
+    public function sendNotification($message, $number)
+    {
         // Siapkan data
         // 'target' => bisa multiple (dipisah koma). Di sini satu nomor
         // 'message' => isi pesan. Contoh menambahkan judul artikel dan link approval.
         // Boleh memakai placeholder {name} dsb. tapi di sini kita pakai teks biasa.
         $postFields = [
-            'target'   => $adminNumber,
-            'message'  => "Halo Admin, ada artikel baru dengan judul '{$article->title}'.\nSilakan review di: {$approveUrl}",
+            'target'   => $number,
+            'message'  => $message,
             'delay'    => '1-3', // random 1-3 detik
             'countryCode' => '62',
         ];
@@ -37,7 +34,7 @@ class WhatsappController extends Controller
             CURLOPT_POST           => true,
             CURLOPT_POSTFIELDS     => $postFields,
             CURLOPT_HTTPHEADER     => [
-                "Authorization: $token",
+                "Authorization: $this->token",
             ],
         ]);
 

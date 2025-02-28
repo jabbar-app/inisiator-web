@@ -586,29 +586,25 @@ pre code {
 
 @media (min-width: 576px) {
     .container {
-        max-width: 460px;
-        /* Lebar lebih kecil */
+        max-width: 540px;
     }
 }
 
 @media (min-width: 768px) {
     .container {
-        max-width: 640px;
-        /* Lebar lebih kecil */
+        max-width: 720px;
     }
 }
 
 @media (min-width: 992px) {
     .container {
-        max-width: 860px;
-        /* Lebar lebih kecil */
+        max-width: 960px;
     }
 }
 
 @media (min-width: 1200px) {
     .container {
-        max-width: 960px;
-        /* Lebar lebih kecil */
+        max-width: 1140px;
     }
 }
 
@@ -619,7 +615,6 @@ pre code {
     margin-right: auto;
     margin-left: auto;
 }
-
 
 .row {
     display: -ms-flexbox;
@@ -8887,8 +8882,8 @@ a.text-dark:focus {
     appearance: none;
     background-color: #fff;
     background-clip: padding-box;
-    border: var(--bs-border-width) solid #dbdade;
-    border-radius: var(--bs-border-radius);
+    border: 1px solid #dedeea;
+    border-radius: 12px !important;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -8907,9 +8902,9 @@ a.text-dark:focus {
 }
 
 .form-control:focus {
-    color: #6f6b7d;
+    color: #6f6b7d !important;
     background-color: #fff;
-    border-color: #14A0B4;
+    border-color: #14A0B4 !important;
     outline: 0;
     box-shadow: 0 0.125rem 0.25rem rgba(165, 163, 174, 0.3);
 }

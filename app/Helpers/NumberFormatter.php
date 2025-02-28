@@ -18,3 +18,12 @@ if (!function_exists('formatNumber')) {
         return $number;
     }
 }
+
+if (!function_exists('formatTime')) {
+    function formatTime($seconds)
+    {
+        $minutes = floor($seconds / 60);
+        $remainingSeconds = $seconds % 60;
+        return sprintf('%dm %02ds', $minutes, $remainingSeconds);
+    }
+}

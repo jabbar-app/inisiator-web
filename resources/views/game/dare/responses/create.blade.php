@@ -1,62 +1,82 @@
-@extends('layouts.game')
+@extends('templates.main')
+
+@push('styles')
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css">
+@endpush
 
 @section('content')
-  <form id="response-form" action="{{ route('dare-responses.store') }}" method="POST">
-    @csrf
-    <input type="hidden" name="quiz_id" value="{{ $quiz_id }}">
-    <input type="hidden" name="currentQuestionIndex" value="{{ $currentQuestionIndex }}">
-    <input type="hidden" name="response" id="response-input">
+  <div class="content-grid">
+    {{-- <div class="section-banner">
+      <img class="section-banner-icon" src="{{ asset('theme/img/quests-icon.webp') }}" alt="quests-icon">
+      <p class="section-banner-title">Create Question</p>
+      <p class="section-banner-text">Complete quests to gain experience and level up!</p>
+    </div> --}}
 
-    <div class="flex justify-between items-center gap-5">
-      <div class="flex justify-center items-center gap-1 bg-white py-2 px-4 rounded-xl dark:bg-color9">
-        <i class="ph ph-user"></i>
-        <p class="text-xs font-semibold text-nowrap">{{ $currentQuestionIndex }} of {{ $totalQuestions }}</p>
-      </div>
-      <div class="w-full bg-p1 bg-opacity-10 h-2 rounded-full relative">
-        <span class="absolute top-0 left-0 bg-p1 h-2 rounded-full"
-          style="width: {{ ($currentQuestionIndex / $totalQuestions) * 100 }}%"></span>
-      </div>
-      <div class="flex justify-center items-center gap-1 bg-p1 text-white py-2 px-4 rounded-xl">
-        <i class="ph ph-puzzle-piece"></i>
-        <p class="text-xs font-semibold text-nowrap">{{ $currentQuestionIndex }} of {{ $totalQuestions }}</p>
-      </div>
-    </div>
+    <div class="row">
+      <div class="col-12">
+        <form id="response-form" action="{{ route('dare-responses.store') }}" method="POST">
+          @csrf
+          <input type="hidden" name="quiz_id" value="{{ $quiz->id }}">
+          <input type="hidden" name="currentQuestionIndex" value="{{ $currentQuestionIndex }}">
+          <input type="hidden" name="response" id="response-input">
+          <input type="hidden" name="time" id="time-input">
 
-
-    <div
-      class="bg-white dark:bg-color11 p-4 rounded-xl mt-20 text-center flex flex-col justify-center items-center relative">
-      <div
-        class="h-full w-full bg-white dark:bg-color9 rounded-full flex justify-center items-center text-lg font-bold p-1.5 relative progress">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 34 34">
-          <circle cx="16" cy="16" r="15.5" class="progress-bar__background" />
-          <circle cx="16" cy="16" r="15.5" class="progress-bar__progress" />
-          <p class="text-lg font-bold absolute top-[30px] left-[31px] countdown-text">10</p>
-        </svg>
-      </div>
-      <p class="text-lg font-semibold px-4 pt-3 border-b border-dashed border-color21 dark:border-color24">
-        "{{ $question->question }}"
-      </p>
-      <p class="pt-3">Question {{ $currentQuestionIndex }}</p>
-    </div>
-
-    <div class="flex flex-col gap-4 pt-8">
-      @foreach ($question->options as $index => $option)
-        <div class="flex justify-between items-center bg-white dark:bg-color9 py-4 px-5 rounded-2xl option"
-          data-correct="{{ $option === $question->correct_answer ? 'true' : 'false' }}">
-          <label class="flex justify-between items-center w-full cursor-pointer">
-            <p class="text-sm font-semibold">
-              {{ $option }}
-            </p>
-            <input type="radio" name="response" value="{{ $option }}" class="hidden response-radio">
-            <div class="size-8 rounded-full text-white border border-color21 flex justify-center items-center icon">
-              <i class="ph"></i>
+          <div class="widget-box my-4">
+            <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+              <div class="w-100 bg-light rounded-pill" style="height: 8px;">
+                <div class="bg-primary rounded-pill"
+                  style="height: 8px; width: {{ ($currentQuestionIndex / $totalQuestions) * 100 }}%;">
+                </div>
+              </div>
+              <h3 class="bg-primary text-white text-nowrap py-2 px-3 m-0 rounded-pill">
+                {{ $currentQuestionIndex }} of {{ $totalQuestions }}
+              </h3>
             </div>
-          </label>
-        </div>
-      @endforeach
-    </div>
 
-  </form>
+            <div class="text-center d-flex flex-column justify-content-center align-items-center position-relative mb-4">
+              <p class="fw-semibold mb-2">Question {{ $currentQuestionIndex }}</p>
+              <h1 class="pt-3 border-top border-dashed">
+                {{ $question->question }}
+              </h1>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column gap-3">
+            @foreach ($question->options as $index => $option)
+              <div class="widget-box d-flex justify-content-between align-items-center p-3 rounded-3 option"
+                data-correct="{{ $option === $question->correct_answer ? 'true' : 'false' }}">
+                <label class="d-flex justify-content-between align-items-center w-full cursor-pointer">
+                  <h2 class="mb-0 me-2">
+                    {{ $option }}
+                  </h2>
+
+                  {{-- Correct Icon --}}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-check d-none">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M5 12l5 5l10 -10" />
+                  </svg>
+
+                  {{-- Incorrect Icon --}}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-x d-none">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M18 6l-12 12" />
+                    <path d="M6 6l12 12" />
+                  </svg>
+
+                  <input type="radio" name="response" value="{{ $option }}"
+                    class="visually-hidden response-radio">
+                </label>
+              </div>
+            @endforeach
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 @endsection
 
 @push('scripts')
@@ -65,32 +85,38 @@
       const options = document.querySelectorAll('.option');
       const form = document.getElementById('response-form');
       const responseInput = document.getElementById('response-input');
-      const countdownElement = document.querySelector('.progress-bar__progress');
-      const countdownText = document.querySelector('.countdown-text');
+      const timeInput = document.getElementById('time-input'); // Get the time input field
 
-      let duration = 10; // Countdown duration in seconds
+      let duration = 1000; // Countdown duration in seconds
       let currentTime = duration;
+      let timer;
 
-      function updateProgress() {
-        const percentage = (currentTime / duration) * 100;
-        countdownElement.style.strokeDashoffset = 100 - percentage;
-        countdownText.textContent = currentTime;
+      // Function to update the countdown display
+      function updateCountdown() {
+        const countdownElement = document.getElementById('countdown');
+        if (countdownElement) {
+          countdownElement.textContent = currentTime;
+        }
       }
 
-      // Timer for countdown
-      const timer = setInterval(() => {
-        if (currentTime > 0) {
-          currentTime--;
-          updateProgress();
-        } else {
-          clearInterval(timer);
-          countdownText.textContent = "Time's up!";
-          responseInput.value = "No Answer"; // Set empty response
-          form.submit(); // Auto-submit the form
-        }
-      }, 1000);
+      // Start the countdown timer
+      function startTimer() {
+        timer = setInterval(() => {
+          if (currentTime > 0) {
+            currentTime--;
+            updateCountdown();
+          } else {
+            clearInterval(timer);
+            responseInput.value = "No Answer"; // Set empty response
+            timeInput.value = 0; // Set time to 0 when time's up
+            form.submit(); // Auto-submit the form
+          }
+        }, 1000);
+      }
 
-      updateProgress();
+      // Initialize countdown
+      updateCountdown();
+      startTimer();
 
       // Handle option selection
       options.forEach(option => {
@@ -100,22 +126,28 @@
 
           // Reset all options
           options.forEach(opt => {
-            opt.classList.remove('correct', 'wrong');
-            opt.querySelector('.icon i').className = 'ph';
+            opt.classList.remove('bg-success', 'bg-danger',
+              'text-white'); // Reset background and text color
+            opt.querySelector('h2').classList.remove('text-white'); // Reset text color for h2
+            opt.querySelector('.icon-tabler-check').classList.add('d-none'); // Hide correct icon
+            opt.querySelector('.icon-tabler-x').classList.add('d-none'); // Hide incorrect icon
           });
 
           // Add class based on correctness
           if (isCorrect) {
-            option.classList.add('correct');
-            option.querySelector('.icon i').className = 'ph ph-check';
+            option.classList.add('bg-success', 'text-white'); // Set background to green and text to white
+            option.querySelector('h2').classList.add('text-white'); // Set h2 text to white
+            option.querySelector('.icon-tabler-check').classList.remove('d-none'); // Show correct icon
           } else {
-            option.classList.add('wrong');
-            option.querySelector('.icon i').className = 'ph ph-x';
+            option.classList.add('bg-danger', 'text-white'); // Set background to red and text to white
+            option.querySelector('h2').classList.add('text-white'); // Set h2 text to white
+            option.querySelector('.icon-tabler-x').classList.remove('d-none'); // Show incorrect icon
           }
 
           // Set response value and submit form
           const radio = option.querySelector('.response-radio');
           responseInput.value = radio.value;
+          timeInput.value = duration - currentTime; // Set the time taken to answer
           setTimeout(() => {
             form.submit();
           }, 1000);
@@ -123,44 +155,4 @@
       });
     });
   </script>
-
-  <style>
-    .option.correct {
-      background-color: #4caf50;
-      color: white;
-      border-color: #4caf50;
-    }
-
-    .option.correct .icon {
-      background-color: white;
-      color: #4caf50;
-    }
-
-    .option.wrong {
-      background-color: #f44336;
-      color: white;
-      border-color: #f44336;
-    }
-
-    .option.wrong .icon {
-      background-color: white;
-      color: #f44336;
-    }
-
-    .progress-bar__background {
-      fill: none;
-      stroke: rgba(236, 137, 68, 0.4);
-      stroke-width: 2.8;
-    }
-
-    .progress-bar__progress {
-      fill: none;
-      stroke: #ff710f;
-      stroke-dasharray: 100 100;
-      stroke-dashoffset: 100;
-      stroke-linecap: round;
-      stroke-width: 2.8;
-      transition: stroke-dashoffset 1s ease-in-out;
-    }
-  </style>
 @endpush

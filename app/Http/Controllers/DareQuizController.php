@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DareQuiz;
+use App\Models\DareReaction;
 use App\Models\DareResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,129 @@ class DareQuizController extends Controller
      */
     public function create()
     {
-        return view('game.dare.quizzes.create');
+        $countryCodes = [
+            62 => 'Indonesia',
+            1 => 'Amerika Serikat',
+            44 => 'Inggris Raya',
+            91 => 'India',
+            60 => 'Malaysia',
+            86 => 'Tiongkok',
+            81 => 'Jepang',
+            49 => 'Jerman',
+            33 => 'Prancis',
+            39 => 'Italia',
+            82 => 'Korea Selatan',
+            7 => 'Rusia',
+            55 => 'Brasil',
+            61 => 'Australia',
+            1 => 'Kanada',
+            966 => 'Arab Saudi',
+            27 => 'Afrika Selatan',
+            92 => 'Pakistan',
+            90 => 'Turki',
+            34 => 'Spanyol',
+            31 => 'Belanda',
+            46 => 'Swedia',
+            41 => 'Swiss',
+            47 => 'Norwegia',
+            45 => 'Denmark',
+            358 => 'Finlandia',
+            353 => 'Irlandia',
+            351 => 'Portugal',
+            352 => 'Luksemburg',
+            377 => 'Monako',
+            378 => 'San Marino',
+            379 => 'Vatikan',
+            213 => 'Aljazair',
+            20 => 'Mesir',
+            212 => 'Maroko',
+            216 => 'Tunisia',
+            234 => 'Nigeria',
+            251 => 'Ethiopia',
+            254 => 'Kenya',
+            255 => 'Tanzania',
+            263 => 'Zimbabwe',
+            64 => 'Selandia Baru',
+            65 => 'Singapura',
+            66 => 'Thailand',
+            84 => 'Vietnam',
+            971 => 'Uni Emirat Arab',
+            972 => 'Israel',
+            974 => 'Qatar',
+            965 => 'Kuwait',
+            968 => 'Oman',
+            973 => 'Bahrain',
+            962 => 'Yordania',
+            961 => 'Lebanon',
+            963 => 'Suriah',
+            967 => 'Yaman',
+            960 => 'Maladewa',
+            975 => 'Bhutan',
+            977 => 'Nepal',
+            994 => 'Azerbaijan',
+            995 => 'Georgia',
+            996 => 'Kirgistan',
+            998 => 'Uzbekistan',
+            299 => 'Greenland',
+            298 => 'Kepulauan Faroe',
+            297 => 'Aruba',
+            290 => 'Saint Helena',
+            268 => 'Swaziland',
+            267 => 'Botswana',
+            266 => 'Lesotho',
+            265 => 'Malawi',
+            264 => 'Namibia',
+            263 => 'Zimbabwe',
+            262 => 'Reunion',
+            261 => 'Madagaskar',
+            260 => 'Zambia',
+            258 => 'Mozambik',
+            257 => 'Burundi',
+            256 => 'Uganda',
+            255 => 'Tanzania',
+            254 => 'Kenya',
+            253 => 'Djibouti',
+            252 => 'Somalia',
+            251 => 'Ethiopia',
+            250 => 'Rwanda',
+            249 => 'Sudan',
+            248 => 'Seychelles',
+            246 => 'Diego Garcia',
+            245 => 'Guinea-Bissau',
+            244 => 'Angola',
+            243 => 'Republik Demokratik Kongo',
+            242 => 'Kongo',
+            241 => 'Gabon',
+            240 => 'Guinea Khatulistiwa',
+            239 => 'Sao Tome dan Principe',
+            238 => 'Tanjung Verde',
+            237 => 'Kamerun',
+            236 => 'Republik Afrika Tengah',
+            235 => 'Chad',
+            234 => 'Nigeria',
+            233 => 'Ghana',
+            232 => 'Sierra Leone',
+            231 => 'Liberia',
+            230 => 'Mauritius',
+            229 => 'Benin',
+            228 => 'Togo',
+            227 => 'Niger',
+            226 => 'Burkina Faso',
+            225 => 'Pantai Gading',
+            224 => 'Guinea',
+            223 => 'Mali',
+            222 => 'Mauritania',
+            221 => 'Senegal',
+            220 => 'Gambia',
+            218 => 'Libya',
+            216 => 'Tunisia',
+            213 => 'Aljazair',
+            212 => 'Maroko',
+            211 => 'Sudan Selatan',
+            20 => 'Mesir',
+        ];
+
+        return view('game.dare.quizzes.create', compact('countryCodes'));
     }
 
     /**
@@ -32,43 +155,69 @@ class DareQuizController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'slug' => 'nullable|string',
-        ]);
+        $user = Auth::user();
 
         $location = $this->getLocationFromIP($request->ip());
         $device = $this->getDeviceDetails($request);
 
+        // dd($request->ip());
+
         // Simpan kuis ke database
         $quiz = DareQuiz::create([
             'user_id' => Auth::id(),
-            'slug' => $request->input('slug'),
+            'slug' => $user->username,
             'location' => $location,
             'device' => json_encode($device),
         ]);
 
         // Redirect ke halaman untuk menambahkan pertanyaan ke kuis ini
-        return redirect()->route('dare-questions.create', ['quiz_id' => $quiz->id])
+        return redirect()->route('play.dare.add-questions', ['quiz_id' => $quiz->id])
             ->with('success', 'Quiz created successfully. You can now add questions.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DareQuiz $dareQuiz)
+    public function show(string $slug, Request $request)
     {
-        // Ambil leaderboard berdasarkan skor tertinggi, lalu waktu terendah
-        $leaderboard = DareResponse::where('dare_quiz_id', $dareQuiz->id)
+        $response = DareResponse::where('identifier', app(DareResponseController::class)->getUserIdentifier($request))->first();
+        $quiz = DareQuiz::where('slug', $slug)->first();
+
+        $leaderboard = DareResponse::where('dare_quiz_id', $quiz->id)
             ->orderByDesc('score')
             ->orderBy('time')
-            ->take(10) // Batasi leaderboard ke 10 peserta teratas
-            ->get();
+            ->paginate(10);
 
-        return view('game.dare.quizzes.show', compact('dareQuiz', 'leaderboard'));
+        // Ambil reaksi untuk setiap jenis
+        $reactions = [];
+        foreach (['Like', 'Love', 'Wow', 'Angry', 'Sad'] as $reaction) {
+            $reactions[$reaction] = DareReaction::where('dare_quiz_id', $quiz->id)
+                ->where('content', $reaction)
+                ->pluck('name')
+                ->toArray();
+        }
+
+        return view('game.dare.quizzes.show', compact('quiz', 'leaderboard', 'response', 'reactions'));
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
+
+    public function updateSong(Request $request, $id)
+    {
+        $quiz = DareQuiz::findOrFail($id);
+
+        // Validasi input
+        $request->validate([
+            'song' => 'nullable|string',
+        ]);
+
+        // Update lagu yang dipilih
+        $quiz->update([
+            'song' => $request->input('song'),
+        ]);
+
+        // Kembalikan respons JSON
+        return response()->json([
+            'success' => true,
+            'message' => 'Lagu berhasil diperbarui!',
+        ]);
+    }
+
     public function edit(DareQuiz $dareQuiz)
     {
         return view('game.dare.quizzes.edit', compact('dareQuiz'));

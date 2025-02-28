@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 use OpenAI;
+use DOMDocument;
 
 class ArticleController extends Controller
 {
@@ -28,7 +29,7 @@ class ArticleController extends Controller
             ->with(['category', 'stats'])
             ->orderByDesc('created_at')
             ->get();
-            // ->paginate(10);
+        // ->paginate(10);
 
         $totalViews = ArticleStat::whereIn('article_id', $articles->pluck('id'))->sum('views');
 
@@ -190,7 +191,11 @@ class ArticleController extends Controller
         }
 
         try {
-            app(WhatsappController::class)->sendNotification($article->id, '08990980799');
+            $number = '08990980799';
+            $approveUrl = route('articles.to-approve', $article->id);
+            $message = "Halo Admin, ada artikel baru dengan judul '{$article->title}'.\nSilakan review di: {$approveUrl}";
+
+            app(WhatsappController::class)->sendNotification($message, $number);
         } catch (\Exception $e) {
             Log::error('WhatsApp notification failed: ' . $e->getMessage());
         }
@@ -213,7 +218,7 @@ class ArticleController extends Controller
         $relatedPosts = Article::where('category_id', $article->category->id)
             ->where('id', '!=', $article->id)
             ->latest()
-            ->take(3)
+            ->take(2)
             ->get();
 
         // 3. Handle views and earnings with caching
@@ -237,13 +242,65 @@ class ArticleController extends Controller
 
         // 4. Inject Ads after the third paragraph
         $adsHtml = view('components.adsense-responsive')->render();
-        $content = $this->injectAdsIntoContent($article->content, $adsHtml);
+
+        // **Hapus <br> kosong**
+        $cleanContent = $this->removeEmptyBrTags($article->content);
+
+        // **Tambahkan class pada setiap <p> di dalam content**
+        $content = $this->addClassToParagraphs($cleanContent, 'post-open-paragraph');
+
+        $content = $this->injectAdsIntoContent($content, $adsHtml);
 
         // 5. Prepare tags for the view
         $tags = $article->tags->pluck('name')->toArray();
 
         // 6. Pass all data to the view
         return view('articles.show', compact('article', 'relatedPosts', 'tags', 'content'));
+    }
+
+    /**
+     * Fungsi untuk menghapus <br> kosong dari konten HTML
+     */
+    private function removeEmptyBrTags(string $htmlContent): string
+    {
+        $dom = new DOMDocument();
+        libxml_use_internal_errors(true); // Menghindari error jika ada HTML yang tidak valid
+        $dom->loadHTML(mb_convert_encoding($htmlContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+
+        $brTags = $dom->getElementsByTagName('br');
+
+        // Loop secara terbalik untuk menghindari masalah saat menghapus node dari live NodeList
+        for ($i = $brTags->length - 1; $i >= 0; $i--) {
+            $br = $brTags->item($i);
+            if (!$br->nextSibling && (!$br->previousSibling || trim($br->previousSibling->textContent) === '')) {
+                $br->parentNode->removeChild($br);
+            }
+        }
+
+        return $dom->saveHTML();
+    }
+
+    /**
+     * Fungsi untuk menambahkan class ke setiap <p> di dalam content
+     */
+    private function addClassToParagraphs(string $htmlContent, string $className): string
+    {
+        $dom = new DOMDocument();
+        libxml_use_internal_errors(true); // Supaya tidak error jika ada tag HTML yang tidak valid
+        $dom->loadHTML(mb_convert_encoding($htmlContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+
+        // Ambil semua elemen <p>
+        $paragraphs = $dom->getElementsByTagName('p');
+
+        foreach ($paragraphs as $p) {
+            $existingClass = $p->getAttribute('class');
+            $newClass = trim($existingClass . ' ' . $className);
+            $p->setAttribute('class', $newClass);
+        }
+
+        return $dom->saveHTML();
     }
 
     /**
@@ -362,14 +419,28 @@ class ArticleController extends Controller
         $writerEarning->save();
     }
 
-    public function approve($id)
+    public function toApprove(Article $article)
     {
-        $article = Article::findOrFail($id);
-        // Lakukan apa pun yang dibutuhkan, misalnya:
+        return view('articles.approve', compact('article'));
+    }
+
+    public function approve(Article $article)
+    {
         $article->status = 'approved';
+        $article->approved_by = Auth::user()->id;
         $article->save();
 
-        return redirect()->route('articles.index')->with('success', 'Artikel berhasil disetujui!');
+        try {
+            $number = $article->user->phone;
+            $articleUrl = route('articles.show', $article->slug);
+            $message = "Salam! Artikel kamu yang berjudul '{$article->title}' telah disetujui publikasinya oleh Admin. \n\nCek di sini ya: {$articleUrl}";
+
+            app(WhatsappController::class)->sendNotification($message, $number);
+        } catch (\Exception $e) {
+            Log::error('WhatsApp notification failed: ' . $e->getMessage());
+        }
+
+        return redirect()->route('articles.to-approve')->with('success', 'Artikel berhasil disetujui!');
     }
 
     public function search(Request $request)

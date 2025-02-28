@@ -16,6 +16,16 @@ class DareQuiz extends Model
         return $this->hasMany(DareQuestion::class);
     }
 
+    public function messages()
+    {
+        return $this->hasMany(DareMessage::class);
+    }
+
+    public function reactions()
+    {
+        return $this->hasMany(DareReaction::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

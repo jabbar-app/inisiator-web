@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('dare_response_id')->constrained()->onDelete('cascade');
             $table->foreignId('dare_question_id')->constrained()->onDelete('cascade');
             $table->string('selected_answer');
-            $table->integer('time');
+            $table->integer('time')->default(0);
             $table->timestamps();
         });
     }

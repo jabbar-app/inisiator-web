@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_highlighted')->default(false);
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('approved_by')->constrained('users')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

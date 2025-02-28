@@ -16,6 +16,21 @@ class DashboardController extends Controller
     {
         // Current month's earnings
         $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        $dailyEarnings = Earning::where('user_id', Auth::id())
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->selectRaw('DAYNAME(created_at) as day, SUM(total_amount) as total')
+            ->groupBy('day')
+            ->pluck('total', 'day');
+
+        $orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $weekEarnings = [];
+        foreach ($orderedDays as $day) {
+            $weekEarnings[$day] = $dailyEarnings->get($day, 0);
+        }
+
         $currentMonthEarning = Earning::where('user_id', Auth::id())
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', now()->year)
@@ -56,6 +71,7 @@ class DashboardController extends Controller
         $viewsData = [];
         $readsData = [];
 
+
         foreach (range(1, now()->daysInMonth) as $day) {
             $date = now()->startOfMonth()->addDays($day - 1)->format('Y-m-d');
             $dates[] = now()->startOfMonth()->addDays($day - 1)->format('M j');
@@ -65,7 +81,10 @@ class DashboardController extends Controller
             $readsData[] = isset($stats[$date]) ? $stats[$date]->sum('reads') : 0;
         }
 
+        $articles = Article::all();
+
         return view('dashboard.index', compact(
+            'weekEarnings',
             'dates',
             'viewsData',
             'readsData',
@@ -74,7 +93,8 @@ class DashboardController extends Controller
             'currentMonthEarning',
             'lastMonthEarning',
             'percentageChange',
-            'earnings'
+            'earnings',
+            'articles',
         ));
     }
 }

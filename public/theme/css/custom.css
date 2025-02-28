@@ -1,0 +1,29 @@
+.bgcover {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
+}
+
+.text-white {
+    color: white !important;
+}
+
+.text-start {
+    text-align: start !important;
+}
+
+.avatar-circle-36 {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}

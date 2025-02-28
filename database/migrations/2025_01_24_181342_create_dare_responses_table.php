@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('responder_message')->nullable();
             $table->integer('score');
             $table->integer('time');
+            $table->string('identifier')->nullable();
             $table->string('location')->nullable();
             $table->string('device')->nullable();
             $table->timestamps();
