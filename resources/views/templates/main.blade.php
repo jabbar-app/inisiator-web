@@ -17,13 +17,13 @@
   <meta property="og:url" content="{{ request()->url() }}">
   <meta property="og:title" content="@yield('title', 'Home')&nbsp;|&nbsp;Inisiator">
   <meta property="og:description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">
-  <meta property="og:image" content="@yield('meta_image', asset('assets/img/company/inisiator-icon.svg'))">
+  <meta property="og:image" content="@yield('meta_image', asset('assets/img/profpic.svg'))">
 
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="{{ request()->url() }}">
   <meta property="twitter:title" content="@yield('title', 'Home')&nbsp;|&nbsp;Inisiator">
   <meta property="twitter:description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">
-  <meta property="twitter:image" content="@yield('meta_image', asset('assets/img/company/inisiator-icon.svg'))">
+  <meta property="twitter:image" content="@yield('meta_image', asset('assets/img/profpic.svg'))">
 
   <link rel="canonical" href="{{ request()->url() }}">
 
@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="{{ asset('theme/css/vendor/simplebar.css') }}">
   <link rel="stylesheet" href="{{ asset('theme/css/vendor/tiny-slider.css') }}">
   <link rel="stylesheet" href="{{ asset('theme/css/custom.css') }}">
-  <link rel="icon" href="{{ asset('assets/img/company/inisiator-icon.svg') }}">
+  <link rel="icon" href="{{ asset('assets/img/profpic.svg') }}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
