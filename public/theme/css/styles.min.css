@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,900&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Rajdhani:400,500,600,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
 *,
 :after,
@@ -10,7 +10,7 @@
     border: none;
     outline: none;
     box-sizing: border-box;
-    font-family: "Lato", sans-serif;
+    font-family: "Noto Sans", sans-serif;
 }
 
 :after,
@@ -829,7 +829,7 @@ textarea::placeholder {
 .form-counter.with-currency:before {
     content: "$";
     color: #00c7d9;
-    font-family: "Lato", sans-serif;
+    font-family: "Noto Sans", sans-serif;
     font-size: .875rem;
     font-weight: 700;
     position: absolute;
@@ -1619,7 +1619,7 @@ h5,
 h6,
 p {
     color: #3e3f5e;
-    font-family: "Lato", sans-serif;
+    font-family: "Noto Sans", sans-serif;
     line-height: 1em
 }
 
@@ -7373,7 +7373,7 @@ figure>img {
 }
 
 .widget-box .widget-box-status .widget-box-status-content .user-status {
-    font-family: "Lato", sans-serif;
+    font-family: "Noto Sans", sans-serif;
     padding-right: 70px
 }
 
@@ -10231,9 +10231,9 @@ figure>img {
 
 .post-open .post-open-body .post-open-content .post-open-content-body .post-open-paragraph {
     margin-top: 36px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
-    line-height: 2em
+    line-height: 18px;
 }
 
 .post-open .post-open-body .post-open-content .post-open-content-body .post-open-paragraph:first-child {
@@ -14369,7 +14369,7 @@ figure>img {
     display: flex;
     -ms-flex-align: center;
     align-items: center;
-    font-family: "Lato", sans-serif;
+    font-family: "Noto Sans", sans-serif;
     color: #3e3f5e;
     font-size: .875rem;
     font-weight: 500
