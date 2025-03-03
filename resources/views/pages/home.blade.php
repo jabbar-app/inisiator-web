@@ -117,7 +117,7 @@
     </div>
   </div>
 
-  <div class="content-grid full">
+  <div class="content-grid full my-4">
     <div class="container">
       <div class="row">
         <div class="col-12">
@@ -168,7 +168,7 @@
 
   <div class="content-grid full">
     <div class="container">
-      <div class="row">
+      <div class="row mb-4">
         <div class="col-12">
           @include('components.adsense-responsive')
         </div>
@@ -216,7 +216,7 @@
 
   <div class="content-grid full">
     <div class="container">
-      <div class="row mb-2">
+      <div class="row mb-4">
         <div class="col-12">
           @include('components.adsense-responsive')
         </div>
