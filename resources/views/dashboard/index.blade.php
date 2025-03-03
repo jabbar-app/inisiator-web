@@ -273,9 +273,9 @@
       <div class="section-header">
         <div class="section-header-info">
           <p class="section-pretitle">{{ Auth::user()->name }}'s</p>
-
           <h2 class="section-title">Statistic Articles</h2>
         </div>
+        <a href="{{ route('articles.create') }}" class="button primary w-25">Write Article</a>
       </div>
 
       <div class="section-filters-bar v5">

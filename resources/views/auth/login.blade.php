@@ -52,8 +52,8 @@
           <div class="form-row">
             <div class="form-item">
               <div class="form-input">
-                <label for="login-username" class="f-rajdhani">Username or Email</label>
-                <input type="text" id="login-username" name="email" class="f-rajdhani">
+                <label for="login-username" class="form-label f-rajdhani">Username or Email</label>
+                <input type="text" id="login-username" name="email" class="form-control f-rajdhani" autofocus>
               </div>
             </div>
           </div>
