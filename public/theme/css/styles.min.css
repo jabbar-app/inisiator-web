@@ -10232,7 +10232,7 @@ figure>img {
 .post-open .post-open-body .post-open-content .post-open-content-body .post-open-paragraph {
     margin-top: 36px;
     font-size: 18px;
-    font-weight: 500;
+    /* font-weight: 500; */
     line-height: 28px;
 }
 
