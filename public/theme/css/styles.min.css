@@ -1620,7 +1620,7 @@ h6,
 p {
     color: #3e3f5e;
     font-family: "Rubik", sans-serif;
-    line-height: 1em
+    font-weight: 400;
 }
 
 h1,
