@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ArticleCommentController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ArticleReactionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
@@ -60,6 +62,10 @@ Route::middleware('auth', NotificationMiddleware::class)->group(function () {
     Route::get('/articles/{article}/to-approve', [ArticleController::class, 'toApprove'])->name('articles.to-approve');
     Route::post('/articles/{article}/approve', [ArticleController::class, 'approve'])->name('articles.approve');
     Route::post('/articles/{article}/mark-read', [ArticleController::class, 'markRead']);
+
+    Route::post('/article/comments', [ArticleCommentController::class, 'store'])->name('article-comments.store');
+    Route::get('/article/{article}/comments', [ArticleCommentController::class, 'loadMoreComments']);
+    Route::post('/article/reactions', [ArticleReactionController::class, 'store'])->name('article-reactions.store');
 
     Route::resource('articles', ArticleController::class)->except(['show']);
 

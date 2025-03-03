@@ -30,7 +30,7 @@
 
     <ul class="menu small">
       <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="{{ route('dashboard') }}" data-title="Dashboard">
+        <a class="menu-item-link text-tooltip-tfr" href="{{ route('pages.home') }}" data-title="Home">
           <svg class="menu-item-link-icon icon-newsfeed">
             <use xlink:href="#svg-newsfeed"></use>
           </svg>
@@ -38,7 +38,7 @@
       </li>
 
       <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Overview">
+        <a class="menu-item-link text-tooltip-tfr" href="{{ route('dashboard') }}" data-title="Dashboard">
           <svg class="menu-item-link-icon icon-overview">
             <use xlink:href="#svg-overview"></use>
           </svg>
@@ -1048,7 +1048,7 @@
   </aside> --}}
 @endauth
 <header class="header">
-  <div class="header-actions">
+  <a href="{{ route('pages.home') }}" class="header-actions">
     <div class="header-brand">
       <div class="logo">
         <img src="{{ asset('assets/img/inisiator-favicon-o.svg') }}" alt="" class="h-100">
@@ -1056,7 +1056,7 @@
 
       <h1 class="header-brand-text">Inisiator</h1>
     </div>
-  </div>
+  </a>
 
   <div class="header-actions">
     <div class="sidemenu-trigger navigation-widget-trigger">

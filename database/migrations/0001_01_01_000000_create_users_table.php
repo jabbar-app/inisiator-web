@@ -26,8 +26,9 @@ return new class extends Migration
             $table->unsignedBigInteger('invited_by')->nullable();
             $table->foreign('invited_by')->references('id')->on('users')->onDelete('cascade');
             $table->integer('referral_quota')->default(0);
-            $table->string('rank')->default('Stargazer');
+            $table->integer('level')->default(1);
             $table->integer('xp')->default(0);
+            $table->string('rank')->default('Stargazer');
             $table->date('check_in_date')->nullable();
             $table->integer('check_in_streak')->default(0);
             $table->boolean('is_verified')->default(false);

@@ -86,7 +86,7 @@
         lengthChange: true,
         order: [
           [3, 'asc']
-        ] // Contoh: urutkan berdasarkan kolom views (index kolom dimulai dari 0)
+        ]
       });
     });
   </script>

@@ -2,7 +2,7 @@
 
 @section('content')
   <div class="content-grid full">
-    <article class="post-open">
+    <article class="post-open" id="article" data-id="{{ $article->id }}">
       <figure class="post-open-cover liquid">
         <img src="{{ asset('assets/img/bg.svg') }}" alt="">
       </figure>
@@ -141,111 +141,46 @@
           </div>
         </div>
 
-        {{-- <div class="content-actions">
+        <div class="content-actions">
           <div class="content-action">
             <div class="meta-line">
               <div class="meta-line-list reaction-item-list">
-                <div class="reaction-item">
-                  <img class="reaction-image reaction-item-dropdown-trigger"
-                    src="{{ asset('assets/img/reactions/happy.webp') }}" alt="reaction-happy">
+                @foreach (['Like', 'Love', 'Dislike', 'Happy', 'Funny', 'Wow', 'Angry', 'Sad'] as $reaction)
+                  @if (isset($reactions[$reaction]) && count($reactions[$reaction]) > 0)
+                    <div class="reaction-item" style="position: relative;">
+                      <img class="reaction-image reaction-item-dropdown-trigger"
+                        src="{{ asset('assets/img/reactions/' . strtolower($reaction) . '.webp') }}"
+                        alt="reaction-{{ strtolower($reaction) }}">
 
-                  <div class="simple-dropdown padded reaction-item-dropdown">
-                    <p class="simple-dropdown-text"><img class="reaction"
-                        src="{{ asset('assets/img/reactions/happy.webp') }}" alt="reaction-happy"> <span
-                        class="bold">Happy</span></p>
+                      <div class="simple-dropdown padded reaction-item-dropdown"
+                        style="position: absolute; z-index: 9999; bottom: 38px; left: -16px; opacity: 0; visibility: hidden; transform: translate(0px, 20px); transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;">
+                        <p class="simple-dropdown-text">
+                          <img class="reaction"
+                            src="{{ asset('assets/img/reactions/' . strtolower($reaction) . '.webp') }}"
+                            alt="reaction-{{ strtolower($reaction) }}">
+                          <span class="bold">{{ $reaction }}</span>
+                        </p>
 
-                    <p class="simple-dropdown-text">Matt Parker</p>
+                        @foreach ($reactions[$reaction] as $name)
+                          <p class="simple-dropdown-text">{{ $name }}</p>
+                        @endforeach
 
-                    <p class="simple-dropdown-text">Destroy Dex</p>
-
-                    <p class="simple-dropdown-text">The Green Goo</p>
-                  </div>
-                </div>
-
-                <div class="reaction-item">
-                  <img class="reaction-image reaction-item-dropdown-trigger"
-                    src="{{ asset('assets/img/reactions/love.webp') }}" alt="reaction-love">
-
-                  <div class="simple-dropdown padded reaction-item-dropdown">
-                    <p class="simple-dropdown-text"><img class="reaction"
-                        src="{{ asset('assets/img/reactions/love.webp') }}" alt="reaction-love"> <span
-                        class="bold">Love</span></p>
-
-                    <p class="simple-dropdown-text">Sandra Strange</p>
-                  </div>
-                </div>
-
-                <div class="reaction-item">
-                  <img class="reaction-image reaction-item-dropdown-trigger"
-                    src="{{ asset('assets/img/reactions/like.webp') }}" alt="reaction-like">
-
-                  <div class="simple-dropdown padded reaction-item-dropdown">
-                    <p class="simple-dropdown-text"><img class="reaction"
-                        src="{{ asset('assets/img/reactions/like.webp') }}" alt="reaction-like"> <span
-                        class="bold">Like</span></p>
-
-                    <p class="simple-dropdown-text">Neko Bebop</p>
-
-                    <p class="simple-dropdown-text">Nick Grissom</p>
-
-                    <p class="simple-dropdown-text">Sarah Diamond</p>
-
-                    <p class="simple-dropdown-text">Jett Spiegel</p>
-
-                    <p class="simple-dropdown-text">Marcus Jhonson</p>
-
-                    <p class="simple-dropdown-text">Jane Rodgers</p>
-
-                    <p class="simple-dropdown-text"><span class="bold">and 2 more...</span></p>
-                  </div>
-                </div>
+                        @if (count($reactions[$reaction]) > 5)
+                          <p class="simple-dropdown-text">
+                            <span class="bold">and {{ count($reactions[$reaction]) - 5 }} more...</span>
+                          </p>
+                        @endif
+                      </div>
+                    </div>
+                  @endif
+                @endforeach
               </div>
 
-              <p class="meta-line-text">12</p>
+              <p class="meta-line-text">{{ number_format($article->reactions->count()) }}</p>
             </div>
 
-            <div class="meta-line">
+            {{-- <div class="meta-line">
               <div class="meta-line-list user-avatar-list">
-                <div class="user-avatar micro no-stats">
-                  <div class="user-avatar-border">
-                    <div class="hexagon-22-24"></div>
-                  </div>
-
-                  <div class="user-avatar-content">
-                    <div class="hexagon-image-18-20" data-src="{{ asset('assets/img/profpic.svg') }}"></div>
-                  </div>
-                </div>
-
-                <div class="user-avatar micro no-stats">
-                  <div class="user-avatar-border">
-                    <div class="hexagon-22-24"></div>
-                  </div>
-
-                  <div class="user-avatar-content">
-                    <div class="hexagon-image-18-20" data-src="{{ asset('assets/img/profpic.svg') }}"></div>
-                  </div>
-                </div>
-
-                <div class="user-avatar micro no-stats">
-                  <div class="user-avatar-border">
-                    <div class="hexagon-22-24"></div>
-                  </div>
-
-                  <div class="user-avatar-content">
-                    <div class="hexagon-image-18-20" data-src="{{ asset('assets/img/profpic.svg') }}"></div>
-                  </div>
-                </div>
-
-                <div class="user-avatar micro no-stats">
-                  <div class="user-avatar-border">
-                    <div class="hexagon-22-24"></div>
-                  </div>
-
-                  <div class="user-avatar-content">
-                    <div class="hexagon-image-18-20" data-src="{{ asset('assets/img/profpic.svg') }}"></div>
-                  </div>
-                </div>
-
                 <div class="user-avatar micro no-stats">
                   <div class="user-avatar-border">
                     <div class="hexagon-22-24"></div>
@@ -258,70 +193,51 @@
               </div>
 
               <p class="meta-line-text">14 Participants</p>
-            </div>
+            </div> --}}
           </div>
 
           <div class="content-action">
             <div class="meta-line">
-              <p class="meta-line-link">3 Comments</p>
+              <p class="meta-line-link">{{ $article->comments->count() }} Comments</p>
             </div>
 
             <div class="meta-line">
-              <p class="meta-line-text">0 Shares</p>
+              <p class="meta-line-text">{{ $article->share_count }} Shares</p>
             </div>
           </div>
         </div>
 
         <div class="post-options">
-          <div class="post-option-wrap">
+          <div class="post-option-wrap" style="position: relative;">
             <div class="post-option reaction-options-dropdown-trigger">
               <svg class="post-option-icon icon-thumbs-up">
                 <use xlink:href="#svg-thumbs-up"></use>
               </svg>
-
               <p class="post-option-text">React!</p>
             </div>
 
+            <!-- Dropdown untuk pilihan reaksi -->
             <div class="reaction-options reaction-options-dropdown">
-              <div class="reaction-option text-tooltip-tft" data-title="Like">
-                <img class="reaction-option-image" src="{{ asset('assets/img/reactions/like.webp') }}"
-                  alt="reaction-like">
-              </div>
-
-              <div class="reaction-option text-tooltip-tft" data-title="Love">
-                <img class="reaction-option-image" src="{{ asset('assets/img/reactions/love.webp') }}"
-                  alt="reaction-love">
-              </div>
-
-              <div class="reaction-option text-tooltip-tft" data-title="Dislike">
-                <img class="reaction-option-image" src="{{ asset('assets/img/reactions/dislike.webp') }}"
-                  alt="reaction-dislike">
-              </div>
-
-              <div class="reaction-option text-tooltip-tft" data-title="Happy">
-                <img class="reaction-option-image" src="{{ asset('assets/img/reactions/happy.webp') }}"
-                  alt="reaction-happy">
-              </div>
-
-              <div class="reaction-option text-tooltip-tft" data-title="Funny">
-                <img class="reaction-option-image" src="{{ asset('assets/img/reactions/funny.webp') }}"
-                  alt="reaction-funny">
-              </div>
-
-              <div class="reaction-option text-tooltip-tft" data-title="Wow">
-                <img class="reaction-option-image" src="{{ asset('assets/img/reactions/wow.webp') }}"
-                  alt="reaction-wow">
-              </div>
-
-              <div class="reaction-option text-tooltip-tft" data-title="Angry">
-                <img class="reaction-option-image" src="{{ asset('assets/img/reactions/angry.webp') }}"
-                  alt="reaction-angry">
-              </div>
-
-              <div class="reaction-option text-tooltip-tft" data-title="Sad">
-                <img class="reaction-option-image" src="{{ asset('assets/img/reactions/sad.webp') }}"
-                  alt="reaction-sad">
-              </div>
+              @auth
+                @foreach (['Like', 'Love', 'Dislike', 'Happy', 'Funny', 'Wow', 'Angry', 'Sad'] as $reaction)
+                  <form action="{{ route('article-reactions.store') }}" method="POST" class="reaction-form">
+                    @csrf
+                    <input type="hidden" name="article_id" value="{{ $article->id }}">
+                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                    <input type="hidden" name="content" value="{{ $reaction }}">
+                    <button type="submit" class="reaction-option text-tooltip-tft" data-title="{{ $reaction }}"
+                      style="margin-right: 8px;">
+                      <img class="reaction-option-image"
+                        src="{{ asset('assets/img/reactions/' . strtolower($reaction) . '.webp') }}"
+                        alt="reaction-{{ strtolower($reaction) }}">
+                    </button>
+                  </form>
+                @endforeach
+              @else
+                <p class="reaction-login-message text-nowrap">
+                  <a href="{{ route('login') }}" class="reaction-login-link">Login</a> to react!
+                </p>
+              @endauth
             </div>
           </div>
 
@@ -342,521 +258,269 @@
           </div>
         </div>
 
+
+
+        @php
+          $totalComments = $article->comments->count();
+          $displayedComments = 5; // Jumlah komentar yang ditampilkan awal
+          $remainingComments = $totalComments - $displayedComments;
+        @endphp
+
         <div id="comments" class="post-comment-list">
-          <div class="post-comment">
-            <a class="user-avatar small no-outline" href="profile-timeline.html">
-              <div class="user-avatar-content">
-                <div class="hexagon-image-30-32" data-src="{{ asset('assets/img/profpic.svg') }}"></div>
-              </div>
-
-              <div class="user-avatar-progress">
-                <div class="hexagon-progress-40-44"></div>
-              </div>
-
-              <div class="user-avatar-progress-border">
-                <div class="hexagon-border-40-44"></div>
-              </div>
-
-              <div class="user-avatar-badge">
-                <div class="user-avatar-badge-border">
-                  <div class="hexagon-22-24"></div>
+          @foreach ($article->comments->slice(0, $displayedComments) as $comment)
+            <div class="post-comment">
+              <a class="user-avatar small no-outline"
+                href="{{ route('pages.author', $comment->article->user->username) }}">
+                <div class="user-avatar-content">
+                  <div class="hexagon-image-30-32"
+                    data-src="{{ !empty($comment->article->user->avatar) ? asset($comment->article->user->avatar) : asset('assets/img/profpic.svg') }}">
+                  </div>
                 </div>
 
-                <div class="user-avatar-badge-content">
-                  <div class="hexagon-dark-16-18"></div>
+                <div class="user-avatar-progress">
+                  <div class="hexagon-progress-40-44"></div>
                 </div>
 
-                <p class="user-avatar-badge-text">6</p>
-              </div>
-            </a>
+                <div class="user-avatar-progress-border">
+                  <div class="hexagon-border-40-44"></div>
+                </div>
 
-            <p class="post-comment-text"><a class="post-comment-text-author" href="profile-timeline.html">Bearded
-                Wonder</a>It's really inspiring to read about this and how you managed to get all up and running! Super
-              awesome! Congratz <a href="profile-timeline.html">@MarinaValentine</a>!</p>
+                <div class="user-avatar-badge">
+                  <div class="user-avatar-badge-border">
+                    <div class="hexagon-22-24"></div>
+                  </div>
 
-            <div class="content-actions">
-              <div class="content-action">
-                <div class="meta-line">
-                  <div class="meta-line-list reaction-item-list small">
-                    <div class="reaction-item">
-                      <img class="reaction-image reaction-item-dropdown-trigger"
-                        src="{{ asset('assets/img/reactions/happy.webp') }}" alt="reaction-happy">
+                  <div class="user-avatar-badge-content">
+                    <div class="hexagon-dark-16-18"></div>
+                  </div>
 
-                      <div class="simple-dropdown padded reaction-item-dropdown">
-                        <p class="simple-dropdown-text"><img class="reaction"
-                            src="{{ asset('assets/img/reactions/happy.webp') }}" alt="reaction-happy"> <span
-                            class="bold">Happy</span></p>
+                  <p class="user-avatar-badge-text">{{ $comment->article->user->level }}</p>
+                </div>
+              </a>
 
-                        <p class="simple-dropdown-text">Marcus Jhonson</p>
+              <p class="post-comment-text">
+                <a class="post-comment-text-author"
+                  href="{{ route('pages.author', $comment->article->user->username) }}">{{ $comment->article->user->name }}</a>
+                {{ $comment->content }}
+              </p>
+
+              <div class="content-actions">
+                <div class="content-action">
+                  <div class="meta-line">
+                    <div class="meta-line-list reaction-item-list small">
+                      <div class="reaction-item">
+                        <img class="reaction-image reaction-item-dropdown-trigger"
+                          src="{{ asset('assets/img/reactions/happy.webp') }}" alt="reaction-happy">
+
+                        <div class="simple-dropdown padded reaction-item-dropdown">
+                          <p class="simple-dropdown-text"><img class="reaction"
+                              src="{{ asset('assets/img/reactions/happy.webp') }}" alt="reaction-happy"> <span
+                              class="bold">Happy</span></p>
+
+                          <p class="simple-dropdown-text">Marcus Jhonson</p>
+                        </div>
+                      </div>
+
+                      <div class="reaction-item">
+                        <img class="reaction-image reaction-item-dropdown-trigger"
+                          src="{{ asset('assets/img/reactions/like.webp') }}" alt="reaction-like">
+
+                        <div class="simple-dropdown padded reaction-item-dropdown">
+                          <p class="simple-dropdown-text"><img class="reaction"
+                              src="{{ asset('assets/img/reactions/like.webp') }}" alt="reaction-like"> <span
+                              class="bold">Like</span></p>
+
+                          <p class="simple-dropdown-text">Neko Bebop</p>
+
+                          <p class="simple-dropdown-text">Nick Grissom</p>
+
+                          <p class="simple-dropdown-text">Sarah Diamond</p>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="reaction-item">
-                      <img class="reaction-image reaction-item-dropdown-trigger"
-                        src="{{ asset('assets/img/reactions/like.webp') }}" alt="reaction-like">
+                    <p class="meta-line-text">4</p>
+                  </div>
 
-                      <div class="simple-dropdown padded reaction-item-dropdown">
-                        <p class="simple-dropdown-text"><img class="reaction"
-                            src="{{ asset('assets/img/reactions/like.webp') }}" alt="reaction-like"> <span
-                            class="bold">Like</span></p>
+                  <div class="meta-line">
+                    <p class="meta-line-link light reaction-options-small-dropdown-trigger">React!</p>
 
-                        <p class="simple-dropdown-text">Neko Bebop</p>
-
-                        <p class="simple-dropdown-text">Nick Grissom</p>
-
-                        <p class="simple-dropdown-text">Sarah Diamond</p>
+                    <div class="reaction-options small reaction-options-small-dropdown">
+                      <div class="reaction-option text-tooltip-tft" data-title="Like">
+                        <img class="reaction-option-image" src="{{ asset('assets/img/reactions/like.webp') }}"
+                          alt="reaction-like">
                       </div>
-                    </div>
-                  </div>
 
-                  <p class="meta-line-text">4</p>
-                </div>
+                      <div class="reaction-option text-tooltip-tft" data-title="Love">
+                        <img class="reaction-option-image" src="{{ asset('assets/img/reactions/love.webp') }}"
+                          alt="reaction-love">
+                      </div>
 
-                <div class="meta-line">
-                  <p class="meta-line-link light reaction-options-small-dropdown-trigger">React!</p>
+                      <div class="reaction-option text-tooltip-tft" data-title="Dislike">
+                        <img class="reaction-option-image" src="{{ asset('assets/img/reactions/dislike.webp') }}"
+                          alt="reaction-dislike">
+                      </div>
 
-                  <div class="reaction-options small reaction-options-small-dropdown">
-                    <div class="reaction-option text-tooltip-tft" data-title="Like">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/like.webp') }}"
-                        alt="reaction-like">
-                    </div>
+                      <div class="reaction-option text-tooltip-tft" data-title="Happy">
+                        <img class="reaction-option-image" src="{{ asset('assets/img/reactions/happy.webp') }}"
+                          alt="reaction-happy">
+                      </div>
 
-                    <div class="reaction-option text-tooltip-tft" data-title="Love">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/love.webp') }}"
-                        alt="reaction-love">
-                    </div>
+                      <div class="reaction-option text-tooltip-tft" data-title="Funny">
+                        <img class="reaction-option-image" src="{{ asset('assets/img/reactions/funny.webp') }}"
+                          alt="reaction-funny">
+                      </div>
 
-                    <div class="reaction-option text-tooltip-tft" data-title="Dislike">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/dislike.webp') }}"
-                        alt="reaction-dislike">
-                    </div>
+                      <div class="reaction-option text-tooltip-tft" data-title="Wow">
+                        <img class="reaction-option-image" src="{{ asset('assets/img/reactions/wow.webp') }}"
+                          alt="reaction-wow">
+                      </div>
 
-                    <div class="reaction-option text-tooltip-tft" data-title="Happy">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/happy.webp') }}"
-                        alt="reaction-happy">
-                    </div>
+                      <div class="reaction-option text-tooltip-tft" data-title="Angry">
+                        <img class="reaction-option-image" src="{{ asset('assets/img/reactions/angry.webp') }}"
+                          alt="reaction-angry">
+                      </div>
 
-                    <div class="reaction-option text-tooltip-tft" data-title="Funny">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/funny.webp') }}"
-                        alt="reaction-funny">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Wow">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/wow.webp') }}"
-                        alt="reaction-wow">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Angry">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/angry.webp') }}"
-                        alt="reaction-angry">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Sad">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/sad.webp') }}"
-                        alt="reaction-sad">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="meta-line">
-                  <p class="meta-line-link light">Reply</p>
-                </div>
-
-                <div class="meta-line">
-                  <p class="meta-line-timestamp">15 minutes ago</p>
-                </div>
-
-                <div class="meta-line settings">
-                  <div class="post-settings-wrap">
-                    <div class="post-settings post-settings-dropdown-trigger">
-                      <svg class="post-settings-icon icon-more-dots">
-                        <use xlink:href="#svg-more-dots"></use>
-                      </svg>
-                    </div>
-
-                    <div class="simple-dropdown post-settings-dropdown">
-                      <p class="simple-dropdown-link">Report Post</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="post-comment unread reply-2">
-            <a class="user-avatar small no-outline" href="profile-timeline.html">
-              <div class="user-avatar-content">
-                <div class="hexagon-image-30-32" data-src="{{ asset('assets/img/profpic.svg') }}"></div>
-              </div>
-
-              <div class="user-avatar-progress">
-                <div class="hexagon-progress-40-44"></div>
-              </div>
-
-              <div class="user-avatar-progress-border">
-                <div class="hexagon-border-40-44"></div>
-              </div>
-
-              <div class="user-avatar-badge">
-                <div class="user-avatar-badge-border">
-                  <div class="hexagon-22-24"></div>
-                </div>
-
-                <div class="user-avatar-badge-content">
-                  <div class="hexagon-dark-16-18"></div>
-                </div>
-
-                <p class="user-avatar-badge-text">5</p>
-              </div>
-            </a>
-
-            <p class="post-comment-text"><a class="post-comment-text-author" href="profile-timeline.html">The
-                Green Goo</a>Yeah!! Totally agree!</p>
-
-            <div class="content-actions">
-              <div class="content-action">
-                <div class="meta-line">
-                  <div class="meta-line-list reaction-item-list small">
-                    <div class="reaction-item">
-                      <img class="reaction-image reaction-item-dropdown-trigger"
-                        src="{{ asset('assets/img/reactions/like.webp') }}" alt="reaction-like">
-
-                      <div class="simple-dropdown padded reaction-item-dropdown">
-                        <p class="simple-dropdown-text"><img class="reaction"
-                            src="{{ asset('assets/img/reactions/like.webp') }}" alt="reaction-like"> <span
-                            class="bold">Like</span></p>
-
-                        <p class="simple-dropdown-text">Neko Bebop</p>
+                      <div class="reaction-option text-tooltip-tft" data-title="Sad">
+                        <img class="reaction-option-image" src="{{ asset('assets/img/reactions/sad.webp') }}"
+                          alt="reaction-sad">
                       </div>
                     </div>
                   </div>
 
-                  <p class="meta-line-text">1</p>
-                </div>
-
-                <div class="meta-line">
-                  <p class="meta-line-link light reaction-options-small-dropdown-trigger">React!</p>
-
-                  <div class="reaction-options small reaction-options-small-dropdown">
-                    <div class="reaction-option text-tooltip-tft" data-title="Like">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/like.webp') }}"
-                        alt="reaction-like">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Love">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/love.webp') }}"
-                        alt="reaction-love">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Dislike">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/dislike.webp') }}"
-                        alt="reaction-dislike">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Happy">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/happy.webp') }}"
-                        alt="reaction-happy">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Funny">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/funny.webp') }}"
-                        alt="reaction-funny">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Wow">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/wow.webp') }}"
-                        alt="reaction-wow">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Angry">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/angry.webp') }}"
-                        alt="reaction-angry">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Sad">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/sad.webp') }}"
-                        alt="reaction-sad">
-                    </div>
+                  <div class="meta-line">
+                    @auth
+                      <p class="meta-line-link light">Reply</p>
+                    @else
+                      <p class="meta-line-link light">
+                        <a href="{{ route('login') }}" class="reply-login-link">Login</a> to reply
+                      </p>
+                    @endauth
                   </div>
-                </div>
 
-                <div class="meta-line">
-                  <p class="meta-line-link light">Reply</p>
-                </div>
+                  <div class="meta-line">
+                    <p class="meta-line-timestamp">{{ $comment->updated_at->diffForHumans() }}</p>
+                  </div>
 
-                <div class="meta-line">
-                  <p class="meta-line-timestamp">2 minutes ago</p>
-                </div>
+                  <div class="meta-line settings">
+                    <div class="post-settings-wrap">
+                      <div class="post-settings post-settings-dropdown-trigger">
+                        <svg class="post-settings-icon icon-more-dots">
+                          <use xlink:href="#svg-more-dots"></use>
+                        </svg>
+                      </div>
 
-                <div class="meta-line settings">
-                  <div class="post-settings-wrap">
-                    <div class="post-settings post-settings-dropdown-trigger">
-                      <svg class="post-settings-icon icon-more-dots">
-                        <use xlink:href="#svg-more-dots"></use>
-                      </svg>
-                    </div>
-
-                    <div class="simple-dropdown post-settings-dropdown">
-                      <p class="simple-dropdown-link">Report Post</p>
+                      <div class="simple-dropdown post-settings-dropdown">
+                        <p class="simple-dropdown-link">Report Post</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="post-comment">
-            <a class="user-avatar small no-outline" href="profile-timeline.html">
-              <div class="user-avatar-content">
-                <div class="hexagon-image-30-32" data-src="{{ asset('assets/img/profpic.svg') }}"></div>
-              </div>
-
-              <div class="user-avatar-progress">
-                <div class="hexagon-progress-40-44"></div>
-              </div>
-
-              <div class="user-avatar-progress-border">
-                <div class="hexagon-border-40-44"></div>
-              </div>
-
-              <div class="user-avatar-badge">
-                <div class="user-avatar-badge-border">
-                  <div class="hexagon-22-24"></div>
-                </div>
-
-                <div class="user-avatar-badge-content">
-                  <div class="hexagon-dark-16-18"></div>
-                </div>
-
-                <p class="user-avatar-badge-text">16</p>
-              </div>
-            </a>
-
-            <p class="post-comment-text"><a class="post-comment-text-author" href="profile-timeline.html">Nick
-                Grissom</a>I also started streaming with a simmilar game! I'm very excited to see what's next on your
-              streams and for your next projects</p>
-
-            <div class="content-actions">
-              <div class="content-action">
-                <div class="meta-line">
-                  <p class="meta-line-link light reaction-options-small-dropdown-trigger">React!</p>
-
-                  <div class="reaction-options small reaction-options-small-dropdown">
-                    <div class="reaction-option text-tooltip-tft" data-title="Like">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/like.webp') }}"
-                        alt="reaction-like">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Love">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/love.webp') }}"
-                        alt="reaction-love">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Dislike">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/dislike.webp') }}"
-                        alt="reaction-dislike">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Happy">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/happy.webp') }}"
-                        alt="reaction-happy">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Funny">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/funny.webp') }}"
-                        alt="reaction-funny">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Wow">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/wow.webp') }}"
-                        alt="reaction-wow">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Angry">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/angry.webp') }}"
-                        alt="reaction-angry">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Sad">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/sad.webp') }}"
-                        alt="reaction-sad">
+            @foreach ($comment->replies as $reply)
+              <div class="post-comment unread reply-2">
+                <a class="user-avatar small no-outline"
+                  href="{{ route('pages.author', $reply->comment->article->user->username) }}">
+                  <div class="user-avatar-content">
+                    <div class="hexagon-image-30-32"
+                      data-src="{{ !empty($reply->comment->article->user->avatar) ? asset($reply->comment->article->user->avatar) : asset('assets/img/profpic.svg') }}">
                     </div>
                   </div>
-                </div>
 
-                <div class="meta-line">
-                  <p class="meta-line-link light">Reply</p>
-                </div>
+                  <div class="user-avatar-progress">
+                    <div class="hexagon-progress-40-44"></div>
+                  </div>
 
-                <div class="meta-line">
-                  <p class="meta-line-timestamp">27 minutes ago</p>
-                </div>
+                  <div class="user-avatar-progress-border">
+                    <div class="hexagon-border-40-44"></div>
+                  </div>
 
-                <div class="meta-line settings">
-                  <div class="post-settings-wrap">
-                    <div class="post-settings post-settings-dropdown-trigger">
-                      <svg class="post-settings-icon icon-more-dots">
-                        <use xlink:href="#svg-more-dots"></use>
-                      </svg>
+                  <div class="user-avatar-badge">
+                    <div class="user-avatar-badge-border">
+                      <div class="hexagon-22-24"></div>
                     </div>
 
-                    <div class="simple-dropdown post-settings-dropdown">
-                      <p class="simple-dropdown-link">Report Post</p>
+                    <div class="user-avatar-badge-content">
+                      <div class="hexagon-dark-16-18"></div>
+                    </div>
+
+                    <p class="user-avatar-badge-text">{{ $reply->comment->article->user->level }}</p>
+                  </div>
+                </a>
+
+                <p class="post-comment-text">
+                  <a class="post-comment-text-author"
+                    href="{{ route('pages.author', $reply->comment->article->user->username) }}">{{ $reply->comment->article->user->name }}</a>
+                  {{ $comment->content }}
+                </p>
+
+                <div class="content-actions">
+                  <div class="content-action">
+                    <div class="meta-line">
+                      <p class="meta-line-timestamp">{{ $reply->updated_at->diffForHumans() }}</p>
+                    </div>
+
+                    <div class="meta-line settings">
+                      <div class="post-settings-wrap">
+                        <div class="post-settings post-settings-dropdown-trigger">
+                          <svg class="post-settings-icon icon-more-dots">
+                            <use xlink:href="#svg-more-dots"></use>
+                          </svg>
+                        </div>
+
+                        <div class="simple-dropdown post-settings-dropdown">
+                          <p class="simple-dropdown-link">Report Comment</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            @endforeach
+          @endforeach
 
-          <div class="post-comment">
-            <a class="user-avatar small no-outline" href="profile-timeline.html">
-              <div class="user-avatar-content">
-                <div class="hexagon-image-30-32" data-src="{{ asset('assets/img/profpic.svg') }}"></div>
-              </div>
-
-              <div class="user-avatar-progress">
-                <div class="hexagon-progress-40-44"></div>
-              </div>
-
-              <div class="user-avatar-progress-border">
-                <div class="hexagon-border-40-44"></div>
-              </div>
-
-              <div class="user-avatar-badge">
-                <div class="user-avatar-badge-border">
-                  <div class="hexagon-22-24"></div>
-                </div>
-
-                <div class="user-avatar-badge-content">
-                  <div class="hexagon-dark-16-18"></div>
-                </div>
-
-                <p class="user-avatar-badge-text">12</p>
-              </div>
-            </a>
-
-            <p class="post-comment-text"><a class="post-comment-text-author" href="profile-timeline.html">Neko
-                Bebop</a>It was great to start this with you and keep streming together! I'm hoping that we can do this
-              for many years to come...and for everyone else, keep posted because we have lots of surprises, including a
-              sneak peek of upcoming games and new DLCs</p>
-
-            <div class="content-actions">
-              <div class="content-action">
-                <div class="meta-line">
-                  <p class="meta-line-link light reaction-options-small-dropdown-trigger">React!</p>
-
-                  <div class="reaction-options small reaction-options-small-dropdown">
-                    <div class="reaction-option text-tooltip-tft" data-title="Like">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/like.webp') }}"
-                        alt="reaction-like">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Love">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/love.webp') }}"
-                        alt="reaction-love">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Dislike">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/dislike.webp') }}"
-                        alt="reaction-dislike">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Happy">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/happy.webp') }}"
-                        alt="reaction-happy">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Funny">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/funny.webp') }}"
-                        alt="reaction-funny">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Wow">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/wow.webp') }}"
-                        alt="reaction-wow">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Angry">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/angry.webp') }}"
-                        alt="reaction-angry">
-                    </div>
-
-                    <div class="reaction-option text-tooltip-tft" data-title="Sad">
-                      <img class="reaction-option-image" src="{{ asset('assets/img/reactions/sad.webp') }}"
-                        alt="reaction-sad">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="meta-line">
-                  <p class="meta-line-link light">Reply</p>
-                </div>
-
-                <div class="meta-line">
-                  <p class="meta-line-timestamp">39 minutes ago</p>
-                </div>
-
-                <div class="meta-line settings">
-                  <div class="post-settings-wrap">
-                    <div class="post-settings post-settings-dropdown-trigger">
-                      <svg class="post-settings-icon icon-more-dots">
-                        <use xlink:href="#svg-more-dots"></use>
-                      </svg>
-                    </div>
-
-                    <div class="simple-dropdown post-settings-dropdown">
-                      <p class="simple-dropdown-link">Report Post</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <p class="post-comment-heading">Load More Comments <span class="highlighted">1+</span></p>
+          @if ($remainingComments > 0)
+            <p class="post-comment-heading">
+              <a href="#" class="load-more-comments" data-article-id="{{ $article->id }}"
+                data-offset="{{ $displayedComments }}">
+                Load More Comments <span class="highlighted">{{ $remainingComments }}+</span>
+              </a>
+            </p>
+          @endif
 
           <div class="post-comment-form">
-            <div class="user-avatar small no-outline">
-              <div class="user-avatar-content">
-                <div class="hexagon-image-30-32"
-                  data-src="{{ !empty($article->user->avatar) ? asset($article->user->avatar) : asset('assets/img/profpic.svg') }}">
-                </div>
-              </div>
-
-              <div class="user-avatar-progress">
-                <div class="hexagon-progress-40-44"></div>
-              </div>
-
-              <div class="user-avatar-progress-border">
-                <div class="hexagon-border-40-44"></div>
-              </div>
-
-              <div class="user-avatar-badge">
-                <div class="user-avatar-badge-border">
-                  <div class="hexagon-22-24"></div>
-                </div>
-
-                <div class="user-avatar-badge-content">
-                  <div class="hexagon-dark-16-18"></div>
-                </div>
-
-                <p class="user-avatar-badge-text">24</p>
-              </div>
-            </div>
-
-            <form class="form">
-              <div class="form-row">
-                <div class="form-item">
-                  <div class="form-input small">
-                    <label for="post-reply">Your Reply</label>
-                    <input type="text" id="post-reply" name="post_reply">
+            @auth
+              <div class="user-avatar small no-outline">
+                <div class="user-avatar-content">
+                  <div class="hexagon-image-30-32"
+                    data-src="{{ !empty($article->user->avatar) ? asset($article->user->avatar) : asset('assets/img/profpic.svg') }}">
                   </div>
                 </div>
               </div>
-            </form>
+
+              <form id="commentForm" action="{{ route('article-comments.store', $article->id) }}" method="POST">
+                @csrf
+                <input type="hidden" name="article_id" value="{{ $article->id }}">
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                <div class="form-row">
+                  <div class="form-item">
+                    <div class="form-input small">
+                      <label for="post-reply">Your Reply</label>
+                      <textarea id="post-reply" name="content" rows="2" required></textarea>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="button primary">Submit</button>
+              </form>
+            @else
+              <p class="comment-login-message">
+                <a href="{{ route('login') }}" class="comment-login-link">Login</a> to leave a comment.
+              </p>
+            @endauth
           </div>
-        </div> --}}
+        </div>
       </div>
     </article>
   </div>
@@ -945,10 +609,169 @@
       @endforeach
     </div>
   </div>
+
+  <!-- Modal Login -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ route('login') }}" method="POST">
+            @csrf
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
 
 @auth
   @push('scripts')
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadMoreButton = document.querySelector('.load-more-comments');
+
+        if (loadMoreButton) {
+          loadMoreButton.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const articleId = this.dataset.articleId;
+            const offset = parseInt(this.dataset.offset);
+            const url = `/articles/${articleId}/comments?offset=${offset}`;
+
+            fetch(url)
+              .then(response => response.json())
+              .then(data => {
+                if (data.comments.length > 0) {
+                  const commentList = document.getElementById('comments');
+
+                  // Tambahkan komentar baru ke daftar
+                  data.comments.forEach(comment => {
+                    const commentHtml = `
+                <div class="post-comment">
+                  <p class="post-comment-text">
+                    <a class="post-comment-text-author"
+                      href="/author/${comment.user.username}">${comment.user.name}</a>
+                    ${comment.content}
+                  </p>
+                </div>
+              `;
+                    commentList.insertAdjacentHTML('beforeend', commentHtml);
+                  });
+
+                  // Perbarui offset dan sisa komentar
+                  const newOffset = offset + data.comments.length;
+                  const newRemaining = data.totalComments - newOffset;
+
+                  if (newRemaining > 0) {
+                    loadMoreButton.dataset.offset = newOffset;
+                    loadMoreButton.querySelector('.highlighted').textContent = `${newRemaining}+`;
+                  } else {
+                    loadMoreButton.remove(); // Sembunyikan tombol jika tidak ada komentar tersisa
+                  }
+                }
+              })
+              .catch(error => console.error('Error loading more comments:', error));
+          });
+        }
+      });
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const reactionTriggers = document.querySelectorAll('.reaction-options-dropdown-trigger');
+        const replyTriggers = document.querySelectorAll('.reply-login-link');
+
+        reactionTriggers.forEach(trigger => {
+          trigger.addEventListener('click', function(e) {
+            if (!{{ auth()->check() ? 'true' : 'false' }}) {
+              e.preventDefault();
+              $('#loginModal').modal('show');
+            }
+          });
+        });
+
+        replyTriggers.forEach(trigger => {
+          trigger.addEventListener('click', function(e) {
+            if (!{{ auth()->check() ? 'true' : 'false' }}) {
+              e.preventDefault();
+              $('#loginModal').modal('show');
+            }
+          });
+        });
+      });
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const commentForm = document.getElementById('commentForm');
+
+        if (commentForm) {
+          commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const url = this.action; // Gunakan URL dari atribut `action` form
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                  'X-CSRF-TOKEN': csrfToken,
+                  'Accept': 'application/json',
+                },
+                body: formData,
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  // Tambahkan komentar baru ke daftar komentar
+                  const commentList = document.getElementById('comments');
+                  const newComment = `
+                    <div class="post-comment">
+                      <a class="user-avatar small no-outline" href="/author/${data.comment.user.username}">
+                      <div class="hexagon-image-30-32" data-src="${data.comment.user.avatar ? `${data.comment.user.avatar}` : '{{ asset('assets/img/profpic.svg') }}'}"></div>
+                      </a>
+                      <p class="post-comment-text">
+                        <a class="post-comment-text-author" href="/author/${data.comment.user.username}">${data.comment.user.name}</a>
+                        ${data.comment.content}
+                      </p>
+                      <div class="content-actions">
+                        <div class="meta-line">
+                          <p class="meta-line-timestamp">${data.comment.created_at}</p>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                  commentList.insertAdjacentHTML('beforeend', newComment);
+
+                  // Reset form
+                  commentForm.reset();
+                } else {
+                  alert('Failed to add comment. Please try again.');
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+              });
+          });
+        }
+      });
+    </script>
     <script>
       let readingTime = 0; // Waktu membaca (dalam detik)
       const readThreshold = 3; // 3 menit

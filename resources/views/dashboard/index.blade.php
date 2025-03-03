@@ -138,9 +138,16 @@
           @else
             <form action="{{ route('check-in') }}" method="POST">
               @csrf
-              <button type="submit" class="button secondary">
-                Daily Check-In
-              </button>
+              <div class="d-none d-md-block">
+                <button type="submit" class="button secondary">
+                  Daily Check-In
+                </button>
+              </div>
+              <div class="d-block d-md-none">
+                <button type="submit" class="button secondary mt-2">
+                  Daily Check-In
+                </button>
+              </div>
             </form>
           @endif
         </div>
@@ -153,42 +160,43 @@
       </div>
     </div>
 
-    <nav class="section-navigation mt-4 d-flex justify-content-center">
-      <div id="section-navigation-slider" class="section-menu">
+    <div class="d-none d-md-block">
+      <nav class="section-navigation mt-4 d-flex justify-content-center">
+        <div id="section-navigation-slider" class="section-menu">
 
-        <a class="section-menu-item active" href="{{ route('dashboard') }}">
-          <svg class="section-menu-item-icon icon-blog-posts">
-            <use xlink:href="#svg-blog-posts"></use>
-          </svg>
+          <a class="section-menu-item active" href="{{ route('dashboard') }}">
+            <svg class="section-menu-item-icon icon-blog-posts">
+              <use xlink:href="#svg-blog-posts"></use>
+            </svg>
 
-          <p class="section-menu-item-text">Dashboard</p>
-        </a>
+            <p class="section-menu-item-text">Dashboard</p>
+          </a>
 
-        <a class="section-menu-item" href="#">
-          <svg class="section-menu-item-icon icon-timeline">
-            <use xlink:href="#svg-timeline"></use>
-          </svg>
+          <a class="section-menu-item" href="#">
+            <svg class="section-menu-item-icon icon-timeline">
+              <use xlink:href="#svg-timeline"></use>
+            </svg>
 
-          <p class="section-menu-item-text">Timeline</p>
-        </a>
+            <p class="section-menu-item-text">Timeline</p>
+          </a>
 
-        <a class="section-menu-item" href="#">
-          <svg class="section-menu-item-icon icon-friend">
-            <use xlink:href="#svg-friend"></use>
-          </svg>
+          <a class="section-menu-item" href="#">
+            <svg class="section-menu-item-icon icon-friend">
+              <use xlink:href="#svg-friend"></use>
+            </svg>
 
-          <p class="section-menu-item-text">Friends</p>
-        </a>
+            <p class="section-menu-item-text">Friends</p>
+          </a>
 
-        <a class="section-menu-item" href="#">
-          <svg class="section-menu-item-icon icon-group">
-            <use xlink:href="#svg-group"></use>
-          </svg>
+          <a class="section-menu-item" href="#">
+            <svg class="section-menu-item-icon icon-group">
+              <use xlink:href="#svg-group"></use>
+            </svg>
 
-          <p class="section-menu-item-text">Groups</p>
-        </a>
+            <p class="section-menu-item-text">Groups</p>
+          </a>
 
-        {{-- <a class="section-menu-item" href="#">
+          {{-- <a class="section-menu-item" href="#">
           <svg class="section-menu-item-icon icon-photos">
             <use xlink:href="#svg-photos"></use>
           </svg>
@@ -204,23 +212,23 @@
           <p class="section-menu-item-text">Videos</p>
         </a> --}}
 
-        <a class="section-menu-item" href="#">
-          <svg class="section-menu-item-icon icon-badges">
-            <use xlink:href="#svg-badges"></use>
-          </svg>
+          <a class="section-menu-item" href="#">
+            <svg class="section-menu-item-icon icon-badges">
+              <use xlink:href="#svg-badges"></use>
+            </svg>
 
-          <p class="section-menu-item-text">Quests</p>
-        </a>
+            <p class="section-menu-item-text">Quests</p>
+          </a>
 
-        <a class="section-menu-item" href="{{ route('profile.edit') }}">
-          <svg class="section-menu-item-icon icon-profile">
-            <use xlink:href="#svg-profile"></use>
-          </svg>
+          <a class="section-menu-item" href="{{ route('profile.edit') }}">
+            <svg class="section-menu-item-icon icon-profile">
+              <use xlink:href="#svg-profile"></use>
+            </svg>
 
-          <p class="section-menu-item-text">Profile</p>
-        </a>
+            <p class="section-menu-item-text">Profile</p>
+          </a>
 
-        {{-- <a class="section-menu-item" href="#">
+          {{-- <a class="section-menu-item" href="#">
           <svg class="section-menu-item-icon icon-streams">
             <use xlink:href="#svg-streams"></use>
           </svg>
@@ -243,22 +251,23 @@
 
           <p class="section-menu-item-text">Store</p>
         </a> --}}
-      </div>
-
-      <div id="section-navigation-slider-controls" class="slider-controls">
-        <div class="slider-control left">
-          <svg class="slider-control-icon icon-small-arrow">
-            <use xlink:href="#svg-small-arrow"></use>
-          </svg>
         </div>
 
-        <div class="slider-control right">
-          <svg class="slider-control-icon icon-small-arrow">
-            <use xlink:href="#svg-small-arrow"></use>
-          </svg>
+        <div id="section-navigation-slider-controls" class="slider-controls">
+          <div class="slider-control left">
+            <svg class="slider-control-icon icon-small-arrow">
+              <use xlink:href="#svg-small-arrow"></use>
+            </svg>
+          </div>
+
+          <div class="slider-control right">
+            <svg class="slider-control-icon icon-small-arrow">
+              <use xlink:href="#svg-small-arrow"></use>
+            </svg>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
 
     <section class="section">
       <div class="section-header">

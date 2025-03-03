@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 use OpenAI;
 use DOMDocument;
+use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
@@ -210,7 +211,8 @@ class ArticleController extends Controller
             'tags',              // Load tags
             'category',          // Load category
             'user.followers',    // Load user followers for stats
-            'comments'           // Load comments
+            'comments',          // Load comments
+            'reactions'          // Load reactions
         ])->where('slug', $slug)
             ->firstOrFail();
 
@@ -254,8 +256,29 @@ class ArticleController extends Controller
         // 5. Prepare tags for the view
         $tags = $article->tags->pluck('name')->toArray();
 
-        // 6. Pass all data to the view
-        return view('articles.show', compact('article', 'relatedPosts', 'tags', 'content'));
+        // 6. Prepare reactions data
+        $reactions = [];
+
+        // Dapatkan semua reaksi untuk artikel ini
+        $allReactions = DB::table('article_reactions')
+            ->join('users', 'article_reactions.user_id', '=', 'users.id')
+            ->select('article_reactions.*', 'users.name as user_name')
+            ->where('article_reactions.article_id', $article->id)
+            ->get();
+
+        // Format reactions untuk view
+        foreach ($allReactions as $reaction) {
+            $type = $reaction->content ?? 'Like'; // Default ke 'Like' jika null
+
+            if (!isset($reactions[$type])) {
+                $reactions[$type] = [];
+            }
+
+            $reactions[$type][] = $reaction->user_name;
+        }
+
+        // 7. Pass all data to the view
+        return view('articles.show', compact('article', 'relatedPosts', 'tags', 'content', 'reactions'));
     }
 
     /**

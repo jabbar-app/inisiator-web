@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('article_claps', function (Blueprint $table) {
+        Schema::create('article_comment_replies', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('article_comment_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('article_id')->constrained()->onDelete('cascade');
-            $table->unsignedInteger('claps_count')->default(1);
+            $table->text('content');
+            $table->integer('like_count')->default(0);
+            $table->boolean('is_visible')->default(false);
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('article_claps');
+        Schema::dropIfExists('article_comment_replies');
     }
 };

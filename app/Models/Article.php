@@ -39,7 +39,12 @@ class Article extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(ArticleComment::class);
+    }
+
+    public function reactions()
+    {
+        return $this->hasMany(ArticleReaction::class);
     }
 
     public function claps()
