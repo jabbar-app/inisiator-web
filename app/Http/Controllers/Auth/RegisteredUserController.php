@@ -87,10 +87,23 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // dd($request->validate([
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'phone' => ['required', 'string', 'min:10', 'max:15', 'unique:users'],
+        //     'username' => ['required', 'string', 'max:255', 'unique:users'],
+        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        //     'password' => ['required', Rules\Password::defaults()],
+        //     'referral_code' => ['nullable', 'exists:users,referral_code'], // Validasi kode referral
+        // ]));
+        session(['url' => $request->input('url')]); // Simpan variabel 'url' ke session
+        // $url = session()->pull('url'); // Ambil nilai 'url' dan hapus dari session
+        // dd($url); // Tampilkan nilai 'url'
+        // dd(session('url')); // Cek lagi, hasilnya akan null
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'min:10', 'max:15', 'unique:users'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', Rules\Password::defaults()],
             'referral_code' => ['nullable', 'exists:users,referral_code'], // Validasi kode referral
@@ -134,6 +147,15 @@ class RegisteredUserController extends Controller
             'title' => 'Selamat datang! 🎉',
             'message' => 'Lengkapi profil kamu dan mulai menulis sekarang.',
         ]);
+
+        if (session('url')) {
+            $redirectUrl = $request->input('url');
+
+            // Validasi URL untuk menghindari redirect ke domain yang tidak diinginkan
+            if (filter_var($redirectUrl, FILTER_VALIDATE_URL)) {
+                return redirect()->to($redirectUrl);
+            }
+        }
 
         return redirect(route('dashboard'));
     }

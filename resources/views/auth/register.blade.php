@@ -82,7 +82,7 @@
 
       <p class="text-center">
         <span>Sudah punya akun?</span>
-        <a href="{{ route('login') }}">
+        <a href="{{ route('login', ['url' => request()->fullUrl()]) }}">
           <span>Login</span>
         </a>
       </p>

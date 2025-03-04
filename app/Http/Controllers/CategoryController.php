@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,10 @@ class CategoryController extends Controller
      */
     public function show(string $slug)
     {
-        $category = Category::where('slug', $slug)->findOrFail();
+        $category = Category::where('slug', $slug)->firstOrFail();
+        $articles = Article::where('category_id', $category->id)->get();
+
+        return view('articles.categories', compact('category', 'articles'));
     }
 
     /**

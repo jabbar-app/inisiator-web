@@ -27,7 +27,7 @@
             <a href="#">Learn more about Inisiator Prime</a>
             @guest
               <span>
-                Already a member? <a href="{{ route('login') }}" class="text-primary">Login</a>
+                Already a member? <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="text-primary">Login</a>
               </span>
             @endguest
           </small>

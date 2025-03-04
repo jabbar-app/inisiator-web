@@ -1,15 +1,17 @@
-<div class="row">
-  <!-- Monthly Views and Reads Chart -->
-  <div class="col-md-12 mb-4">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title mb-0">Monthly Views & Reads</h5>
-        <small class="text-muted">
-          {{ now()->startOfMonth()->format('F 1, Y') }} - {{ now()->format('F d, Y') }} (UTC)
-        </small>
-      </div>
-      <div class="card-body">
-        <canvas id="viewsReadsChart" height="100"></canvas>
+<div class="content-grid p-0 my-4 full">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="widget-box">
+          <h5 class="mb-0">Monthly Views & Reads</h5>
+          <small class="text-muted">
+            {{ now()->startOfMonth()->format('F 1, Y') }} - {{ now()->format('F d, Y') }} (UTC)
+          </small>
+          <!-- Tambahkan wrapper untuk canvas -->
+          <div class="chart-container" style="position: relative; height: 400px;">
+            <canvas id="viewsReadsChart"></canvas>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -52,7 +54,7 @@
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          maintainAspectRatio: false, // Nonaktifkan maintainAspectRatio
           interaction: {
             mode: 'nearest',
             intersect: false,

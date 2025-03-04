@@ -49,6 +49,7 @@
 
         <form action="{{ route('login') }}" method="POST" class="form">
           @csrf
+          <input type="hidden" name="url" value="{{ request('url') }}">
           <div class="form-row">
             <div class="form-item">
               <div class="form-input">
@@ -127,6 +128,7 @@
 
         <form action="{{ route('register') }}" method="POST" class="form">
           @csrf
+          <input type="hidden" name="url" value="{{ request('url') }}">
           <div class="form-row">
             <div class="form-item">
               <div class="form-input">
@@ -158,7 +160,7 @@
             <div class="form-item">
               <div class="form-input">
                 <label for="register-email" class="f-rajdhani">Your Email</label>
-                <input type="text" id="register-email" name="register_email" class="f-rajdhani">
+                <input type="text" id="register-email" name="email" class="f-rajdhani">
               </div>
             </div>
           </div>

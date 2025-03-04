@@ -1,91 +1,105 @@
-@extends('layouts.app')
+@extends('templates.main')
+
+@section('title', 'Results for ' . $query)
+@section('meta_description', 'Results for ' . $query)
+@section('meta_keywords', $query)
 
 @section('content')
-  <main id="content">
-    <div class="content-widget">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8">
-            <h4 class="spanborder">
-              Hasil pencarian untuk <span>"{{ $query }}"</span>
-            </h4>
-
-            @if ($results->isEmpty())
-              <p>No results found for "{{ $query }}". Please try again with a different keyword.</p>
-            @else
-              @foreach ($results as $result)
+  <div class="content-grid full">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <h3><span class="fw-400">Results for</span> "{{ $query }}"</h3>
+          <hr>
+          @if ($results->isEmpty())
+            <p>No results found for "{{ $query }}". Please try again with a different keyword.</p>
+          @else
+            @foreach ($results as $article)
+              @if ($article && $article->slug && $article->category && $article->user)
                 <article class="row justify-content-between mb-5 mr-0">
                   <div class="col-md-9">
                     <div class="align-self-center">
-                      <div class="capsSubtle mb-2">{{ $result->category->name ?? 'Uncategorized' }}</div>
+                      <div class="d-flex">
+                        <a href="{{ route('categories.show', $article->category->slug) }}"
+                          class="tag-item secondary fw-300 mb-2">{{ $article->category->title }}</a>
+                      </div>
                       <h3 class="entry-title mb-3">
-                        <a href="{{ route('articles.show', $result->slug) }}">{{ $result->title }}</a>
+                        <a href="{{ route('articles.show', $article->slug) }}" class="fw-400">{{ $article->title }}</a>
                       </h3>
-                      <div class="entry-excerpt">
-                        <p>{{ Str::limit(strip_tags($result->content), 150) }}</p>
+                      <div class="entry-excerpt mb-2">
+                        <p>{{ Str::limit(strip_tags($article->content), 150) }}</p>
                       </div>
                       <div class="entry-meta align-items-center">
-                        <a href="{{ route('author', $result->user->username) }}">{{ $result->user->name }}</a>
-                        in <a
-                          href="{{ route('categories.show', $result->category->slug) }}">{{ $result->category->name }}</a><br>
-                        <span>{{ $result->created_at->format('M d, Y') }}</span>
-                        <span class="middotDivider"></span>
-                        <span class="readingTime"
-                          title="{{ $result->reading_time }} min read">{{ $result->reading_time }} min read</span>
+                        by
+                        @if ($article->user && $article->user->username)
+                          <a href="{{ route('pages.author', $article->user->username) }}"
+                            class="fw-400">{{ $article->user->name }}</a>
+                        @else
+                          <span>Unknown Author</span>
+                        @endif
+                        in
+                        @if ($article->category && $article->category->slug)
+                          <a
+                            href="{{ route('categories.show', $article->category->slug) }}">{{ $article->category->title }}</a>
+                        @else
+                          <span>Uncategorized</span>
+                        @endif
+                        <br>
+                        <span>{{ $article->created_at->format('d M Y') }}</span>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-3 bgcover"
-                    style="background-image:url({{ $result->featured_image ? asset($result->featured_image) : asset('assets/images/default-image.jpg') }});">
+                    style="background-image:url({{ $article->img_featured ? asset($article->img_featured) : asset('assets/images/thumb/thumb-512x512.jpg') }});">
                   </div>
                 </article>
-              @endforeach
+              @endif
+            @endforeach
+          @endif
+        </div>
 
-              <div class="mt-4">
-                {{ $results->links() }}
-              </div>
-            @endif
-          </div>
-
-          <div class="col-md-4 pl-md-5 sticky-sidebar">
-            <div class="sidebar-widget latest-tpl-4">
-              <h5 class="spanborder widget-title">
-                <span>Trending di Medan</span>
-              </h5>
-              <ol>
-                @foreach ($highlightPosts as $index => $highlight)
-                  <li class="d-flex">
-                    <div class="post-count">{{ sprintf('%02d', $index + 1) }}</div>
+        <div class="col-md-4 pl-md-5 sticky-sidebar">
+          <div class="sidebar-widget latest-tpl-4">
+            <h3>Trending in "Medan"</h3>
+            <hr>
+            <ol>
+              @foreach ($popularArticles as $index => $popular)
+                @if ($popular && $popular->slug && $popular->category && $popular->user)
+                  <li class="d-flex mb-4" style="gap: 16px;">
+                    <h1 class="post-count">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</h1>
                     <div class="post-content">
-                      <h5 class="entry-title mb-3">
-                        <a href="{{ route('articles.show', $highlight->slug) }}">{{ $highlight->title }}</a>
+                      <h5 class="entry-title my-1">
+                        <a href="{{ route('articles.show', $popular->slug) }}">{{ $popular->title }}</a>
                       </h5>
                       <div class="entry-meta align-items-center">
-                        <a href="{{ route('author', $highlight->user->username) }}">{{ $highlight->user->name }}</a>
-                        in <a
-                          href="{{ route('categories.show', $highlight->category->slug) }}">{{ $highlight->category->name }}</a><br>
-                        <span>{{ $highlight->created_at->format('M d, Y') }}</span>
-                        <span class="middotDivider"></span>
-                        <span class="readingTime"
-                          title="{{ $highlight->reading_time }} min read">{{ $highlight->reading_time }} min read</span>
+                        Writen by
+                        <span class="text-white">
+                          @if ($popular->user && $popular->user->username)
+                            <a href="{{ route('pages.author', $popular->user->username) }}"
+                              class="text-info">{{ $popular->user->name }}</a>
+                          @else
+                            <span>Unknown Author</span>
+                          @endif
+                        </span>
+                        in
+                        @if ($popular->category && $popular->category->slug)
+                          <a href="{{ route('categories.show', $popular->category->slug) }}"
+                            class="text-info">{{ $popular->category->title }}</a>
+                        @else
+                          <span>Uncategorized</span>
+                        @endif
+                        <br>
+                        <span>{{ $popular->created_at->format('d M Y') }}</span>
                       </div>
                     </div>
                   </li>
-                @endforeach
-              </ol>
-            </div>
-          </div> <!--col-md-4-->
+                @endif
+              @endforeach
+            </ol>
+            @include('components.adsense-responsive')
+          </div>
         </div>
-      </div> <!--content-widget-->
-    </div>
-
-    <div class="content-widget">
-      <div class="container">
-        <div class="sidebar-widget ads">
-          @include('components.adsense-responsive')
-        </div>
-        <div class="hr"></div>
       </div>
     </div>
-  </main>
+  </div>
 @endsection

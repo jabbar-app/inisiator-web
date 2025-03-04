@@ -91,7 +91,7 @@
         @endforeach
       @else
         <p class="reaction-login-message text-nowrap">
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+          <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
             data-bs-target="#loginModal">Login</button>
         </p>
       @endauth
@@ -247,7 +247,7 @@
               <p class="meta-line-link light">Reply</p>
             @else
               <p class="meta-line-link light">
-                <a href="{{ route('login') }}" class="reply-login-link">Login</a> to reply
+                <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="reply-login-link">Login</a> to reply
               </p>
             @endauth
           </div>
@@ -370,7 +370,7 @@
       </form>
     @else
       <p class="comment-login-message">
-        <a href="{{ route('login') }}" class="comment-login-link">Login</a> to leave a comment.
+        <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="comment-login-link">Login</a> to leave a comment.
       </p>
     @endauth
   </div>

@@ -95,9 +95,9 @@ class PageController extends Controller
             ->latest()
             ->paginate(10);
 
-        $highlightPosts = Article::latest()->take(5)->get();
+        $popularArticles = Article::latest()->take(5)->get();
         // Kirim hasil pencarian ke view
-        return view('pages.search', compact('results', 'query', 'highlightPosts'));
+        return view('pages.search', compact('results', 'query', 'popularArticles'));
     }
 
     public function requestInvitation()

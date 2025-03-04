@@ -90,8 +90,6 @@ Route::get('/whatsapp/send-notification/{articleId}', [WhatsappController::class
 Route::get('/category/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
 Route::get('/tags/{tag}', [PageController::class, 'tagShow'])->name('pages.tags');
 
-Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
-
 Route::post('/validate-referral', [RegisteredUserController::class, 'validateReferral'])->name('validate.referral');
 
 Route::prefix('play')->group(function () {

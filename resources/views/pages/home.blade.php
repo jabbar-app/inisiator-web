@@ -1,9 +1,11 @@
 @extends('templates.main')
 
+@section('title', 'A storytelling platform')
+@section('meta_description', 'Inisiator')
+@section('meta_keywords', 'Inisiator, Storytelling, Writing Platform')
+{{-- @section('meta_image', asset('front/img/profpic.png')) --}}
+
 @section('content')
-
-  <div style="margin-top: 80px;"></div>
-
   <div class="content-grid full p-0">
     <div class="section-featured featured-style-1">
       <div class="container">
@@ -16,7 +18,7 @@
                 @php $firstFeature = $featureds->first(); @endphp
                 @if ($firstFeature && $firstFeature->slug && $firstFeature->user && $firstFeature->category)
                   <div class="col-md-6">
-                    <article class="first mb-3">
+                    <article class="first mb-4">
                       <figure>
                         <a href="{{ route('articles.show', $firstFeature->slug) }}">
                           <img
@@ -24,9 +26,10 @@
                             alt="{{ $firstFeature->title }}" class="w-100 rounded mb-2">
                         </a>
                       </figure>
-                      <h3 class="entry-title mb-1">
-                        <a href="{{ route('articles.show', $firstFeature->slug) }}">{{ $firstFeature->title }}</a>
-                      </h3>
+                      <h4 class="entry-title mb-1">
+                        <a href="{{ route('articles.show', $firstFeature->slug) }}"
+                          class="fw-500">{{ $firstFeature->title }}</a>
+                      </h4>
                       <div class="entry-meta">
                         @if ($firstFeature->user && $firstFeature->user->username)
                           <a
@@ -42,7 +45,8 @@
                           <span>Uncategorized</span>
                         @endif
                         <br>
-                        <span>{{ $firstFeature->created_at->format('d M Y') }}</span>
+                        <small class="text-muted"><em>Published at
+                            {{ $firstFeature->created_at->format('d M Y') }}</em></small>
                       </div>
                     </article>
                   </div>
@@ -51,7 +55,7 @@
                 <div class="col-md-6">
                   @foreach ($featureds->skip(1) as $feature)
                     @if ($feature && $feature->slug && $feature->user && $feature->category)
-                      <article class="post-has-bg m-3">
+                      <article class="post-has-bg mx-3 mb-3">
                         <div class="d-flex row">
                           <figure class="col-4 p-0">
                             <a href="{{ route('articles.show', $feature->slug) }}">
@@ -62,24 +66,27 @@
                           </figure>
                           <div class="entry-content col-8">
                             <h5 class="entry-title">
-                              <a href="{{ route('articles.show', $feature->slug) }}">{{ $feature->title }}</a>
+                              <a href="{{ route('articles.show', $feature->slug) }}"
+                                class="fw-500">{{ $feature->title }}</a>
                             </h5>
-                            <div class="entry-meta">
+                            <div class="entry-meta" style="font-size: 14px;">
+                              by
                               @if ($feature->user && $feature->user->username)
-                                <a
-                                  href="{{ route('pages.author', $feature->user->username) }}">{{ $feature->user->name }}</a>
+                                <a href="{{ route('pages.author', $feature->user->username) }}"
+                                  class="fw-400">{{ $feature->user->name }}</a>
                               @else
                                 <span>Unknown Author</span>
                               @endif
                               in
                               @if ($feature->category && $feature->category->slug)
-                                <a
-                                  href="{{ route('categories.show', $feature->category->slug) }}">{{ $feature->category->title }}</a>
+                                <a href="{{ route('categories.show', $feature->category->slug) }}"
+                                  class="fw-400">{{ $feature->category->title }}</a>
                               @else
                                 <span>Uncategorized</span>
                               @endif
                               <br>
-                              <span>{{ $feature->created_at->format('d M Y') }}</span>
+                              <small class="text-muted"><em>Published at
+                                  {{ $feature->created_at->format('d M Y') }}</em></small>
                             </div>
                           </div>
                         </div>
@@ -94,18 +101,13 @@
           <div class="col-md-3">
             <h2 class="mb-2">Trending</h2>
             <hr>
-            <style>
-              .fw-bold {
-                font-weight: 500;
-              }
-            </style>
             <ol>
               @foreach ($featureds->take(4) as $trend)
                 @if ($trend && $trend->slug)
                   <li class="mb-3">
-                    <h5><a href="{{ route('articles.show', $trend->slug) }}">{{ $trend->title }}</a></h5>
+                    <h5><a href="{{ route('articles.show', $trend->slug) }}" class="fw-500">{{ $trend->title }}</a></h5>
                     <p>
-                      <small>by <strong>{{ $trend->user->name }}</strong></small>
+                      <small class="text-muted">by {{ $trend->user->name }}</small>
                     </p>
                   </li>
                 @endif
@@ -135,9 +137,10 @@
             <div class="pt-5 pb-5 pl-md-5 pr-5 align-self-center">
               <div class="capsSubtle mb-2">Featured Article</div>
               <h2 class="entry-title mb-3">
-                <a href="{{ route('articles.show', $editorsPick->slug) }}">{{ $editorsPick->title }}</a>
+                <a href="{{ route('articles.show', $editorsPick->slug) }}" class="fw-500">{{ $editorsPick->title }}</a>
               </h2>
-              <div class="entry-excerpt">
+              <img src="{{ $editorsPick->img_featured ? asset($editorsPick->img_featured) : asset('assets/images/thumb/thumb-800x495.jpg') }}" alt="" class="img-featured-cover d-block d-md-none">
+              <div class="entry-excerpt mb-3">
                 <p>{{ Str::limit(strip_tags($editorsPick->content), 150) }}</p>
               </div>
               <div class="entry-meta">
@@ -154,7 +157,7 @@
                   <span>Uncategorized</span>
                 @endif
                 <br>
-                <span>{{ $editorsPick->created_at->format('d M Y') }}</span>
+                <small class="text-muted"><em>Published at {{ $editorsPick->created_at->format('d M Y') }}</em></small>
               </div>
             </div>
           </div>
@@ -176,39 +179,41 @@
     </div>
   </div>
 
-  <div class="content-grid p-0" style="transform: translate(140.5px, 0px); transition: transform 0.4s ease-in-out;">
-    <h2 class="mb-2">Today's Entertainment</h2>
-    <hr>
-    <div class="grid">
-      <div class="grid grid-half change-on-desktop">
-        <div class="achievement-box secondary">
-          <div class="achievement-box-info-wrap">
-            <img class="achievement-box-image d-none d-md-block"
-              src="{{ asset('assets/img/icons/badges/caffeinated-b.webp') }}" alt="badge-caffeinated-b">
+  <div class="content-grid full">
+    <div class="container">
+      <h2 class="mb-2">Today's Entertainment</h2>
+      <hr>
+      <div class="grid">
+        <div class="grid grid-half change-on-desktop">
+          <div class="achievement-box secondary">
+            <div class="achievement-box-info-wrap">
+              <img class="achievement-box-image d-none d-md-block"
+                src="{{ asset('assets/img/icons/badges/caffeinated-b.webp') }}" alt="badge-caffeinated-b">
 
-            <div class="achievement-box-info">
-              <p class="achievement-box-title">Friendship Dare Quiz</p>
+              <div class="achievement-box-info">
+                <p class="achievement-box-title">Friendship Dare Quiz</p>
 
-              <p class="achievement-box-text">&rarr; <span class="bold">Most played</span> 741+ players</p>
+                <p class="achievement-box-text">&rarr; <span class="bold">Most played</span> 741+ players</p>
+              </div>
             </div>
+
+            <a href="{{ route('play.dare.create') }}" class="button white-solid">PLAY QUIZ</a>
           </div>
 
-          <a href="{{ route('play.dare.create') }}" class="button white-solid">PLAY QUIZ</a>
-        </div>
+          <div class="achievement-box primary">
+            <div class="achievement-box-info-wrap">
+              <img class="achievement-box-image d-none d-md-block" src="{{ asset('theme/img/completedq-l.webp') }}"
+                alt="quest-completedq-l">
 
-        <div class="achievement-box primary">
-          <div class="achievement-box-info-wrap">
-            <img class="achievement-box-image d-none d-md-block" src="{{ asset('theme/img/completedq-l.webp') }}"
-              alt="quest-completedq-l">
+              <div class="achievement-box-info">
+                <p class="achievement-box-title">Explore Games</p>
 
-            <div class="achievement-box-info">
-              <p class="achievement-box-title">Explore Games</p>
-
-              <p class="achievement-box-text"><span class="bold">Enhance your creativity</span> 41+ games</p>
+                <p class="achievement-box-text"><span class="bold">Enhance your creativity</span> 41+ games</p>
+              </div>
             </div>
-          </div>
 
-          <a class="button white-solid" href="{{ route('pages.game') }}">Browse All</a>
+            <a class="button white-solid" href="{{ route('pages.game') }}">Browse All</a>
+          </div>
         </div>
       </div>
     </div>
@@ -223,7 +228,7 @@
       </div>
 
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8" id="most-recent">
           <h3>Most Recent</h3>
           <hr>
           @foreach ($articles as $article)
@@ -231,16 +236,21 @@
               <article class="row justify-content-between mb-5 mr-0">
                 <div class="col-md-9">
                   <div class="align-self-center">
-                    <div class="capsSubtle mb-2">{{ $article->category->title }}</div>
+                    <div class="d-flex">
+                      <a href="{{ route('categories.show', $article->category->slug) }}"
+                        class="tag-item secondary fw-300 mb-2">{{ $article->category->title }}</a>
+                    </div>
                     <h3 class="entry-title mb-3">
-                      <a href="{{ route('articles.show', $article->slug) }}">{{ $article->title }}</a>
+                      <a href="{{ route('articles.show', $article->slug) }}" class="fw-400">{{ $article->title }}</a>
                     </h3>
-                    <div class="entry-excerpt">
+                    <div class="entry-excerpt mb-2">
                       <p>{{ Str::limit(strip_tags($article->content), 150) }}</p>
                     </div>
                     <div class="entry-meta align-items-center">
+                      by
                       @if ($article->user && $article->user->username)
-                        <a href="{{ route('pages.author', $article->user->username) }}">{{ $article->user->name }}</a>
+                        <a href="{{ route('pages.author', $article->user->username) }}"
+                          class="fw-400">{{ $article->user->name }}</a>
                       @else
                         <span>Unknown Author</span>
                       @endif
@@ -262,9 +272,24 @@
               </article>
             @endif
           @endforeach
-          {{-- <div class="mt-4">
-            {{ $articles->links() }}
-          </div> --}}
+          <div class="mt-4 d-flex align-items-center">
+            @if ($articles->onFirstPage())
+              <span class="btn btn-outline-secondary disabled">&laquo; Previous</span>
+            @else
+              <a href="{{ $articles->previousPageUrl() }}#most-recent" class="btn btn-outline-primary">&laquo;
+                Previous</a>
+            @endif
+
+            <div class="flex-grow-1 text-center mx-3">
+              <span class="text-muted">Page {{ $articles->currentPage() }} of {{ $articles->lastPage() }}</span>
+            </div>
+
+            @if ($articles->hasMorePages())
+              <a href="{{ $articles->nextPageUrl() }}#most-recent" class="btn btn-outline-primary">Next &raquo;</a>
+            @else
+              <span class="btn btn-outline-secondary disabled">Next &raquo;</span>
+            @endif
+          </div>
         </div>
 
         <div class="col-md-4 pl-md-5 sticky-sidebar">
@@ -313,4 +338,32 @@
     </div>
   </div>
 
+  {{-- Ads --}}
+  <div class="content-grid full">
+    <div class="container">
+      <div class="row my-5">
+        <div class="col-12">
+          @include('components.adsense-responsive')
+        </div>
+      </div>
+    </div>
+  </div>
+
 @endsection
+
+@push('styles')
+  <style>
+    .btn-outline-primary {
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-secondary {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+@endpush

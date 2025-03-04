@@ -1,5 +1,9 @@
 @extends('templates.main')
 
+@section('title', $article->title)
+@section('meta_description', $article->excerpt)
+@section('meta_keywords', implode(', ', $article->tags->pluck('name')->toArray()))
+@section('meta_image', asset($article->img_featured))
 @section('content')
   <div class="content-grid full">
     <article class="post-open" id="article" data-id="{{ $article->id }}">
@@ -53,6 +57,12 @@
 
   @include('articles.post-related')
 
+  <!-- Tombol untuk membuka modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+    Login
+  </button>
+
+  <!-- Modal -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -63,7 +73,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="loginForm" method="POST"> <!-- Tambahkan id -->
+          <form id="loginForm" method="POST">
             @csrf
             <div class="form-group">
               <label for="email">Email</label>

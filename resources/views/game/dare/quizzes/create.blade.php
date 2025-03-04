@@ -37,7 +37,7 @@
 
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="">
-                    <p>Already have an account? <a href="{{ route('login') }}">Login here</a></p>
+                    <p>Already have an account? <a href="{{ route('login', ['url' => request()->fullUrl()]) }}">Login here</a></p>
                   </div>
                   <button type="submit" class="button primary w-auto px-5">Validate</button>
                 </div>

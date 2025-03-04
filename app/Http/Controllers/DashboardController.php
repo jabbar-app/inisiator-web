@@ -14,6 +14,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        session()->pull('url');
         // Current month's earnings
         $currentMonth = now()->month;
         $currentYear = now()->year;

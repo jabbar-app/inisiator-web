@@ -329,22 +329,24 @@ class ArticleController extends Controller
     /**
      * Injects an ad into the article content after the third paragraph.
      */
-    private function injectAdsIntoContent(string $content, string $adsHtml): string
+    private function injectAdsIntoContent($content, $adsHtml)
     {
+        // Memecah konten menjadi array paragraf
         $paragraphs = explode('</p>', $content);
-        $contentWithAd = '';
+        $newContent = '';
 
+        // Loop melalui setiap paragraf
         foreach ($paragraphs as $index => $paragraph) {
-            $trimmed = trim($paragraph);
-            if ($trimmed) {
-                $contentWithAd .= $paragraph . '</p>';
-            }
-            if ($index === 2) {
-                $contentWithAd .= $adsHtml;
+            // Tambahkan paragraf ke konten baru
+            $newContent .= $paragraph . '</p>';
+
+            // Sisipkan iklan setiap 8 paragraf
+            if (($index + 1) % 8 === 0) {
+                $newContent .= $adsHtml;
             }
         }
 
-        return $contentWithAd;
+        return $newContent;
     }
 
 

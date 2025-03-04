@@ -179,7 +179,7 @@
                 <ul class="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
                   <li>
                     @guest
-                      <a href="{{ route('login') }}"
+                      <a href="{{ route('login', ['url' => request()->fullUrl()]) }}"
                         class="btn  btn-outline-primary rounded-pill px-4">Login/Register</a>
                     @else
                       <a href="{{ route('dashboard') }}"

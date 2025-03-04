@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,900&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Rajdhani:400,500,600,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swa");
 
 *,
 :after,
@@ -10,6 +10,7 @@
     border: none;
     outline: none;
     box-sizing: border-box;
+    font-weight: 300;
     font-family: "Rubik", sans-serif;
 }
 
@@ -48,14 +49,14 @@ ul {
     margin: 0
 }
 
-button,
+/* button,
 input[type=password],
 input[type=text],
 label,
 select,
 textarea {
-    font-family: "Forum", serif
-}
+    font-family: "Rubik", sans-serif
+} */
 
 label {
     display: block;
@@ -1619,8 +1620,8 @@ h5,
 h6,
 p {
     color: #3e3f5e;
-    font-family: "Rubik", sans-serif;
-    font-weight: 400;
+    /* font-family: "Rubik", sans-serif;
+    font-weight: 300; */
 }
 
 h1,
@@ -8728,6 +8729,14 @@ figure>img {
 
 .f-rajdhani {
     font-family: Rajdhani, sans-serif !important;
+}
+
+
+.lora-regular {
+    font-family: "Lora", serif !important;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .landing-info .landing-info-title {

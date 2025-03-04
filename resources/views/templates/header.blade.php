@@ -1,5 +1,5 @@
-@auth
-  <nav id="navigation-widget-small" class="navigation-widget navigation-widget-desktop closed sidebar left delayed">
+<nav id="navigation-widget-small" class="navigation-widget navigation-widget-desktop closed sidebar left delayed">
+  @auth
     <a class="user-avatar small no-outline online" href="{{ route('pages.author', Auth::user()->username) }}">
       <div class="user-avatar-content">
         <div class="hexagon-image-30-32"
@@ -27,95 +27,97 @@
         <p class="user-avatar-badge-text">24</p>
       </div>
     </a>
+  @endauth
 
-    <ul class="menu small">
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="{{ route('pages.home') }}" data-title="Home">
-          <svg class="menu-item-link-icon icon-newsfeed">
-            <use xlink:href="#svg-newsfeed"></use>
-          </svg>
-        </a>
-      </li>
+  <ul class="menu small">
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="{{ route('pages.home') }}" data-title="Home">
+        <svg class="menu-item-link-icon icon-newsfeed">
+          <use xlink:href="#svg-newsfeed"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="{{ route('dashboard') }}" data-title="Dashboard">
-          <svg class="menu-item-link-icon icon-overview">
-            <use xlink:href="#svg-overview"></use>
-          </svg>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="{{ route('dashboard') }}" data-title="Dashboard">
+        <svg class="menu-item-link-icon icon-overview">
+          <use xlink:href="#svg-overview"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Groups">
-          <svg class="menu-item-link-icon icon-group">
-            <use xlink:href="#svg-group"></use>
-          </svg>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="{{ route('articles.index') }}" data-title="Articles">
+        <svg class="menu-item-link-icon icon-blog-posts">
+          <use xlink:href="#svg-blog-posts"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Networks">
-          <svg class="menu-item-link-icon icon-members">
-            <use xlink:href="#svg-members"></use>
-          </svg>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Networks">
+        <svg class="menu-item-link-icon icon-members">
+          <use xlink:href="#svg-members"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Badges">
-          <svg class="menu-item-link-icon icon-badges">
-            <use xlink:href="#svg-badges"></use>
-          </svg>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Badges">
+        <svg class="menu-item-link-icon icon-badges">
+          <use xlink:href="#svg-badges"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Quests">
-          <svg class="menu-item-link-icon icon-quests">
-            <use xlink:href="#svg-quests"></use>
-          </svg>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Quests">
+        <svg class="menu-item-link-icon icon-quests">
+          <use xlink:href="#svg-quests"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Streams">
-          <svg class="menu-item-link-icon icon-streams">
-            <use xlink:href="#svg-streams"></use>
-          </svg>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Streams">
+        <svg class="menu-item-link-icon icon-streams">
+          <use xlink:href="#svg-streams"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Events">
-          <svg class="menu-item-link-icon icon-events">
-            <use xlink:href="#svg-events"></use>
-          </svg>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Events">
+        <svg class="menu-item-link-icon icon-events">
+          <use xlink:href="#svg-events"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Forums">
-          <svg class="menu-item-link-icon icon-forums">
-            <use xlink:href="#svg-forums"></use>
-          </svg>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Forums">
+        <svg class="menu-item-link-icon icon-forums">
+          <use xlink:href="#svg-forums"></use>
+        </svg>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Marketplace">
-          <svg class="menu-item-link-icon icon-marketplace">
-            <use xlink:href="#svg-marketplace"></use>
-          </svg>
-        </a>
-      </li>
-    </ul>
-  </nav>
+    <li class="menu-item">
+      <a class="menu-item-link text-tooltip-tfr" href="#" data-title="Marketplace">
+        <svg class="menu-item-link-icon icon-marketplace">
+          <use xlink:href="#svg-marketplace"></use>
+        </svg>
+      </a>
+    </li>
+  </ul>
+</nav>
 
-  <nav id="navigation-widget" class="navigation-widget navigation-widget-desktop sidebar left hidden" data-simplebar>
-    <figure class="navigation-widget-cover liquid">
-      <img src="{{ asset('assets/img/backgrounds/cover.webp') }}" alt="cover-01">
-    </figure>
+<nav id="navigation-widget" class="navigation-widget navigation-widget-desktop sidebar left hidden" data-simplebar>
+  <figure class="navigation-widget-cover liquid">
+    <img src="{{ asset('assets/img/backgrounds/cover.webp') }}" alt="cover-01">
+  </figure>
 
+  @auth
     <div class="user-short-description">
       <a class="user-short-description-avatar user-avatar medium"
         href="{{ route('pages.author', Auth::user()->username) }}">
@@ -200,108 +202,110 @@
         <p class="user-stat-text">followers</p>
       </div>
     </div>
+  @endauth
 
-    <ul class="menu">
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-newsfeed">
-            <use xlink:href="#svg-newsfeed"></use>
-          </svg>
-          Newsfeed
-        </a>
-      </li>
+  <ul class="menu">
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-newsfeed">
+          <use xlink:href="#svg-newsfeed"></use>
+        </svg>
+        Newsfeed
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-overview">
-            <use xlink:href="#svg-overview"></use>
-          </svg>
-          Overview
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-overview">
+          <use xlink:href="#svg-overview"></use>
+        </svg>
+        Overview
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-group">
-            <use xlink:href="#svg-group"></use>
-          </svg>
-          Groups
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-group">
+          <use xlink:href="#svg-group"></use>
+        </svg>
+        Groups
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-members">
-            <use xlink:href="#svg-members"></use>
-          </svg>
-          Networks
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-members">
+          <use xlink:href="#svg-members"></use>
+        </svg>
+        Networks
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-badges">
-            <use xlink:href="#svg-badges"></use>
-          </svg>
-          Badges
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-badges">
+          <use xlink:href="#svg-badges"></use>
+        </svg>
+        Badges
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-quests">
-            <use xlink:href="#svg-quests"></use>
-          </svg>
-          Quests
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-quests">
+          <use xlink:href="#svg-quests"></use>
+        </svg>
+        Quests
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-streams">
-            <use xlink:href="#svg-streams"></use>
-          </svg>
-          Streams
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-streams">
+          <use xlink:href="#svg-streams"></use>
+        </svg>
+        Streams
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-events">
-            <use xlink:href="#svg-events"></use>
-          </svg>
-          Events
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-events">
+          <use xlink:href="#svg-events"></use>
+        </svg>
+        Events
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-forums">
-            <use xlink:href="#svg-forums"></use>
-          </svg>
-          Forums
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-forums">
+          <use xlink:href="#svg-forums"></use>
+        </svg>
+        Forums
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-marketplace">
-            <use xlink:href="#svg-marketplace"></use>
-          </svg>
-          Marketplace
-        </a>
-      </li>
-    </ul>
-  </nav>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-marketplace">
+          <use xlink:href="#svg-marketplace"></use>
+        </svg>
+        Marketplace
+      </a>
+    </li>
+  </ul>
+</nav>
 
-  <nav id="navigation-widget-mobile" class="navigation-widget navigation-widget-mobile sidebar left hidden"
-    data-simplebar>
-    <div class="navigation-widget-close-button">
-      <svg class="navigation-widget-close-button-icon icon-back-arrow">
-        <use xlink:href="#svg-back-arrow"></use>
-      </svg>
-    </div>
+<nav id="navigation-widget-mobile" class="navigation-widget navigation-widget-mobile sidebar left hidden"
+  data-simplebar>
+  <div class="navigation-widget-close-button">
+    <svg class="navigation-widget-close-button-icon icon-back-arrow">
+      <use xlink:href="#svg-back-arrow"></use>
+    </svg>
+  </div>
 
+  @auth
     <div class="navigation-widget-info-wrap">
       <div class="navigation-widget-info">
         <a class="user-avatar small no-outline" href="{{ route('pages.author', Auth::user()->username) }}">
@@ -338,103 +342,116 @@
         <p class="navigation-widget-info-text">Welcome Back!</p>
       </div>
 
-      <p class="navigation-widget-info-button button small secondary">Logout</p>
+      <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <a class="navigation-widget-info-button button small secondary" href="{{ route('logout') }}"
+          onclick="event.preventDefault(); this.closest('form').submit();">
+          <i class="ti ti-logout me-2 ti-sm"></i>
+          Logout
+        </a>
+      </form>
     </div>
+  @else
+    <div class="navigation-widget-info-wrap">
+      <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="button secondary text-nowrap px-4">LOGIN / REGISTER</a>
+    </div>
+  @endauth
 
-    <p class="navigation-widget-section-title">Sections</p>
+  <p class="navigation-widget-section-title">Sections</p>
 
-    <ul class="menu">
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-newsfeed">
-            <use xlink:href="#svg-newsfeed"></use>
-          </svg>
-          Newsfeed
-        </a>
-      </li>
+  <ul class="menu">
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-newsfeed">
+          <use xlink:href="#svg-newsfeed"></use>
+        </svg>
+        Newsfeed
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-overview">
-            <use xlink:href="#svg-overview"></use>
-          </svg>
-          Overview
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-overview">
+          <use xlink:href="#svg-overview"></use>
+        </svg>
+        Overview
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-group">
-            <use xlink:href="#svg-group"></use>
-          </svg>
-          Groups
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-group">
+          <use xlink:href="#svg-group"></use>
+        </svg>
+        Groups
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-members">
-            <use xlink:href="#svg-members"></use>
-          </svg>
-          Members
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-members">
+          <use xlink:href="#svg-members"></use>
+        </svg>
+        Members
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-badges">
-            <use xlink:href="#svg-badges"></use>
-          </svg>
-          Badges
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-badges">
+          <use xlink:href="#svg-badges"></use>
+        </svg>
+        Badges
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-quests">
-            <use xlink:href="#svg-quests"></use>
-          </svg>
-          Quests
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-quests">
+          <use xlink:href="#svg-quests"></use>
+        </svg>
+        Quests
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-streams">
-            <use xlink:href="#svg-streams"></use>
-          </svg>
-          Streams
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-streams">
+          <use xlink:href="#svg-streams"></use>
+        </svg>
+        Streams
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-events">
-            <use xlink:href="#svg-events"></use>
-          </svg>
-          Events
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-events">
+          <use xlink:href="#svg-events"></use>
+        </svg>
+        Events
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-forums">
-            <use xlink:href="#svg-forums"></use>
-          </svg>
-          Forums
-        </a>
-      </li>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-forums">
+          <use xlink:href="#svg-forums"></use>
+        </svg>
+        Forums
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a class="menu-item-link" href="#">
-          <svg class="menu-item-link-icon icon-marketplace">
-            <use xlink:href="#svg-marketplace"></use>
-          </svg>
-          Marketplace
-        </a>
-      </li>
-    </ul>
+    <li class="menu-item">
+      <a class="menu-item-link" href="#">
+        <svg class="menu-item-link-icon icon-marketplace">
+          <use xlink:href="#svg-marketplace"></use>
+        </svg>
+        Marketplace
+      </a>
+    </li>
+  </ul>
 
+  @auth
     <p class="navigation-widget-section-title">My Profile</p>
 
     <a class="navigation-widget-section-link" href="{{ route('profile.edit') }}">Profile Info</a>
@@ -463,8 +480,7 @@
 
     <p class="navigation-widget-section-title">My Store</p>
 
-    <a class="navigation-widget-section-link" href="#">My Account <span
-        class="highlighted">$250,32</span></a>
+    <a class="navigation-widget-section-link" href="#">My Account <span class="highlighted">$250,32</span></a>
 
     <a class="navigation-widget-section-link" href="#">Sales Statement</a>
 
@@ -487,8 +503,8 @@
     <a class="navigation-widget-section-link" href="#">Contact Us</a>
 
     <a class="navigation-widget-section-link" href="#">Privacy Policy</a>
-  </nav>
-@endauth
+  @endauth
+</nav>
 
 @auth
   {{-- <aside id="chat-widget-messages" class="chat-widget closed sidebar right">
@@ -1064,7 +1080,6 @@
         <use xlink:href="#svg-grid"></use>
       </svg>
     </div>
-
     <div class="mobilemenu-trigger navigation-widget-mobile-trigger">
       <div class="burger-icon inverted">
         <div class="burger-icon-bar"></div>
@@ -1074,18 +1089,19 @@
         <div class="burger-icon-bar"></div>
       </div>
     </div>
+
     <nav class="navigation">
       <ul class="menu-main">
         <li class="menu-main-item">
-          <a class="menu-main-item-link" href="{{ route('pages.home') }}">HOME</a>
+          <a class="menu-main-item-link {{ Route::is('pages.home') ? 'text-primary' : '' }}" href="{{ route('pages.home') }}">HOME</a>
+        </li>
+
+        <li class="menu-main-item">
+          <a class="menu-main-item-link {{ Route::is('pages.game') ? 'text-primary' : '' }}" href="{{ route('pages.game') }}">PLAY</a>
         </li>
 
         <li class="menu-main-item">
           <a class="menu-main-item-link" href="#">CAREERS</a>
-        </li>
-
-        <li class="menu-main-item">
-          <a class="menu-main-item-link" href="#">F.A.Q.</a>
         </li>
 
         <li class="menu-main-item">
@@ -1117,13 +1133,9 @@
     </nav>
   </div>
 
-  @guest
-    <div class="w-100"></div>
-  @endguest
-
   <div class="header-actions search-bar">
-    <div class="interactive-input dark">
-      <input type="text" id="search-main" name="search_main" placeholder="Search here for people or groups">
+    <form action="{{ route('pages.search') }}" method="GET" class="interactive-input dark">
+      <input type="text" value="{{ request('s') }}" name="s" id="search-main" placeholder="Search here for people or groups">
       <div class="interactive-input-icon-wrap">
         <svg class="interactive-input-icon icon-magnifying-glass">
           <use xlink:href="#svg-magnifying-glass"></use>
@@ -1135,7 +1147,7 @@
           <use xlink:href="#svg-cross-thin"></use>
         </svg>
       </div>
-    </div>
+    </form>
 
     {{-- <div class="dropdown-box padding-bottom-small header-search-dropdown">
       <div class="dropdown-box-category">
@@ -1289,9 +1301,13 @@
       <div class="action-list dark">
         <div class="action-list-item-wrap">
           <div class="action-list-item header-dropdown-trigger">
-            <a href="{{ route('login') }}" class="button white-solid text-nowrap px-4">LOGIN / REGISTER</a>
+            <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="button white-solid text-nowrap px-4">LOGIN / REGISTER</a>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="action-list dark">
       </div>
     </div>
   @else
