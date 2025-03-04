@@ -38,9 +38,10 @@ class ArticleCommentController extends Controller
         ]);
     }
 
-    public function loadMoreComments(Article $article, Request $request)
+    public function loadMoreComments($id, Request $request)
     {
-        $offset = $request->query('offset', 5);
+        $offset = $request->query('offset', 0);
+        $article = Article::findOrFail($id);
         $comments = $article->comments()->skip($offset)->take(5)->get();
         $totalComments = $article->comments()->count();
 

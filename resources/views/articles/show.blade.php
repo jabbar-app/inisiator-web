@@ -41,11 +41,38 @@
 
             {!! $content !!}
 
-            <div class="tag-list">
+
+
+            <h4 class="mt-5 mb-0">Tags</h4>
+            <div class="tag-list m-0">
               @foreach ($tags as $tag)
                 <a href="{{ route('pages.tags', ['tag' => $tag]) }}" rel="tag"
                   class="tag-item secondary">{{ $tag }}</a>
               @endforeach
+            </div>
+
+            <div class="quest-item mt-5">
+              <a href="#" class="text-sticker small-text">
+                <svg class="text-sticker-icon icon-plus-small">
+                  <use xlink:href="#svg-plus-small"></use>
+                </svg>
+                Follow
+              </a>
+              <div class="quest-item-info">
+                <p class="quest-item-text fw-300 m-0">Written by:</p>
+                <a href="{{ route('pages.author', $article->user->username) }}"
+                  class="quest-item-title">{{ $article->user->name }}</a>
+                <p class="quest-item-text fw-300">{{ $article->user->bio ?? 'This user hasn\'t setup their bio yet.' }}
+                </p>
+                <div class="quest-item-meta justify-content-between align-items-center">
+                  <div class="quest-item-meta-info" style="margin-left: 0px;">
+                    <p class="quest-item-meta-title">+{{ $article->user->articles->count() }} stories published</p>
+
+                    <p class="quest-item-meta-text fw-300">+8,313 views gained</p>
+                  </div>
+                  <button class="button small secondary w-25 p-0">See More</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -56,248 +83,79 @@
   </div>
 
   @include('articles.post-related')
-
-  <!-- Tombol untuk membuka modal -->
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
-    Login
-  </button>
-
-  <!-- Modal -->
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="loginModalLabel">Login</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="loginForm" method="POST">
-            @csrf
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 @endsection
 
 @auth
   @push('scripts')
     <script>
-      (() => {
-        'use strict';
+      document.addEventListener('DOMContentLoaded', function() {
+        const reactionTriggers = document.querySelectorAll('.reaction-options-dropdown-trigger');
+        const replyTriggers = document.querySelectorAll('.reply-login-link');
 
-        const getCsrfToken = () => document.querySelector('meta[name="csrf-token"]')?.content;
-        const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
-
-        // Comment Templates
-        const commentTemplates = {
-          basic: (comment) => `
-            <div class="post-comment">
-              <p class="post-comment-text">
-                <a class="post-comment-text-author" href="/author/${comment.user.username}">
-                  ${comment.user.name}
-                </a>
-                ${comment.content}
-              </p>
-            </div>
-          `,
-
-          full: (comment) => `
-            <div class="post-comment">
-              <a class="user-avatar small no-outline" href="/author/${comment.user.username}">
-                <div class="hexagon-image-30-32"
-                     data-src="${comment.user.avatar || '{{ asset('assets/img/profpic.svg') }}'">
-                </div>
-              </a>
-              <p class="post-comment-text">
-                <a class="post-comment-text-author" href="/author/${comment.user.username}">
-                  ${comment.user.name}
-                </a>
-                ${comment.content}
-              </p>
-              <div class="content-actions">
-                <div class="meta-line">
-                  <p class="meta-line-timestamp">${comment.created_at}</p>
-                </div>
-              </div>
-            </div>
-          `
-        };
-
-        // Auth Protection Handler
-        const handleAuthRequired = (e) => {
-          if (!isAuthenticated) {
-            e.preventDefault();
-            $('#loginModal').modal('show');
-          }
-        };
-
-        // Load More Comments
-        const initializeLoadMore = () => {
-          const loadMoreButton = document.querySelector('.load-more-comments');
-          if (!loadMoreButton) return;
-
-          loadMoreButton.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const {
-              articleId,
-              offset
-            } = loadMoreButton.dataset;
-            const url = `/articles/${articleId}/comments?offset=${offset}`;
-
-            try {
-              const response = await fetch(url);
-              const data = await response.json();
-
-              if (data.comments.length === 0) {
-                loadMoreButton.remove();
-                return;
-              }
-
-              const commentList = document.getElementById('comments');
-              data.comments.forEach(comment => {
-                commentList.insertAdjacentHTML('beforeend', commentTemplates.basic(comment));
-              });
-
-              const newOffset = parseInt(offset) + data.comments.length;
-              const remaining = data.totalComments - newOffset;
-
-              loadMoreButton.dataset.offset = newOffset;
-              remaining > 0 ?
-                loadMoreButton.querySelector('.highlighted').textContent = `${remaining}+` :
-                loadMoreButton.remove();
-            } catch (error) {
-              console.error('Error loading comments:', error);
+        reactionTriggers.forEach(trigger => {
+          trigger.addEventListener('click', function(e) {
+            if (!{{ auth()->check() ? 'true' : 'false' }}) {
+              e.preventDefault();
+              $('#loginModal').modal('show');
             }
           });
-        };
-
-        // Comment Form Submission
-        const initializeCommentForm = () => {
-          const commentForm = document.getElementById('commentForm');
-          if (!commentForm) return;
-
-          commentForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(commentForm);
-
-            try {
-              const response = await fetch(commentForm.action, {
-                method: 'POST',
-                headers: {
-                  'X-CSRF-TOKEN': getCsrfToken(),
-                  'Accept': 'application/json',
-                },
-                body: formData,
-              });
-
-              const data = await response.json();
-              if (!data.success) throw new Error('Comment submission failed');
-
-              document.getElementById('comments').insertAdjacentHTML(
-                'beforeend',
-                commentTemplates.full(data.comment)
-              );
-              commentForm.reset();
-            } catch (error) {
-              console.error('Error:', error);
-              alert('An error occurred. Please try again.');
-            }
-          });
-        };
-
-        // Reading Time Tracker
-        const initializeReadingTracker = () => {
-          const articleElement = document.getElementById('article');
-          if (!articleElement) return;
-
-          let readingTime = 0;
-          const readThreshold = 180; // 3 minutes in seconds
-          const articleId = articleElement.dataset.id;
-
-          const timer = setInterval(async () => {
-            if (++readingTime < readThreshold) return;
-
-            try {
-              await fetch(`/articles/${articleId}/mark-read`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRF-TOKEN': getCsrfToken(),
-                },
-                body: JSON.stringify({}),
-              });
-              clearInterval(timer);
-            } catch (error) {
-              console.error('Error recording read:', error);
-            }
-          }, 1000);
-        };
-
-        // Login Form Handling
-        const initializeLoginForm = () => {
-          const loginForm = document.getElementById('loginForm');
-          if (!loginForm) return;
-
-          loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(loginForm);
-
-            try {
-              const response = await fetch('{{ route('login') }}', {
-                method: 'POST',
-                headers: {
-                  'X-CSRF-TOKEN': getCsrfToken(),
-                  'Accept': 'application/json',
-                },
-                body: formData,
-              });
-
-              const data = await response.json();
-
-              if (data.success) {
-                window.location.reload(); // Refresh halaman setelah login berhasil
-              } else {
-                // Tampilkan error message
-                const errorMessage = data.message || 'Login failed. Please check your credentials.';
-                alert(errorMessage);
-              }
-            } catch (error) {
-              console.error('Error:', error);
-              alert('An error occurred during login.');
-            }
-          });
-        };
-
-        // Initialize all components
-        document.addEventListener('DOMContentLoaded', () => {
-          // Auth protected elements
-          document.querySelectorAll([
-            '.reaction-options-dropdown-trigger',
-            '.reply-login-link',
-            '.reaction-login-link' // Tambahkan class ini
-          ].join(',')).forEach(element => {
-            element.addEventListener('click', handleAuthRequired);
-          });
-
-          initializeLoadMore();
-          initializeCommentForm();
-          initializeReadingTracker();
-          initializeLoginForm();
         });
-      })
-      ();
+
+        replyTriggers.forEach(trigger => {
+          trigger.addEventListener('click', function(e) {
+            if (!{{ auth()->check() ? 'true' : 'false' }}) {
+              e.preventDefault();
+              $('#loginModal').modal('show');
+            }
+          });
+        });
+      });
+    </script>
+    <script>
+      let readingTime = 0; // Waktu membaca (dalam detik)
+      const readThreshold = 3; // 3 menit
+      const articleId = document.getElementById("article").dataset.id;
+
+      const timer = setInterval(() => {
+        readingTime += 1;
+
+        if (readingTime >= readThreshold) {
+          markArticleAsRead(articleId);
+          clearInterval(timer); // Hentikan timer setelah tercapai
+        }
+      }, 1000);
+
+      function markArticleAsRead(articleId) {
+        const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+        if (!csrfTokenMeta) {
+          console.error("CSRF token meta tag is missing. Cannot send request.");
+          return; // Exit the function if CSRF token is missing
+        }
+
+        const csrfToken = csrfTokenMeta.content;
+        console.log("CSRF token found:", csrfToken); // Log the token for debugging
+
+        fetch(`/articles/${articleId}/mark-read`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": csrfToken,
+            },
+            body: JSON.stringify({}),
+          })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Read recorded successfully:", data); // Log successful response
+          })
+          .catch((error) => {
+            console.error("Error recording read:", error); // Log any errors
+          });
+      }
     </script>
   @endpush
 @endauth

@@ -247,7 +247,8 @@
               <p class="meta-line-link light">Reply</p>
             @else
               <p class="meta-line-link light">
-                <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="reply-login-link">Login</a> to reply
+                <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="reply-login-link">Login</a> to
+                reply
               </p>
             @endauth
           </div>
@@ -337,7 +338,7 @@
 
   @if ($remainingComments > 0)
     <p class="post-comment-heading">
-      <a href="#" class="load-more-comments" data-article-id="{{ $article->id }}"
+      <a href="javascript:void(0)" class="load-more-comments" data-article-id="{{ $article->id }}"
         data-offset="{{ $displayedComments }}">
         Load More Comments <span class="highlighted">{{ $remainingComments }}+</span>
       </a>
@@ -370,8 +371,118 @@
       </form>
     @else
       <p class="comment-login-message">
-        <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="comment-login-link">Login</a> to leave a comment.
+        <a href="{{ route('login', ['url' => request()->fullUrl()]) }}" class="comment-login-link">Login</a> to leave a
+        comment.
       </p>
     @endauth
   </div>
 </div>
+
+@push('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loadMoreButton = document.querySelector('.load-more-comments');
+
+      if (loadMoreButton) {
+        loadMoreButton.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          const articleId = this.dataset.articleId;
+          const offset = parseInt(this.dataset.offset);
+          const url = `/articles/${articleId}/comments?offset=${offset}`;
+
+          fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              if (data.comments.length > 0) {
+                const commentList = document.getElementById('comments');
+
+                // Tambahkan komentar baru ke daftar
+                data.comments.forEach(comment => {
+                  const commentHtml = `
+                <div class="post-comment">
+                  <p class="post-comment-text">
+                    <a class="post-comment-text-author" href="/author/${comment.user.username}">${comment.user.name}</a>
+                    ${comment.content}
+                  </p>
+                </div>
+              `;
+                  commentList.insertAdjacentHTML('beforeend', commentHtml);
+                });
+
+                // Perbarui offset dan sisa komentar
+                const newOffset = offset + data.comments.length;
+                const newRemaining = data.totalComments - newOffset;
+
+                if (newRemaining > 0) {
+                  loadMoreButton.dataset.offset = newOffset;
+                  loadMoreButton.querySelector('.highlighted').textContent = `${newRemaining}+`;
+                } else {
+                  loadMoreButton.remove(); // Sembunyikan tombol jika tidak ada komentar tersisa
+                }
+              }
+            })
+            .catch(error => console.error('Error loading more comments:', error));
+        });
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const commentForm = document.getElementById('commentForm');
+
+      if (commentForm) {
+        commentForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const formData = new FormData(this);
+          const url = this.action; // Gunakan URL dari atribut `action` form
+          const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+          fetch(url, {
+              method: 'POST',
+              headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+              },
+              body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Tambahkan komentar baru ke daftar komentar
+                const commentList = document.getElementById('comments');
+                const newComment = `
+              <div class="post-comment">
+                <a class="user-avatar small no-outline" href="/author/${data.comment.user.username}">
+                <div class="hexagon-image-30-32" data-src="${data.comment.user.avatar ? `${data.comment.user.avatar}` : '{{ asset('assets/img/profpic.svg') }}'}"></div>
+                </a>
+                <p class="post-comment-text">
+                  <a class="post-comment-text-author" href="/author/${data.comment.user.username}">${data.comment.user.name}</a>
+                  ${data.comment.content}
+                </p>
+                <div class="content-actions">
+                  <div class="meta-line">
+                    <p class="meta-line-timestamp">${data.comment.created_at}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+                commentList.insertAdjacentHTML('beforeend', newComment);
+
+                // Reset form
+                commentForm.reset();
+              } else {
+                alert('Failed to add comment. Please try again.');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('An error occurred. Please try again.');
+            });
+        });
+      }
+    });
+  </script>
+@endpush

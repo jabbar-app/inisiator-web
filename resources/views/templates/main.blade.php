@@ -10,6 +10,8 @@
     @yield('title', 'Home')&nbsp;|&nbsp;Inisiator
   </title>
 
+  <link rel="icon" href="{{ asset('assets/img/profpic.svg') }}">
+
   <meta name="description" content="@yield('meta_description', 'Deskripsi default untuk Inisiator.')">
   <meta name="keywords" content="@yield('meta_keywords', 'kata kunci, inisiator, website')">
 
@@ -27,40 +29,13 @@
 
   <link rel="canonical" href="{{ request()->url() }}">
 
-  {{-- <link rel="stylesheet" href="{{ asset('front/css/bootstrap.css') }}"> --}}
-  <link rel="stylesheet" href="{{ asset('theme/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('theme/css/styles.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('theme/css/vendor/simplebar.css') }}">
-  <link rel="stylesheet" href="{{ asset('theme/css/vendor/tiny-slider.css') }}">
-  <link rel="stylesheet" href="{{ asset('theme/css/custom.css') }}">
-  <link rel="icon" href="{{ asset('assets/img/profpic.svg') }}">
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web:400,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Rajdhani:400,500,600,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="{{ mix('theme/css/app.css') }}" rel="stylesheet">
 
   {{-- CDN --}}
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-  @if (app()->environment('prod'))
-    <script>
-      document.addEventListener('contextmenu', function(e) {
-        e.preventDefault(); // Blokir klik kanan
-      });
-
-      document.addEventListener('keydown', function(e) {
-        // Blokir Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+J, F12
-        if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
-          e.preventDefault();
-        }
-        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
-          e.preventDefault();
-        }
-        if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
-          e.preventDefault();
-        }
-        if (e.key === 'F12') {
-          e.preventDefault();
-        }
-      });
-    </script>
-  @endif
 
   @stack('styles')
 </head>
@@ -76,7 +51,7 @@
     @yield('content')
   </main>
 
-  <script src="{{ asset('theme/js/app.bundle.min.js') }}"></script>
+  <script src="{{ mix('theme/js/app.js') }}" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -19,11 +19,11 @@
           <div class="post-preview-info-top">
             <p class="post-preview-timestamp">{{ $related->created_at->format('d M Y') }}</p>
             <h5 class="post-preview-title">
-              <a href="{{ route('articles.show', $related->slug) }}">{{ $related->title }}</a>
+              <a href="{{ route('articles.show', $related->slug) }}" class="fw-400">{{ $related->title }}</a>
             </h5>
           </div>
           <div class="post-preview-info-bottom">
-            <p class="post-preview-text">{{ Str::words(strip_tags($related->content), 36, '...') }}</p>
+            <p class="post-preview-text fw-300">{{ Str::words(strip_tags($related->content), 36, '...') }}</p>
             <a class="post-preview-link" href="{{ route('articles.show', $related->slug) }}">Read more</a>
           </div>
         </div>
@@ -69,12 +69,12 @@
 
           <div class="content-action">
             <div class="meta-line">
-              <a class="meta-line-link"
+              <a class="meta-line-link fw-400"
                 href="{{ route('articles.show', $related->slug) }}#comments">{{ $related->comments_count ?? 0 }}
                 Comments</a>
             </div>
             <div class="meta-line">
-              <p class="meta-line-text">0 Shares</p>
+              <p class="meta-line-text fw-400">0 Shares</p>
             </div>
           </div>
         </div>
