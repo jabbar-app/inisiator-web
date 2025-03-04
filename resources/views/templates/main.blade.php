@@ -73,17 +73,6 @@
   <main id="content" style="margin-bottom: 200px;">
     <div class="d-none d-md-block" style="margin-top: 80px;"></div>
     <div class="d-block d-md-none" style="margin-top: 48px;"></div>
-    {{-- <hr class="mt-0">
-    <div class="container">
-      <div class="d-flex" style="gap: 24px;">
-        <a href="#">+</a>
-        <a href="#" class="text-primary">STORY</a>
-        <a href="#">PLAY</a>
-        <a href="#">JOB OPPORTUNITIES</a>
-        <a href="#">TRENDING</a>
-      </div>
-    </div>
-    <hr> --}}
     @yield('content')
   </main>
 

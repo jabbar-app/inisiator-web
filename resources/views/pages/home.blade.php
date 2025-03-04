@@ -139,7 +139,7 @@
               <h2 class="entry-title mb-3">
                 <a href="{{ route('articles.show', $editorsPick->slug) }}" class="fw-500">{{ $editorsPick->title }}</a>
               </h2>
-              <img src="{{ $editorsPick->img_featured ? asset($editorsPick->img_featured) : asset('assets/images/thumb/thumb-800x495.jpg') }}" alt="" class="img-featured-cover d-block d-md-none">
+              {{-- <img src="{{ $editorsPick->img_featured ? asset($editorsPick->img_featured) : asset('assets/images/thumb/thumb-800x495.jpg') }}" alt="" class="img-featured-cover d-block d-md-none"> --}}
               <div class="entry-excerpt mb-3">
                 <p>{{ Str::limit(strip_tags($editorsPick->content), 150) }}</p>
               </div>
