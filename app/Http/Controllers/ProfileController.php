@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,70 +25,62 @@ class ProfileController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
+        $user = User::find(Auth::id());
 
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'cropped_avatar' => 'nullable|string|regex:/^data:image\/\w+;base64,/',
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'email' => 'nullable|email|unique:users,email,' . $user->id,
         ]);
-
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $avatarPath;
-        }
-
-        if ($request->hasFile('cover')) {
-            $coverPath = $request->file('cover')->store('covers', 'public');
-            $user->cover = $coverPath;
-        }
 
         $user->name = $request->name;
         $user->username = $request->username;
-        $user->save();
 
-        return redirect()->back()->with('success', 'Profile updated successfully.');
-    }
-
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $user = $request->user();
-
-        // Update user details
-        $user->fill($request->validated());
-
-        // Reset email verification if email is updated
-        if ($user->isDirty('email')) {
+        if ($request->filled('email') && $user->email != $request->email) {
+            $user->email = $request->email;
             $user->email_verified_at = null;
         }
 
-        // Handle avatar upload
+        // Handle avatar upload (base64)
         if ($request->filled('cropped_avatar')) {
-            $croppedData = $request->input('cropped_avatar'); // Ambil data Base64
-            $avatarName = time() . '-' . uniqid() . '.webp'; // Nama unik untuk avatar
-            $avatarFolder = public_path('avatars'); // Lokasi folder avatar
-            $avatarPath = $avatarFolder . '/' . $avatarName; // Lokasi lengkap untuk menyimpan avatar
+            $croppedData = $request->input('cropped_avatar');
+            $avatarName = time() . '-' . uniqid() . '.webp';
+            $avatarFolder = public_path('avatars');
+            $avatarPath = $avatarFolder . '/' . $avatarName;
 
-            // Buat folder jika belum ada
             if (!is_dir($avatarFolder)) {
                 mkdir($avatarFolder, 0755, true);
             }
 
-            // Hapus avatar lama jika ada
             if ($user->avatar && file_exists(public_path($user->avatar))) {
                 unlink(public_path($user->avatar));
             }
 
-            // Decode dan simpan file dari Base64
             $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $croppedData));
             file_put_contents($avatarPath, $imageData);
 
-            // Simpan path relatif ke database
             $user->avatar = 'avatars/' . $avatarName;
+        }
+
+        // Handle avatar upload (file)
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && file_exists(public_path($user->avatar))) {
+                unlink(public_path($user->avatar));
+            }
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $avatarPath;
+        }
+
+        // Handle cover upload
+        if ($request->hasFile('cover')) {
+            if ($user->cover && file_exists(public_path($user->cover))) {
+                unlink(public_path($user->cover));
+            }
+            $coverPath = $request->file('cover')->store('covers', 'public');
+            $user->cover = $coverPath;
         }
 
         $user->save();

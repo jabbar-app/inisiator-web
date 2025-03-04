@@ -50,7 +50,6 @@ Route::middleware('auth', NotificationMiddleware::class)->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::patch('/update-profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/verification', [ProfileController::class, 'verification'])->name('profile.verification');
     Route::get('/profile/rank', [ProfileController::class, 'rank'])->name('profile.rank');
