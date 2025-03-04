@@ -6,7 +6,7 @@
       <div class="row justify-content-center">
         <div class="col-12">
           <div class="widget-box">
-            <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data"
+            <form id="articleForm" action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data"
               class="needs-validation">
               @csrf
 
@@ -23,7 +23,7 @@
                   <div class="mb-3">
                     <label for="content" class="form-label mb-2">Write story</label>
                     <div id="editor-container" class="border rounded p-2 bg-white" style="height: 400px;"></div>
-                    <input type="hidden" name="content" id="content" value="{{ old('content') }}">
+                    <input type="hidden" name="content" id="story" value="{{ old('content') }}">
                     <small class="text-muted">Kamu sudah menulis
                       <span id="content-word-count" style="color: inherit;">0</span>
                       dari minimal 300 kata yang direkomendasikan.
@@ -32,8 +32,8 @@
 
                   <div class="mb-3">
                     <label for="excerpt" class="form-label mb-2">Excerpt (Summary)</label>
-                    <textarea name="excerpt" id="excerpt" class="form-control box-input-article" rows="3"
-                      placeholder="..." required>{{ old('excerpt') }}</textarea>
+                    <textarea name="excerpt" id="excerpt" class="form-control box-input-article" rows="3" placeholder="..."
+                      required>{{ old('excerpt') }}</textarea>
                     <small class="text-muted">
                       Kamu sudah menulis <span id="excerpt-word-count" style="color: inherit;">0</span>
                       dari 30 kata maksimal untuk ringkasan.
@@ -100,13 +100,14 @@
 
 
                   <!-- Input Tags -->
-                  {{-- <div class="mb-3">
+                  <div class="mb-3">
                     <label for="tags" class="form-label mb-2">Tags</label>
-                    <input id="TagifyCustomInlineSuggestion" name="tags" class="form-control" placeholder="Pilih Tag"
-                      value="" required />
-                  </div> --}}
+                    <input type="text" name="tags" placeholder="Separate with comma"required />
+                  </div>
 
-                  <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Submit</button>
+                  {{-- <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Submit</button> --}}
+                  <button type="button" onclick="validateAndSubmit()"
+                    class="btn btn-primary w-100 py-2 fw-semibold">Submit</button>
                 </div>
               </div>
             </form>
@@ -121,7 +122,7 @@
 
 @push('styles')
   <!-- External Styles -->
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
   <style>
     .drop-zone {
       cursor: pointer;
@@ -149,13 +150,12 @@
 @endpush
 
 @push('scripts')
-  <!-- External Scripts -->
-  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/compressorjs/dist/compressor.min.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize Quill Editor
+      // Inisialisasi Quill di luar validateAndSubmit()
       const quill = new Quill('#editor-container', {
         theme: 'snow',
         modules: {
@@ -172,13 +172,27 @@
             ['link'],
             ['clean']
           ]
-        }
+        },
+        placeholder: 'Tulis ceritamu di sini...'
       });
 
       // Set existing content (if any)
       var existingContent = {!! json_encode(old('content', '')) !!};
-      quill.root.innerHTML = existingContent;
+      if (existingContent) {
+        quill.root.innerHTML = existingContent;
+      }
 
+      quill.on('text-change', function() {
+        document.getElementById('story').value = quill.root.innerHTML;
+
+        // Update word count
+        const content = quill.getText().trim();
+        updateWordCount({
+          value: content
+        }, 'content-word-count', 300, true, 30);
+      });
+
+      // Function to update word count
       function updateWordCount(element, wordCountElementId, maxWords, isContent = true, yellowThreshold = 10) {
         const wordCountElement = document.getElementById(wordCountElementId);
         const words = element.value.trim().split(/\s+/).filter(word => word.length > 0).length;
@@ -205,15 +219,6 @@
           }
         }
       }
-
-      // Update Content Word Count
-      quill.on('text-change', function() {
-        const content = quill.root.innerText.trim();
-        document.getElementById('content').value = quill.root.innerHTML;
-        updateWordCount({
-          value: content
-        }, 'content-word-count', 300, true, 30);
-      });
 
       // Update Excerpt Word Count
       document.getElementById('excerpt').addEventListener('input', function() {
@@ -266,6 +271,35 @@
       };
 
       addDropZoneListeners();
+
+      // Verifikasi input tersedia
+      console.log('Content input element exists:', !!document.getElementById('story'));
+
+      window.validateAndSubmit = function() {
+        console.log('Validasi dan submit form dimulai...');
+
+        // Gunakan instance Quill yang sudah ada
+        const content = quill.root.innerHTML;
+        document.getElementById('story').value = content;
+
+        console.log('Final content value:', document.getElementById('story').value);
+
+        const wordCount = quill.getText().trim().split(/\s+/).filter(word => word.length > 0).length;
+        if (wordCount < 300) {
+          alert('Konten harus memiliki minimal 300 kata.');
+          return;
+        }
+
+        // Submit form yang spesifik dengan ID
+        document.getElementById('articleForm').submit();
+      };
+
+      // Trigger initial word count update if there's existing content
+      if (existingContent) {
+        updateWordCount({
+          value: quill.getText().trim()
+        }, 'content-word-count', 300, true, 30);
+      }
     });
   </script>
 @endpush

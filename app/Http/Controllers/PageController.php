@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Game;
 use App\Models\InvitationRequest;
 use App\Models\Page;
 use App\Models\Subscriber;
@@ -148,7 +149,8 @@ class PageController extends Controller
 
     public function game()
     {
-        return view('pages.game');
+        $games = Game::all();
+        return view('pages.game', compact('games'));
     }
 
     /**

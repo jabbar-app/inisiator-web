@@ -36,7 +36,7 @@
 
   <div class="content-grid full p-0 mt-5">
     <div class="container">
-      <div class="row">
+      <div class="row" id="my-articles">
         <div class="col-12">
           <div class="widget-box">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -44,6 +44,7 @@
               <a href="{{ route('articles.create') }}" class="button secondary px-5 text-nowrap">Write New
                 Post</a>
             </div>
+            @include('layouts.session-message')
             <div class="table-responsive" style="padding: 7px 0;">
               <table id="articlesTable" class="table">
                 <thead>

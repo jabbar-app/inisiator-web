@@ -133,13 +133,13 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'title'            => 'required|string|max:255',
             'content'          => 'required',
             'category_id'      => 'nullable|exists:categories,id',
             'img_featured'     => 'nullable|image|mimes:jpeg,png,jpg',
             'compressed_image' => 'nullable|string|regex:/^data:image\/\w+;base64,/',
+            'tags'             => 'nullable|string',
         ]);
 
         $imgPath = null;
@@ -179,9 +179,9 @@ class ArticleController extends Controller
         ]);
 
         if ($request->filled('tags')) {
-            $tags = collect(json_decode($request->input('tags'), true))
-                ->pluck('value')
-                ->map(fn($tag) => ucwords(strtolower(trim($tag))));
+            $tags = collect(explode(',', $request->input('tags')))
+                ->map(fn($tag) => ucwords(strtolower(trim($tag))))
+                ->filter(); // remove empty strings
 
             $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
 
@@ -192,7 +192,7 @@ class ArticleController extends Controller
         }
 
         try {
-            $number = '08990980799';
+            $number = '628990980799';
             $approveUrl = route('articles.to-approve', $article->id);
             $message = "Halo Admin, ada artikel baru dengan judul '{$article->title}'.\nSilakan review di: {$approveUrl}";
 
@@ -201,7 +201,7 @@ class ArticleController extends Controller
             Log::error('WhatsApp notification failed: ' . $e->getMessage());
         }
 
-        return redirect()->route('articles.index')->with('success', 'Artikel berhasil diajukan!');
+        return redirect()->route('articles.index')->with('success', 'Artikel berhasil diajukan!')->withFragment('my-articles');
     }
 
     public function show(string $slug)

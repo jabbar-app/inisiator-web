@@ -70,7 +70,7 @@
     @include('templates.header')
   @endif
 
-  <main id="content">
+  <main id="content" style="margin-bottom: 200px;">
     <div class="d-none d-md-block" style="margin-top: 80px;"></div>
     <div class="d-block d-md-none" style="margin-top: 48px;"></div>
     {{-- <hr class="mt-0">
